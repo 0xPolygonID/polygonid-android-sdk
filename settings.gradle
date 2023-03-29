@@ -1,0 +1,31 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
+
+    repositories {
+        google()
+        mavenCentral()
+//        maven {
+//            url '/Users/fluck/Dev/Flutter/PolygonID/Iden3/Native/polygonid-flutter-wrapper/build/host/outputs/repo'
+//        }
+        maven {
+            url "$storageUrl/download.flutter.io"
+        }
+    }
+}
+rootProject.name = "polygonid-android-sdk"
+include ':app'
+include ':polygonid-protobuf'
+
+setBinding(new Binding([gradle: this]))
+evaluate(new File(
+        settingsDir.parentFile,
+        'polygonid-flutter-wrapper/.android/include_flutter.groovy'
+))

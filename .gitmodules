@@ -1,0 +1,3 @@
+[submodule "polygonid-protobuf"]
+	path = polygonid-protobuf
+	url = git@github.com:Plumillon/polygonid-protobuf.git
