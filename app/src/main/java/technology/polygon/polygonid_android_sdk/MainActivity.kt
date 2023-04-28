@@ -1,81 +1,40 @@
 package technology.polygon.polygonid_android_sdk
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.engine.dart.DartExecutor
-import io.flutter.plugin.common.EventChannel.EventSink
-import io.flutter.plugin.common.MethodChannel
-import java.util.concurrent.CompletableFuture
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-        callFlutterMethod(this)
-    }
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-    fun callFlutterMethod(context: Context): CompletableFuture<Void> {
-        val flutterEngine: FlutterEngine
-        val completableFuture = CompletableFuture<Void>()
-
-        if (FlutterEngineCache.getInstance().contains("engineFlex")) {
-            flutterEngine = FlutterEngineCache.getInstance().get("engineFlex")!!
-        } else {
-            flutterEngine = FlutterEngine(applicationContext)
-            FlutterEngineCache.getInstance().put("engineFlex", flutterEngine)
+        findViewById<Button>(R.id.button_init).setOnClickListener {
+            viewModel.init(applicationContext)
         }
 
-        val dartExecutor = flutterEngine.dartExecutor
-        dartExecutor.executeDartEntrypoint(
-            DartExecutor.DartEntrypoint(
-                "main.dart",
-                "init"
-            ),
-        )
+        findViewById<Button>(R.id.button_get_env).setOnClickListener {
+            viewModel.getEnv(applicationContext)
+        }
 
-//        FlutterEngine(context).dartExecutor.executeDartEntrypoint(
-//            DartExecutor.DartEntrypoint(
-//                "main.dart",
-//                "init"
-//            ),
-//        )
+        findViewById<Button>(R.id.button_set_env).setOnClickListener {
+            viewModel.setEnv(applicationContext)
+        }
 
-        val methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "technology.polygon.polygonid_flutter_wrapper")
-        methodChannel.invokeMethod("initSDK", null, object : MethodChannel.Result {
-            override fun success(result: Any?) {
-                completableFuture.complete(null)
-            }
+        findViewById<Button>(R.id.button_add_identity).setOnClickListener {
+            viewModel.addIdentity(applicationContext)
+        }
 
-            override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                completableFuture.completeExceptionally(Throwable(errorMessage))
-            }
+        findViewById<Button>(R.id.button_get_identities).setOnClickListener {
+            viewModel.getIdentities(applicationContext)
+        }
 
-            override fun notImplemented() {
-
-            }
-        })
-
-//        val methodChannel2 = MethodChannel(FlutterEngine(context).dartExecutor.binaryMessenger, "technology.polygon.polygonid_flutter_wrapper")
-//        methodChannel2.invokeMethod("hello", null, object : MethodChannel.Result {
-//            override fun success(result: Any?) {
-//                Log.d("TAG", "success: ${result as String}")
-//            }
-//
-//            override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-//                completableFuture.completeExceptionally(Throwable(errorMessage))
-//            }
-//
-//            override fun notImplemented() {
-//
-//            }
-//        })
-
-        return completableFuture
+        findViewById<Button>(R.id.button_get_did_identifier).setOnClickListener {
+            viewModel.getDidIdentifier(applicationContext)
+        }
     }
 }

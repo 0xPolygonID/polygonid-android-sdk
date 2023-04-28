@@ -9,13 +9,9 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/package_info_plus-3.0.3/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.0.24/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/polygonid-protobuf" />
-            <option value="$PROJECT_DIR$/../polygonid-flutter-wrapper/.android/Flutter" />
-            <option value="$PROJECT_DIR$/../../polygonid-flutter-sdk/android" />
+            <option value="$PROJECT_DIR$/sdk" />
           </set>
         </option>
       </GradleProjectSettings>
