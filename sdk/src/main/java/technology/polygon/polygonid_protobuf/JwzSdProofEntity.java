@@ -56,11 +56,11 @@ public final class JwzSdProofEntity {
         getTypeBytes();
 
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     int getVerifiableCredentialCount();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     boolean containsVerifiableCredential(
         String key);
@@ -68,25 +68,25 @@ public final class JwzSdProofEntity {
      * Use {@link #getVerifiableCredentialMap()} instead.
      */
     @Deprecated
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getVerifiableCredential();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getVerifiableCredentialMap();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     /* nullable */
-com.google.protobuf.Any getVerifiableCredentialOrDefault(
+com.google.protobuf.Value getVerifiableCredentialOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue);
+com.google.protobuf.Value defaultValue);
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
-    com.google.protobuf.Any getVerifiableCredentialOrThrow(
+    com.google.protobuf.Value getVerifiableCredentialOrThrow(
         String key);
   }
   /**
@@ -221,19 +221,19 @@ com.google.protobuf.Any defaultValue);
     public static final int VERIFIABLECREDENTIAL_FIELD_NUMBER = 3;
     private static final class VerifiableCredentialDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
-          String, com.google.protobuf.Any> defaultEntry =
+          String, com.google.protobuf.Value> defaultEntry =
               com.google.protobuf.MapEntry
-              .<String, com.google.protobuf.Any>newDefaultInstance(
+              .<String, com.google.protobuf.Value>newDefaultInstance(
                   JwzSdProofEntity.internal_static_technology_polygon_polygonid_protobuf_JWZVPProof_VerifiableCredentialEntry_descriptor,
                   com.google.protobuf.WireFormat.FieldType.STRING,
                   "",
                   com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                  com.google.protobuf.Any.getDefaultInstance());
+                  com.google.protobuf.Value.getDefaultInstance());
     }
     @SuppressWarnings("serial")
     private com.google.protobuf.MapField<
-        String, com.google.protobuf.Any> verifiableCredential_;
-    private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+        String, com.google.protobuf.Value> verifiableCredential_;
+    private com.google.protobuf.MapField<String, com.google.protobuf.Value>
     internalGetVerifiableCredential() {
       if (verifiableCredential_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -245,7 +245,7 @@ com.google.protobuf.Any defaultValue);
       return internalGetVerifiableCredential().getMap().size();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     @Override
     public boolean containsVerifiableCredential(
@@ -258,38 +258,38 @@ com.google.protobuf.Any defaultValue);
      */
     @Override
     @Deprecated
-    public java.util.Map<String, com.google.protobuf.Any> getVerifiableCredential() {
+    public java.util.Map<String, com.google.protobuf.Value> getVerifiableCredential() {
       return getVerifiableCredentialMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     @Override
-    public java.util.Map<String, com.google.protobuf.Any> getVerifiableCredentialMap() {
+    public java.util.Map<String, com.google.protobuf.Value> getVerifiableCredentialMap() {
       return internalGetVerifiableCredential().getMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     @Override
     public /* nullable */
-com.google.protobuf.Any getVerifiableCredentialOrDefault(
+com.google.protobuf.Value getVerifiableCredentialOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetVerifiableCredential().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
      */
     @Override
-    public com.google.protobuf.Any getVerifiableCredentialOrThrow(
+    public com.google.protobuf.Value getVerifiableCredentialOrThrow(
         String key) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetVerifiableCredential().getMap();
       if (!map.containsKey(key)) {
         throw new IllegalArgumentException();
@@ -343,9 +343,9 @@ com.google.protobuf.Any defaultValue) {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, type_);
       }
-      for (java.util.Map.Entry<String, com.google.protobuf.Any> entry
+      for (java.util.Map.Entry<String, com.google.protobuf.Value> entry
            : internalGetVerifiableCredential().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+        com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
         verifiableCredential__ = VerifiableCredentialDefaultEntryHolder.defaultEntry.newBuilderForType()
             .setKey(entry.getKey())
             .setValue(entry.getValue())
@@ -701,7 +701,7 @@ com.google.protobuf.Any defaultValue) {
                 break;
               } // case 18
               case 26: {
-                com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+                com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
                 verifiableCredential__ = input.readMessage(
                     VerifiableCredentialDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
                 internalGetMutableVerifiableCredential().getMutableMap().put(
@@ -903,8 +903,8 @@ com.google.protobuf.Any defaultValue) {
       }
 
       private com.google.protobuf.MapField<
-          String, com.google.protobuf.Any> verifiableCredential_;
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+          String, com.google.protobuf.Value> verifiableCredential_;
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetVerifiableCredential() {
         if (verifiableCredential_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
@@ -912,7 +912,7 @@ com.google.protobuf.Any defaultValue) {
         }
         return verifiableCredential_;
       }
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetMutableVerifiableCredential() {
         if (verifiableCredential_ == null) {
           verifiableCredential_ = com.google.protobuf.MapField.newMapField(
@@ -929,7 +929,7 @@ com.google.protobuf.Any defaultValue) {
         return internalGetVerifiableCredential().getMap().size();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       @Override
       public boolean containsVerifiableCredential(
@@ -942,38 +942,38 @@ com.google.protobuf.Any defaultValue) {
        */
       @Override
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any> getVerifiableCredential() {
+      public java.util.Map<String, com.google.protobuf.Value> getVerifiableCredential() {
         return getVerifiableCredentialMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       @Override
-      public java.util.Map<String, com.google.protobuf.Any> getVerifiableCredentialMap() {
+      public java.util.Map<String, com.google.protobuf.Value> getVerifiableCredentialMap() {
         return internalGetVerifiableCredential().getMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       @Override
       public /* nullable */
-com.google.protobuf.Any getVerifiableCredentialOrDefault(
+com.google.protobuf.Value getVerifiableCredentialOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetVerifiableCredential().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       @Override
-      public com.google.protobuf.Any getVerifiableCredentialOrThrow(
+      public com.google.protobuf.Value getVerifiableCredentialOrThrow(
           String key) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetVerifiableCredential().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
@@ -987,7 +987,7 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       public Builder removeVerifiableCredential(
           String key) {
@@ -1000,17 +1000,17 @@ com.google.protobuf.Any defaultValue) {
        * Use alternate mutation accessors instead.
        */
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any>
+      public java.util.Map<String, com.google.protobuf.Value>
           getMutableVerifiableCredential() {
         bitField0_ |= 0x00000004;
         return internalGetMutableVerifiableCredential().getMutableMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       public Builder putVerifiableCredential(
           String key,
-          com.google.protobuf.Any value) {
+          com.google.protobuf.Value value) {
         if (key == null) { throw new NullPointerException("map key"); }
         if (value == null) { throw new NullPointerException("map value"); }
         internalGetMutableVerifiableCredential().getMutableMap()
@@ -1019,10 +1019,10 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; verifiableCredential = 3;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; verifiableCredential = 3;</code>
        */
       public Builder putAllVerifiableCredential(
-          java.util.Map<String, com.google.protobuf.Any> values) {
+          java.util.Map<String, com.google.protobuf.Value> values) {
         internalGetMutableVerifiableCredential().getMutableMap()
             .putAll(values);
         bitField0_ |= 0x00000004;
@@ -2422,25 +2422,25 @@ com.google.protobuf.Any defaultValue) {
   static {
     String[] descriptorData = {
       "\n\031jwz_sd_proof_entity.proto\022%technology." +
-      "polygon.polygonid_protobuf\032\031google/proto" +
-      "buf/any.proto\032\026jwz_proof_entity.proto\"\351\001" +
-      "\n\nJWZVPProof\022\017\n\007context\030\001 \003(\t\022\014\n\004type\030\002 " +
-      "\001(\t\022i\n\024verifiableCredential\030\003 \003(\0132K.tech" +
-      "nology.polygon.polygonid_protobuf.JWZVPP" +
-      "roof.VerifiableCredentialEntry\032Q\n\031Verifi" +
-      "ableCredentialEntry\022\013\n\003key\030\001 \001(\t\022#\n\005valu" +
-      "e\030\002 \001(\0132\024.google.protobuf.Any:\0028\001\"\311\001\n\020JW" +
-      "ZSDProofEntity\022B\n\005proof\030\001 \001(\01323.technolo" +
-      "gy.polygon.polygonid_protobuf.JWZBasePro" +
-      "of\022\023\n\013pub_signals\030\002 \003(\t\022\n\n\002id\030\003 \001(\t\022\021\n\tc" +
-      "ircuitId\030\004 \001(\t\022=\n\002vp\030\005 \001(\01321.technology." +
-      "polygon.polygonid_protobuf.JWZVPProofb\006p" +
-      "roto3"
+      "polygon.polygonid_protobuf\032\034google/proto" +
+      "buf/struct.proto\032\026jwz_proof_entity.proto" +
+      "\"\353\001\n\nJWZVPProof\022\017\n\007context\030\001 \003(\t\022\014\n\004type" +
+      "\030\002 \001(\t\022i\n\024verifiableCredential\030\003 \003(\0132K.t" +
+      "echnology.polygon.polygonid_protobuf.JWZ" +
+      "VPProof.VerifiableCredentialEntry\032S\n\031Ver" +
+      "ifiableCredentialEntry\022\013\n\003key\030\001 \001(\t\022%\n\005v" +
+      "alue\030\002 \001(\0132\026.google.protobuf.Value:\0028\001\"\311" +
+      "\001\n\020JWZSDProofEntity\022B\n\005proof\030\001 \001(\01323.tec" +
+      "hnology.polygon.polygonid_protobuf.JWZBa" +
+      "seProof\022\023\n\013pub_signals\030\002 \003(\t\022\n\n\002id\030\003 \001(\t" +
+      "\022\021\n\tcircuitId\030\004 \001(\t\022=\n\002vp\030\005 \001(\01321.techno" +
+      "logy.polygon.polygonid_protobuf.JWZVPPro" +
+      "ofb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.google.protobuf.AnyProto.getDescriptor(),
+          com.google.protobuf.StructProto.getDescriptor(),
           JwzProofEntity.getDescriptor(),
         });
     internal_static_technology_polygon_polygonid_protobuf_JWZVPProof_descriptor =
@@ -2461,7 +2461,7 @@ com.google.protobuf.Any defaultValue) {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_technology_polygon_polygonid_protobuf_JWZSDProofEntity_descriptor,
         new String[] { "Proof", "PubSignals", "Id", "CircuitId", "Vp", });
-    com.google.protobuf.AnyProto.getDescriptor();
+    com.google.protobuf.StructProto.getDescriptor();
     JwzProofEntity.getDescriptor();
   }
 

@@ -208,11 +208,11 @@ public final class ClaimEntityOuterClass {
     com.google.protobuf.StringValueOrBuilder getExpirationOrBuilder();
 
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     int getSchemaCount();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     boolean containsSchema(
         String key);
@@ -220,33 +220,33 @@ public final class ClaimEntityOuterClass {
      * Use {@link #getSchemaMap()} instead.
      */
     @Deprecated
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getSchema();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getSchemaMap();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     /* nullable */
-com.google.protobuf.Any getSchemaOrDefault(
+com.google.protobuf.Value getSchemaOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue);
+com.google.protobuf.Value defaultValue);
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
-    com.google.protobuf.Any getSchemaOrThrow(
+    com.google.protobuf.Value getSchemaOrThrow(
         String key);
 
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     int getVocabCount();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     boolean containsVocab(
         String key);
@@ -254,25 +254,25 @@ com.google.protobuf.Any defaultValue);
      * Use {@link #getVocabMap()} instead.
      */
     @Deprecated
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getVocab();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getVocabMap();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     /* nullable */
-com.google.protobuf.Any getVocabOrDefault(
+com.google.protobuf.Value getVocabOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue);
+com.google.protobuf.Value defaultValue);
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
-    com.google.protobuf.Any getVocabOrThrow(
+    com.google.protobuf.Value getVocabOrThrow(
         String key);
 
     /**
@@ -288,11 +288,11 @@ com.google.protobuf.Any defaultValue);
         getTypeBytes();
 
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     int getInfoCount();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     boolean containsInfo(
         String key);
@@ -300,25 +300,25 @@ com.google.protobuf.Any defaultValue);
      * Use {@link #getInfoMap()} instead.
      */
     @Deprecated
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getInfo();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getInfoMap();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     /* nullable */
-com.google.protobuf.Any getInfoOrDefault(
+com.google.protobuf.Value getInfoOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue);
+com.google.protobuf.Value defaultValue);
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
-    com.google.protobuf.Any getInfoOrThrow(
+    com.google.protobuf.Value getInfoOrThrow(
         String key);
   }
   /**
@@ -567,19 +567,19 @@ com.google.protobuf.Any defaultValue);
     public static final int SCHEMA_FIELD_NUMBER = 6;
     private static final class SchemaDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
-          String, com.google.protobuf.Any> defaultEntry =
+          String, com.google.protobuf.Value> defaultEntry =
               com.google.protobuf.MapEntry
-              .<String, com.google.protobuf.Any>newDefaultInstance(
+              .<String, com.google.protobuf.Value>newDefaultInstance(
                   ClaimEntityOuterClass.internal_static_technology_polygon_polygonid_protobuf_ClaimEntity_SchemaEntry_descriptor,
                   com.google.protobuf.WireFormat.FieldType.STRING,
                   "",
                   com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                  com.google.protobuf.Any.getDefaultInstance());
+                  com.google.protobuf.Value.getDefaultInstance());
     }
     @SuppressWarnings("serial")
     private com.google.protobuf.MapField<
-        String, com.google.protobuf.Any> schema_;
-    private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+        String, com.google.protobuf.Value> schema_;
+    private com.google.protobuf.MapField<String, com.google.protobuf.Value>
     internalGetSchema() {
       if (schema_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -591,7 +591,7 @@ com.google.protobuf.Any defaultValue);
       return internalGetSchema().getMap().size();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
     public boolean containsSchema(
@@ -604,38 +604,38 @@ com.google.protobuf.Any defaultValue);
      */
     @Override
     @Deprecated
-    public java.util.Map<String, com.google.protobuf.Any> getSchema() {
+    public java.util.Map<String, com.google.protobuf.Value> getSchema() {
       return getSchemaMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
-    public java.util.Map<String, com.google.protobuf.Any> getSchemaMap() {
+    public java.util.Map<String, com.google.protobuf.Value> getSchemaMap() {
       return internalGetSchema().getMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
     public /* nullable */
-com.google.protobuf.Any getSchemaOrDefault(
+com.google.protobuf.Value getSchemaOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetSchema().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
-    public com.google.protobuf.Any getSchemaOrThrow(
+    public com.google.protobuf.Value getSchemaOrThrow(
         String key) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetSchema().getMap();
       if (!map.containsKey(key)) {
         throw new IllegalArgumentException();
@@ -646,19 +646,19 @@ com.google.protobuf.Any defaultValue) {
     public static final int VOCAB_FIELD_NUMBER = 7;
     private static final class VocabDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
-          String, com.google.protobuf.Any> defaultEntry =
+          String, com.google.protobuf.Value> defaultEntry =
               com.google.protobuf.MapEntry
-              .<String, com.google.protobuf.Any>newDefaultInstance(
+              .<String, com.google.protobuf.Value>newDefaultInstance(
                   ClaimEntityOuterClass.internal_static_technology_polygon_polygonid_protobuf_ClaimEntity_VocabEntry_descriptor,
                   com.google.protobuf.WireFormat.FieldType.STRING,
                   "",
                   com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                  com.google.protobuf.Any.getDefaultInstance());
+                  com.google.protobuf.Value.getDefaultInstance());
     }
     @SuppressWarnings("serial")
     private com.google.protobuf.MapField<
-        String, com.google.protobuf.Any> vocab_;
-    private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+        String, com.google.protobuf.Value> vocab_;
+    private com.google.protobuf.MapField<String, com.google.protobuf.Value>
     internalGetVocab() {
       if (vocab_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -670,7 +670,7 @@ com.google.protobuf.Any defaultValue) {
       return internalGetVocab().getMap().size();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
     public boolean containsVocab(
@@ -683,38 +683,38 @@ com.google.protobuf.Any defaultValue) {
      */
     @Override
     @Deprecated
-    public java.util.Map<String, com.google.protobuf.Any> getVocab() {
+    public java.util.Map<String, com.google.protobuf.Value> getVocab() {
       return getVocabMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
-    public java.util.Map<String, com.google.protobuf.Any> getVocabMap() {
+    public java.util.Map<String, com.google.protobuf.Value> getVocabMap() {
       return internalGetVocab().getMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
     public /* nullable */
-com.google.protobuf.Any getVocabOrDefault(
+com.google.protobuf.Value getVocabOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetVocab().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
      */
     @Override
-    public com.google.protobuf.Any getVocabOrThrow(
+    public com.google.protobuf.Value getVocabOrThrow(
         String key) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetVocab().getMap();
       if (!map.containsKey(key)) {
         throw new IllegalArgumentException();
@@ -764,19 +764,19 @@ com.google.protobuf.Any defaultValue) {
     public static final int INFO_FIELD_NUMBER = 9;
     private static final class InfoDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
-          String, com.google.protobuf.Any> defaultEntry =
+          String, com.google.protobuf.Value> defaultEntry =
               com.google.protobuf.MapEntry
-              .<String, com.google.protobuf.Any>newDefaultInstance(
+              .<String, com.google.protobuf.Value>newDefaultInstance(
                   ClaimEntityOuterClass.internal_static_technology_polygon_polygonid_protobuf_ClaimEntity_InfoEntry_descriptor,
                   com.google.protobuf.WireFormat.FieldType.STRING,
                   "",
                   com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                  com.google.protobuf.Any.getDefaultInstance());
+                  com.google.protobuf.Value.getDefaultInstance());
     }
     @SuppressWarnings("serial")
     private com.google.protobuf.MapField<
-        String, com.google.protobuf.Any> info_;
-    private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+        String, com.google.protobuf.Value> info_;
+    private com.google.protobuf.MapField<String, com.google.protobuf.Value>
     internalGetInfo() {
       if (info_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -788,7 +788,7 @@ com.google.protobuf.Any defaultValue) {
       return internalGetInfo().getMap().size();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     @Override
     public boolean containsInfo(
@@ -801,38 +801,38 @@ com.google.protobuf.Any defaultValue) {
      */
     @Override
     @Deprecated
-    public java.util.Map<String, com.google.protobuf.Any> getInfo() {
+    public java.util.Map<String, com.google.protobuf.Value> getInfo() {
       return getInfoMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     @Override
-    public java.util.Map<String, com.google.protobuf.Any> getInfoMap() {
+    public java.util.Map<String, com.google.protobuf.Value> getInfoMap() {
       return internalGetInfo().getMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     @Override
     public /* nullable */
-com.google.protobuf.Any getInfoOrDefault(
+com.google.protobuf.Value getInfoOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetInfo().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
      */
     @Override
-    public com.google.protobuf.Any getInfoOrThrow(
+    public com.google.protobuf.Value getInfoOrThrow(
         String key) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetInfo().getMap();
       if (!map.containsKey(key)) {
         throw new IllegalArgumentException();
@@ -915,9 +915,9 @@ com.google.protobuf.Any defaultValue) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, getExpiration());
       }
-      for (java.util.Map.Entry<String, com.google.protobuf.Any> entry
+      for (java.util.Map.Entry<String, com.google.protobuf.Value> entry
            : internalGetSchema().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+        com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
         schema__ = SchemaDefaultEntryHolder.defaultEntry.newBuilderForType()
             .setKey(entry.getKey())
             .setValue(entry.getValue())
@@ -925,9 +925,9 @@ com.google.protobuf.Any defaultValue) {
         size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(6, schema__);
       }
-      for (java.util.Map.Entry<String, com.google.protobuf.Any> entry
+      for (java.util.Map.Entry<String, com.google.protobuf.Value> entry
            : internalGetVocab().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+        com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
         vocab__ = VocabDefaultEntryHolder.defaultEntry.newBuilderForType()
             .setKey(entry.getKey())
             .setValue(entry.getValue())
@@ -938,9 +938,9 @@ com.google.protobuf.Any defaultValue) {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, type_);
       }
-      for (java.util.Map.Entry<String, com.google.protobuf.Any> entry
+      for (java.util.Map.Entry<String, com.google.protobuf.Value> entry
            : internalGetInfo().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+        com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
         info__ = InfoDefaultEntryHolder.defaultEntry.newBuilderForType()
             .setKey(entry.getKey())
             .setValue(entry.getValue())
@@ -1395,7 +1395,7 @@ com.google.protobuf.Any defaultValue) {
                 break;
               } // case 42
               case 50: {
-                com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+                com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
                 schema__ = input.readMessage(
                     SchemaDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
                 internalGetMutableSchema().getMutableMap().put(
@@ -1404,7 +1404,7 @@ com.google.protobuf.Any defaultValue) {
                 break;
               } // case 50
               case 58: {
-                com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+                com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
                 vocab__ = input.readMessage(
                     VocabDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
                 internalGetMutableVocab().getMutableMap().put(
@@ -1418,7 +1418,7 @@ com.google.protobuf.Any defaultValue) {
                 break;
               } // case 66
               case 74: {
-                com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+                com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
                 info__ = input.readMessage(
                     InfoDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
                 internalGetMutableInfo().getMutableMap().put(
@@ -1851,8 +1851,8 @@ com.google.protobuf.Any defaultValue) {
       }
 
       private com.google.protobuf.MapField<
-          String, com.google.protobuf.Any> schema_;
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+          String, com.google.protobuf.Value> schema_;
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetSchema() {
         if (schema_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
@@ -1860,7 +1860,7 @@ com.google.protobuf.Any defaultValue) {
         }
         return schema_;
       }
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetMutableSchema() {
         if (schema_ == null) {
           schema_ = com.google.protobuf.MapField.newMapField(
@@ -1877,7 +1877,7 @@ com.google.protobuf.Any defaultValue) {
         return internalGetSchema().getMap().size();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
       public boolean containsSchema(
@@ -1890,38 +1890,38 @@ com.google.protobuf.Any defaultValue) {
        */
       @Override
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any> getSchema() {
+      public java.util.Map<String, com.google.protobuf.Value> getSchema() {
         return getSchemaMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
-      public java.util.Map<String, com.google.protobuf.Any> getSchemaMap() {
+      public java.util.Map<String, com.google.protobuf.Value> getSchemaMap() {
         return internalGetSchema().getMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
       public /* nullable */
-com.google.protobuf.Any getSchemaOrDefault(
+com.google.protobuf.Value getSchemaOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetSchema().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
-      public com.google.protobuf.Any getSchemaOrThrow(
+      public com.google.protobuf.Value getSchemaOrThrow(
           String key) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetSchema().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
@@ -1935,7 +1935,7 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       public Builder removeSchema(
           String key) {
@@ -1948,17 +1948,17 @@ com.google.protobuf.Any defaultValue) {
        * Use alternate mutation accessors instead.
        */
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any>
+      public java.util.Map<String, com.google.protobuf.Value>
           getMutableSchema() {
         bitField0_ |= 0x00000020;
         return internalGetMutableSchema().getMutableMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       public Builder putSchema(
           String key,
-          com.google.protobuf.Any value) {
+          com.google.protobuf.Value value) {
         if (key == null) { throw new NullPointerException("map key"); }
         if (value == null) { throw new NullPointerException("map value"); }
         internalGetMutableSchema().getMutableMap()
@@ -1967,10 +1967,10 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; schema = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       public Builder putAllSchema(
-          java.util.Map<String, com.google.protobuf.Any> values) {
+          java.util.Map<String, com.google.protobuf.Value> values) {
         internalGetMutableSchema().getMutableMap()
             .putAll(values);
         bitField0_ |= 0x00000020;
@@ -1978,8 +1978,8 @@ com.google.protobuf.Any defaultValue) {
       }
 
       private com.google.protobuf.MapField<
-          String, com.google.protobuf.Any> vocab_;
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+          String, com.google.protobuf.Value> vocab_;
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetVocab() {
         if (vocab_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
@@ -1987,7 +1987,7 @@ com.google.protobuf.Any defaultValue) {
         }
         return vocab_;
       }
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetMutableVocab() {
         if (vocab_ == null) {
           vocab_ = com.google.protobuf.MapField.newMapField(
@@ -2004,7 +2004,7 @@ com.google.protobuf.Any defaultValue) {
         return internalGetVocab().getMap().size();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
       public boolean containsVocab(
@@ -2017,38 +2017,38 @@ com.google.protobuf.Any defaultValue) {
        */
       @Override
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any> getVocab() {
+      public java.util.Map<String, com.google.protobuf.Value> getVocab() {
         return getVocabMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
-      public java.util.Map<String, com.google.protobuf.Any> getVocabMap() {
+      public java.util.Map<String, com.google.protobuf.Value> getVocabMap() {
         return internalGetVocab().getMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
       public /* nullable */
-com.google.protobuf.Any getVocabOrDefault(
+com.google.protobuf.Value getVocabOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetVocab().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
-      public com.google.protobuf.Any getVocabOrThrow(
+      public com.google.protobuf.Value getVocabOrThrow(
           String key) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetVocab().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
@@ -2062,7 +2062,7 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       public Builder removeVocab(
           String key) {
@@ -2075,17 +2075,17 @@ com.google.protobuf.Any defaultValue) {
        * Use alternate mutation accessors instead.
        */
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any>
+      public java.util.Map<String, com.google.protobuf.Value>
           getMutableVocab() {
         bitField0_ |= 0x00000040;
         return internalGetMutableVocab().getMutableMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       public Builder putVocab(
           String key,
-          com.google.protobuf.Any value) {
+          com.google.protobuf.Value value) {
         if (key == null) { throw new NullPointerException("map key"); }
         if (value == null) { throw new NullPointerException("map value"); }
         internalGetMutableVocab().getMutableMap()
@@ -2094,10 +2094,10 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; vocab = 7 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       public Builder putAllVocab(
-          java.util.Map<String, com.google.protobuf.Any> values) {
+          java.util.Map<String, com.google.protobuf.Value> values) {
         internalGetMutableVocab().getMutableMap()
             .putAll(values);
         bitField0_ |= 0x00000040;
@@ -2177,8 +2177,8 @@ com.google.protobuf.Any defaultValue) {
       }
 
       private com.google.protobuf.MapField<
-          String, com.google.protobuf.Any> info_;
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+          String, com.google.protobuf.Value> info_;
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetInfo() {
         if (info_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
@@ -2186,7 +2186,7 @@ com.google.protobuf.Any defaultValue) {
         }
         return info_;
       }
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetMutableInfo() {
         if (info_ == null) {
           info_ = com.google.protobuf.MapField.newMapField(
@@ -2203,7 +2203,7 @@ com.google.protobuf.Any defaultValue) {
         return internalGetInfo().getMap().size();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       @Override
       public boolean containsInfo(
@@ -2216,38 +2216,38 @@ com.google.protobuf.Any defaultValue) {
        */
       @Override
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any> getInfo() {
+      public java.util.Map<String, com.google.protobuf.Value> getInfo() {
         return getInfoMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       @Override
-      public java.util.Map<String, com.google.protobuf.Any> getInfoMap() {
+      public java.util.Map<String, com.google.protobuf.Value> getInfoMap() {
         return internalGetInfo().getMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       @Override
       public /* nullable */
-com.google.protobuf.Any getInfoOrDefault(
+com.google.protobuf.Value getInfoOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetInfo().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       @Override
-      public com.google.protobuf.Any getInfoOrThrow(
+      public com.google.protobuf.Value getInfoOrThrow(
           String key) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetInfo().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
@@ -2261,7 +2261,7 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       public Builder removeInfo(
           String key) {
@@ -2274,17 +2274,17 @@ com.google.protobuf.Any defaultValue) {
        * Use alternate mutation accessors instead.
        */
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any>
+      public java.util.Map<String, com.google.protobuf.Value>
           getMutableInfo() {
         bitField0_ |= 0x00000100;
         return internalGetMutableInfo().getMutableMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       public Builder putInfo(
           String key,
-          com.google.protobuf.Any value) {
+          com.google.protobuf.Value value) {
         if (key == null) { throw new NullPointerException("map key"); }
         if (value == null) { throw new NullPointerException("map value"); }
         internalGetMutableInfo().getMutableMap()
@@ -2293,10 +2293,10 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; info = 9;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; info = 9;</code>
        */
       public Builder putAllInfo(
-          java.util.Map<String, com.google.protobuf.Any> values) {
+          java.util.Map<String, com.google.protobuf.Value> values) {
         internalGetMutableInfo().getMutableMap()
             .putAll(values);
         bitField0_ |= 0x00000100;
@@ -2396,31 +2396,32 @@ com.google.protobuf.Any defaultValue) {
   static {
     String[] descriptorData = {
       "\n\022claim_entity.proto\022%technology.polygon" +
-      ".polygonid_protobuf\032\031google/protobuf/any" +
-      ".proto\032\036google/protobuf/wrappers.proto\032\023" +
-      "field_options.proto\"\307\004\n\013ClaimEntity\022\n\n\002i" +
-      "d\030\001 \001(\t\022\016\n\006issuer\030\002 \001(\t\022\013\n\003did\030\003 \001(\t\022\r\n\005" +
-      "state\030\004 \001(\t\0220\n\nexpiration\030\005 \001(\0132\034.google" +
-      ".protobuf.StringValue\022T\n\006schema\030\006 \003(\0132>." +
-      "technology.polygon.polygonid_protobuf.Cl" +
-      "aimEntity.SchemaEntryB\004\210\265\030\001\022R\n\005vocab\030\007 \003" +
-      "(\0132=.technology.polygon.polygonid_protob" +
-      "uf.ClaimEntity.VocabEntryB\004\210\265\030\001\022\014\n\004type\030" +
-      "\010 \001(\t\022J\n\004info\030\t \003(\0132<.technology.polygon" +
-      ".polygonid_protobuf.ClaimEntity.InfoEntr" +
-      "y\032C\n\013SchemaEntry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002" +
-      " \001(\0132\024.google.protobuf.Any:\0028\001\032B\n\nVocabE" +
-      "ntry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.googl" +
-      "e.protobuf.Any:\0028\001\032A\n\tInfoEntry\022\013\n\003key\030\001" +
-      " \001(\t\022#\n\005value\030\002 \001(\0132\024.google.protobuf.An" +
-      "y:\0028\001*?\n\nClaimState\022\n\n\006active\020\000\022\013\n\007expir" +
-      "ed\020\001\022\013\n\007pending\020\002\022\013\n\007revoked\020\003b\006proto3"
+      ".polygonid_protobuf\032\036google/protobuf/wra" +
+      "ppers.proto\032\034google/protobuf/struct.prot" +
+      "o\032\023field_options.proto\"\315\004\n\013ClaimEntity\022\n" +
+      "\n\002id\030\001 \001(\t\022\016\n\006issuer\030\002 \001(\t\022\013\n\003did\030\003 \001(\t\022" +
+      "\r\n\005state\030\004 \001(\t\0220\n\nexpiration\030\005 \001(\0132\034.goo" +
+      "gle.protobuf.StringValue\022T\n\006schema\030\006 \003(\013" +
+      "2>.technology.polygon.polygonid_protobuf" +
+      ".ClaimEntity.SchemaEntryB\004\210\265\030\001\022R\n\005vocab\030" +
+      "\007 \003(\0132=.technology.polygon.polygonid_pro" +
+      "tobuf.ClaimEntity.VocabEntryB\004\210\265\030\001\022\014\n\004ty" +
+      "pe\030\010 \001(\t\022J\n\004info\030\t \003(\0132<.technology.poly" +
+      "gon.polygonid_protobuf.ClaimEntity.InfoE" +
+      "ntry\032E\n\013SchemaEntry\022\013\n\003key\030\001 \001(\t\022%\n\005valu" +
+      "e\030\002 \001(\0132\026.google.protobuf.Value:\0028\001\032D\n\nV" +
+      "ocabEntry\022\013\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026." +
+      "google.protobuf.Value:\0028\001\032C\n\tInfoEntry\022\013" +
+      "\n\003key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.google.prot" +
+      "obuf.Value:\0028\001*?\n\nClaimState\022\n\n\006active\020\000" +
+      "\022\013\n\007expired\020\001\022\013\n\007pending\020\002\022\013\n\007revoked\020\003b" +
+      "\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.google.protobuf.AnyProto.getDescriptor(),
           com.google.protobuf.WrappersProto.getDescriptor(),
+          com.google.protobuf.StructProto.getDescriptor(),
           FieldOptions.getDescriptor(),
         });
     internal_static_technology_polygon_polygonid_protobuf_ClaimEntity_descriptor =
@@ -2452,8 +2453,8 @@ com.google.protobuf.Any defaultValue) {
     registry.add(FieldOptions.isOptional);
     com.google.protobuf.Descriptors.FileDescriptor
         .internalUpdateFileDescriptor(descriptor, registry);
-    com.google.protobuf.AnyProto.getDescriptor();
     com.google.protobuf.WrappersProto.getDescriptor();
+    com.google.protobuf.StructProto.getDescriptor();
     FieldOptions.getDescriptor();
   }
 

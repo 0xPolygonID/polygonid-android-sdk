@@ -214,19 +214,19 @@ public final class FilterEntityOuterClass {
         getNameBytes();
 
     /**
-     * <code>.google.protobuf.Any value = 3;</code>
+     * <code>.google.protobuf.Value value = 3;</code>
      * @return Whether the value field is set.
      */
     boolean hasValue();
     /**
-     * <code>.google.protobuf.Any value = 3;</code>
+     * <code>.google.protobuf.Value value = 3;</code>
      * @return The value.
      */
-    com.google.protobuf.Any getValue();
+    com.google.protobuf.Value getValue();
     /**
-     * <code>.google.protobuf.Any value = 3;</code>
+     * <code>.google.protobuf.Value value = 3;</code>
      */
-    com.google.protobuf.AnyOrBuilder getValueOrBuilder();
+    com.google.protobuf.ValueOrBuilder getValueOrBuilder();
   }
   /**
    * Protobuf type {@code technology.polygon.polygonid_protobuf.FilterEntity}
@@ -349,9 +349,9 @@ public final class FilterEntityOuterClass {
     }
 
     public static final int VALUE_FIELD_NUMBER = 3;
-    private com.google.protobuf.Any value_;
+    private com.google.protobuf.Value value_;
     /**
-     * <code>.google.protobuf.Any value = 3;</code>
+     * <code>.google.protobuf.Value value = 3;</code>
      * @return Whether the value field is set.
      */
     @Override
@@ -359,19 +359,19 @@ public final class FilterEntityOuterClass {
       return value_ != null;
     }
     /**
-     * <code>.google.protobuf.Any value = 3;</code>
+     * <code>.google.protobuf.Value value = 3;</code>
      * @return The value.
      */
     @Override
-    public com.google.protobuf.Any getValue() {
-      return value_ == null ? com.google.protobuf.Any.getDefaultInstance() : value_;
+    public com.google.protobuf.Value getValue() {
+      return value_ == null ? com.google.protobuf.Value.getDefaultInstance() : value_;
     }
     /**
-     * <code>.google.protobuf.Any value = 3;</code>
+     * <code>.google.protobuf.Value value = 3;</code>
      */
     @Override
-    public com.google.protobuf.AnyOrBuilder getValueOrBuilder() {
-      return value_ == null ? com.google.protobuf.Any.getDefaultInstance() : value_;
+    public com.google.protobuf.ValueOrBuilder getValueOrBuilder() {
+      return value_ == null ? com.google.protobuf.Value.getDefaultInstance() : value_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -902,31 +902,31 @@ public final class FilterEntityOuterClass {
         return this;
       }
 
-      private com.google.protobuf.Any value_;
+      private com.google.protobuf.Value value_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> valueBuilder_;
+          com.google.protobuf.Value, com.google.protobuf.Value.Builder, com.google.protobuf.ValueOrBuilder> valueBuilder_;
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        * @return Whether the value field is set.
        */
       public boolean hasValue() {
         return ((bitField0_ & 0x00000004) != 0);
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        * @return The value.
        */
-      public com.google.protobuf.Any getValue() {
+      public com.google.protobuf.Value getValue() {
         if (valueBuilder_ == null) {
-          return value_ == null ? com.google.protobuf.Any.getDefaultInstance() : value_;
+          return value_ == null ? com.google.protobuf.Value.getDefaultInstance() : value_;
         } else {
           return valueBuilder_.getMessage();
         }
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
-      public Builder setValue(com.google.protobuf.Any value) {
+      public Builder setValue(com.google.protobuf.Value value) {
         if (valueBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -940,10 +940,10 @@ public final class FilterEntityOuterClass {
         return this;
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
       public Builder setValue(
-          com.google.protobuf.Any.Builder builderForValue) {
+          com.google.protobuf.Value.Builder builderForValue) {
         if (valueBuilder_ == null) {
           value_ = builderForValue.build();
         } else {
@@ -954,13 +954,13 @@ public final class FilterEntityOuterClass {
         return this;
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
-      public Builder mergeValue(com.google.protobuf.Any value) {
+      public Builder mergeValue(com.google.protobuf.Value value) {
         if (valueBuilder_ == null) {
           if (((bitField0_ & 0x00000004) != 0) &&
             value_ != null &&
-            value_ != com.google.protobuf.Any.getDefaultInstance()) {
+            value_ != com.google.protobuf.Value.getDefaultInstance()) {
             getValueBuilder().mergeFrom(value);
           } else {
             value_ = value;
@@ -973,7 +973,7 @@ public final class FilterEntityOuterClass {
         return this;
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
       public Builder clearValue() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -986,33 +986,33 @@ public final class FilterEntityOuterClass {
         return this;
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
-      public com.google.protobuf.Any.Builder getValueBuilder() {
+      public com.google.protobuf.Value.Builder getValueBuilder() {
         bitField0_ |= 0x00000004;
         onChanged();
         return getValueFieldBuilder().getBuilder();
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
-      public com.google.protobuf.AnyOrBuilder getValueOrBuilder() {
+      public com.google.protobuf.ValueOrBuilder getValueOrBuilder() {
         if (valueBuilder_ != null) {
           return valueBuilder_.getMessageOrBuilder();
         } else {
           return value_ == null ?
-              com.google.protobuf.Any.getDefaultInstance() : value_;
+              com.google.protobuf.Value.getDefaultInstance() : value_;
         }
       }
       /**
-       * <code>.google.protobuf.Any value = 3;</code>
+       * <code>.google.protobuf.Value value = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder> 
+          com.google.protobuf.Value, com.google.protobuf.Value.Builder, com.google.protobuf.ValueOrBuilder> 
           getValueFieldBuilder() {
         if (valueBuilder_ == null) {
           valueBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.protobuf.Any, com.google.protobuf.Any.Builder, com.google.protobuf.AnyOrBuilder>(
+              com.google.protobuf.Value, com.google.protobuf.Value.Builder, com.google.protobuf.ValueOrBuilder>(
                   getValue(),
                   getParentForChildren(),
                   isClean());
@@ -1099,19 +1099,19 @@ public final class FilterEntityOuterClass {
   static {
     String[] descriptorData = {
       "\n\023filter_entity.proto\022%technology.polygo" +
-      "n.polygonid_protobuf\032\031google/protobuf/an" +
-      "y.proto\"S\n\014FilterEntity\022\020\n\010operator\030\001 \001(" +
-      "\t\022\014\n\004name\030\002 \001(\t\022#\n\005value\030\003 \001(\0132\024.google." +
-      "protobuf.Any*\216\001\n\016FilterOperator\022\t\n\005equal" +
-      "\020\000\022\023\n\017equalsAnyInList\020\001\022\013\n\007greater\020\002\022\n\n\006" +
-      "lesser\020\003\022\020\n\014greaterEqual\020\004\022\017\n\013lesserEqua" +
-      "l\020\005\022\n\n\006inList\020\006\022\006\n\002or\020\007\022\014\n\010nonEqual\020\010b\006p" +
-      "roto3"
+      "n.polygonid_protobuf\032\034google/protobuf/st" +
+      "ruct.proto\"U\n\014FilterEntity\022\020\n\010operator\030\001" +
+      " \001(\t\022\014\n\004name\030\002 \001(\t\022%\n\005value\030\003 \001(\0132\026.goog" +
+      "le.protobuf.Value*\216\001\n\016FilterOperator\022\t\n\005" +
+      "equal\020\000\022\023\n\017equalsAnyInList\020\001\022\013\n\007greater\020" +
+      "\002\022\n\n\006lesser\020\003\022\020\n\014greaterEqual\020\004\022\017\n\013lesse" +
+      "rEqual\020\005\022\n\n\006inList\020\006\022\006\n\002or\020\007\022\014\n\010nonEqual" +
+      "\020\010b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.google.protobuf.AnyProto.getDescriptor(),
+          com.google.protobuf.StructProto.getDescriptor(),
         });
     internal_static_technology_polygon_polygonid_protobuf_FilterEntity_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -1119,7 +1119,7 @@ public final class FilterEntityOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_technology_polygon_polygonid_protobuf_FilterEntity_descriptor,
         new String[] { "Operator", "Name", "Value", });
-    com.google.protobuf.AnyProto.getDescriptor();
+    com.google.protobuf.StructProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

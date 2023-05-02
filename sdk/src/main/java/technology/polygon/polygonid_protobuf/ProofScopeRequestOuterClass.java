@@ -197,11 +197,11 @@ public final class ProofScopeRequestOuterClass {
       com.google.protobuf.BoolValueOrBuilder getSkipClaimRevocationCheckOrBuilder();
 
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       int getCredentialSubjectCount();
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       boolean containsCredentialSubject(
           String key);
@@ -209,25 +209,25 @@ public final class ProofScopeRequestOuterClass {
        * Use {@link #getCredentialSubjectMap()} instead.
        */
       @Deprecated
-      java.util.Map<String, com.google.protobuf.Any>
+      java.util.Map<String, com.google.protobuf.Value>
       getCredentialSubject();
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
-      java.util.Map<String, com.google.protobuf.Any>
+      java.util.Map<String, com.google.protobuf.Value>
       getCredentialSubjectMap();
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       /* nullable */
-com.google.protobuf.Any getCredentialSubjectOrDefault(
+com.google.protobuf.Value getCredentialSubjectOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue);
+com.google.protobuf.Value defaultValue);
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
-      com.google.protobuf.Any getCredentialSubjectOrThrow(
+      com.google.protobuf.Value getCredentialSubjectOrThrow(
           String key);
     }
     /**
@@ -426,19 +426,19 @@ com.google.protobuf.Any defaultValue);
       public static final int CREDENTIALSUBJECT_FIELD_NUMBER = 6;
       private static final class CredentialSubjectDefaultEntryHolder {
         static final com.google.protobuf.MapEntry<
-            String, com.google.protobuf.Any> defaultEntry =
+            String, com.google.protobuf.Value> defaultEntry =
                 com.google.protobuf.MapEntry
-                .<String, com.google.protobuf.Any>newDefaultInstance(
+                .<String, com.google.protobuf.Value>newDefaultInstance(
                     ProofScopeRequestOuterClass.internal_static_technology_polygon_polygonid_protobuf_ProofScopeRequest_ProofScopeQueryRequest_CredentialSubjectEntry_descriptor,
                     com.google.protobuf.WireFormat.FieldType.STRING,
                     "",
                     com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                    com.google.protobuf.Any.getDefaultInstance());
+                    com.google.protobuf.Value.getDefaultInstance());
       }
       @SuppressWarnings("serial")
       private com.google.protobuf.MapField<
-          String, com.google.protobuf.Any> credentialSubject_;
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+          String, com.google.protobuf.Value> credentialSubject_;
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
       internalGetCredentialSubject() {
         if (credentialSubject_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
@@ -450,7 +450,7 @@ com.google.protobuf.Any defaultValue);
         return internalGetCredentialSubject().getMap().size();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
       public boolean containsCredentialSubject(
@@ -463,38 +463,38 @@ com.google.protobuf.Any defaultValue);
        */
       @Override
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any> getCredentialSubject() {
+      public java.util.Map<String, com.google.protobuf.Value> getCredentialSubject() {
         return getCredentialSubjectMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
-      public java.util.Map<String, com.google.protobuf.Any> getCredentialSubjectMap() {
+      public java.util.Map<String, com.google.protobuf.Value> getCredentialSubjectMap() {
         return internalGetCredentialSubject().getMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
       public /* nullable */
-com.google.protobuf.Any getCredentialSubjectOrDefault(
+com.google.protobuf.Value getCredentialSubjectOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetCredentialSubject().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
        */
       @Override
-      public com.google.protobuf.Any getCredentialSubjectOrThrow(
+      public com.google.protobuf.Value getCredentialSubjectOrThrow(
           String key) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetCredentialSubject().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
@@ -570,9 +570,9 @@ com.google.protobuf.Any defaultValue) {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(5, getSkipClaimRevocationCheck());
         }
-        for (java.util.Map.Entry<String, com.google.protobuf.Any> entry
+        for (java.util.Map.Entry<String, com.google.protobuf.Value> entry
              : internalGetCredentialSubject().getMap().entrySet()) {
-          com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+          com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
           credentialSubject__ = CredentialSubjectDefaultEntryHolder.defaultEntry.newBuilderForType()
               .setKey(entry.getKey())
               .setValue(entry.getValue())
@@ -1026,7 +1026,7 @@ com.google.protobuf.Any defaultValue) {
                   break;
                 } // case 42
                 case 50: {
-                  com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+                  com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
                   credentialSubject__ = input.readMessage(
                       CredentialSubjectDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
                   internalGetMutableCredentialSubject().getMutableMap().put(
@@ -1632,8 +1632,8 @@ com.google.protobuf.Any defaultValue) {
         }
 
         private com.google.protobuf.MapField<
-            String, com.google.protobuf.Any> credentialSubject_;
-        private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+            String, com.google.protobuf.Value> credentialSubject_;
+        private com.google.protobuf.MapField<String, com.google.protobuf.Value>
             internalGetCredentialSubject() {
           if (credentialSubject_ == null) {
             return com.google.protobuf.MapField.emptyMapField(
@@ -1641,7 +1641,7 @@ com.google.protobuf.Any defaultValue) {
           }
           return credentialSubject_;
         }
-        private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+        private com.google.protobuf.MapField<String, com.google.protobuf.Value>
             internalGetMutableCredentialSubject() {
           if (credentialSubject_ == null) {
             credentialSubject_ = com.google.protobuf.MapField.newMapField(
@@ -1658,7 +1658,7 @@ com.google.protobuf.Any defaultValue) {
           return internalGetCredentialSubject().getMap().size();
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         @Override
         public boolean containsCredentialSubject(
@@ -1671,38 +1671,38 @@ com.google.protobuf.Any defaultValue) {
          */
         @Override
         @Deprecated
-        public java.util.Map<String, com.google.protobuf.Any> getCredentialSubject() {
+        public java.util.Map<String, com.google.protobuf.Value> getCredentialSubject() {
           return getCredentialSubjectMap();
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         @Override
-        public java.util.Map<String, com.google.protobuf.Any> getCredentialSubjectMap() {
+        public java.util.Map<String, com.google.protobuf.Value> getCredentialSubjectMap() {
           return internalGetCredentialSubject().getMap();
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         @Override
         public /* nullable */
-com.google.protobuf.Any getCredentialSubjectOrDefault(
+com.google.protobuf.Value getCredentialSubjectOrDefault(
             String key,
             /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
           if (key == null) { throw new NullPointerException("map key"); }
-          java.util.Map<String, com.google.protobuf.Any> map =
+          java.util.Map<String, com.google.protobuf.Value> map =
               internalGetCredentialSubject().getMap();
           return map.containsKey(key) ? map.get(key) : defaultValue;
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         @Override
-        public com.google.protobuf.Any getCredentialSubjectOrThrow(
+        public com.google.protobuf.Value getCredentialSubjectOrThrow(
             String key) {
           if (key == null) { throw new NullPointerException("map key"); }
-          java.util.Map<String, com.google.protobuf.Any> map =
+          java.util.Map<String, com.google.protobuf.Value> map =
               internalGetCredentialSubject().getMap();
           if (!map.containsKey(key)) {
             throw new IllegalArgumentException();
@@ -1716,7 +1716,7 @@ com.google.protobuf.Any defaultValue) {
           return this;
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         public Builder removeCredentialSubject(
             String key) {
@@ -1729,17 +1729,17 @@ com.google.protobuf.Any defaultValue) {
          * Use alternate mutation accessors instead.
          */
         @Deprecated
-        public java.util.Map<String, com.google.protobuf.Any>
+        public java.util.Map<String, com.google.protobuf.Value>
             getMutableCredentialSubject() {
           bitField0_ |= 0x00000020;
           return internalGetMutableCredentialSubject().getMutableMap();
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         public Builder putCredentialSubject(
             String key,
-            com.google.protobuf.Any value) {
+            com.google.protobuf.Value value) {
           if (key == null) { throw new NullPointerException("map key"); }
           if (value == null) { throw new NullPointerException("map value"); }
           internalGetMutableCredentialSubject().getMutableMap()
@@ -1748,10 +1748,10 @@ com.google.protobuf.Any defaultValue) {
           return this;
         }
         /**
-         * <code>map&lt;string, .google.protobuf.Any&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
+         * <code>map&lt;string, .google.protobuf.Value&gt; credentialSubject = 6 [(.technology.polygon.polygonid_protobuf.is_optional) = true];</code>
          */
         public Builder putAllCredentialSubject(
-            java.util.Map<String, com.google.protobuf.Any> values) {
+            java.util.Map<String, com.google.protobuf.Value> values) {
           internalGetMutableCredentialSubject().getMutableMap()
               .putAll(values);
           bitField0_ |= 0x00000020;
@@ -2772,33 +2772,33 @@ com.google.protobuf.Any defaultValue) {
   static {
     String[] descriptorData = {
       "\n\031proof_scope_request.proto\022%technology." +
-      "polygon.polygonid_protobuf\032\031google/proto" +
-      "buf/any.proto\032\036google/protobuf/wrappers." +
-      "proto\032\023field_options.proto\"\272\005\n\021ProofScop" +
-      "eRequest\022\n\n\002id\030\001 \001(\005\022\021\n\tcircuitId\030\002 \001(\t\022" +
-      "2\n\010optional\030\003 \001(\0132\032.google.protobuf.Bool" +
-      "ValueB\004\210\265\030\001\022^\n\005query\030\004 \001(\0132O.technology." +
-      "polygon.polygonid_protobuf.ProofScopeReq" +
-      "uest.ProofScopeQueryRequest\032\361\003\n\026ProofSco" +
-      "peQueryRequest\022\034\n\016allowedIssuers\030\001 \003(\tB\004" +
-      "\210\265\030\001\0223\n\007context\030\002 \001(\0132\034.google.protobuf." +
-      "StringValueB\004\210\265\030\001\0220\n\004type\030\003 \001(\0132\034.google" +
-      ".protobuf.StringValueB\004\210\265\030\001\0224\n\tchallenge" +
-      "\030\004 \001(\0132\033.google.protobuf.Int32ValueB\004\210\265\030" +
-      "\001\022B\n\030skipClaimRevocationCheck\030\005 \001(\0132\032.go" +
-      "ogle.protobuf.BoolValueB\004\210\265\030\001\022\207\001\n\021creden" +
-      "tialSubject\030\006 \003(\0132f.technology.polygon.p" +
-      "olygonid_protobuf.ProofScopeRequest.Proo" +
-      "fScopeQueryRequest.CredentialSubjectEntr" +
-      "yB\004\210\265\030\001\032N\n\026CredentialSubjectEntry\022\013\n\003key" +
-      "\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.google.protobuf." +
-      "Any:\0028\001b\006proto3"
+      "polygon.polygonid_protobuf\032\036google/proto" +
+      "buf/wrappers.proto\032\034google/protobuf/stru" +
+      "ct.proto\032\023field_options.proto\"\274\005\n\021ProofS" +
+      "copeRequest\022\n\n\002id\030\001 \001(\005\022\021\n\tcircuitId\030\002 \001" +
+      "(\t\0222\n\010optional\030\003 \001(\0132\032.google.protobuf.B" +
+      "oolValueB\004\210\265\030\001\022^\n\005query\030\004 \001(\0132O.technolo" +
+      "gy.polygon.polygonid_protobuf.ProofScope" +
+      "Request.ProofScopeQueryRequest\032\363\003\n\026Proof" +
+      "ScopeQueryRequest\022\034\n\016allowedIssuers\030\001 \003(" +
+      "\tB\004\210\265\030\001\0223\n\007context\030\002 \001(\0132\034.google.protob" +
+      "uf.StringValueB\004\210\265\030\001\0220\n\004type\030\003 \001(\0132\034.goo" +
+      "gle.protobuf.StringValueB\004\210\265\030\001\0224\n\tchalle" +
+      "nge\030\004 \001(\0132\033.google.protobuf.Int32ValueB\004" +
+      "\210\265\030\001\022B\n\030skipClaimRevocationCheck\030\005 \001(\0132\032" +
+      ".google.protobuf.BoolValueB\004\210\265\030\001\022\207\001\n\021cre" +
+      "dentialSubject\030\006 \003(\0132f.technology.polygo" +
+      "n.polygonid_protobuf.ProofScopeRequest.P" +
+      "roofScopeQueryRequest.CredentialSubjectE" +
+      "ntryB\004\210\265\030\001\032P\n\026CredentialSubjectEntry\022\013\n\003" +
+      "key\030\001 \001(\t\022%\n\005value\030\002 \001(\0132\026.google.protob" +
+      "uf.Value:\0028\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.google.protobuf.AnyProto.getDescriptor(),
           com.google.protobuf.WrappersProto.getDescriptor(),
+          com.google.protobuf.StructProto.getDescriptor(),
           FieldOptions.getDescriptor(),
         });
     internal_static_technology_polygon_polygonid_protobuf_ProofScopeRequest_descriptor =
@@ -2824,8 +2824,8 @@ com.google.protobuf.Any defaultValue) {
     registry.add(FieldOptions.isOptional);
     com.google.protobuf.Descriptors.FileDescriptor
         .internalUpdateFileDescriptor(descriptor, registry);
-    com.google.protobuf.AnyProto.getDescriptor();
     com.google.protobuf.WrappersProto.getDescriptor();
+    com.google.protobuf.StructProto.getDescriptor();
     FieldOptions.getDescriptor();
   }
 

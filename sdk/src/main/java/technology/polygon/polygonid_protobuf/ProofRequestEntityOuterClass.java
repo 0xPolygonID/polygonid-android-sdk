@@ -34,11 +34,11 @@ public final class ProofRequestEntityOuterClass {
     ProofScopeRequestOuterClass.ProofScopeRequestOrBuilder getScopeOrBuilder();
 
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     int getContextCount();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     boolean containsContext(
         String key);
@@ -46,25 +46,25 @@ public final class ProofRequestEntityOuterClass {
      * Use {@link #getContextMap()} instead.
      */
     @Deprecated
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getContext();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
-    java.util.Map<String, com.google.protobuf.Any>
+    java.util.Map<String, com.google.protobuf.Value>
     getContextMap();
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     /* nullable */
-com.google.protobuf.Any getContextOrDefault(
+com.google.protobuf.Value getContextOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue);
+com.google.protobuf.Value defaultValue);
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
-    com.google.protobuf.Any getContextOrThrow(
+    com.google.protobuf.Value getContextOrThrow(
         String key);
 
     /**
@@ -982,19 +982,19 @@ com.google.protobuf.Any defaultValue);
     public static final int CONTEXT_FIELD_NUMBER = 2;
     private static final class ContextDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
-          String, com.google.protobuf.Any> defaultEntry =
+          String, com.google.protobuf.Value> defaultEntry =
               com.google.protobuf.MapEntry
-              .<String, com.google.protobuf.Any>newDefaultInstance(
+              .<String, com.google.protobuf.Value>newDefaultInstance(
                   ProofRequestEntityOuterClass.internal_static_technology_polygon_polygonid_protobuf_ProofRequestEntity_ContextEntry_descriptor,
                   com.google.protobuf.WireFormat.FieldType.STRING,
                   "",
                   com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                  com.google.protobuf.Any.getDefaultInstance());
+                  com.google.protobuf.Value.getDefaultInstance());
     }
     @SuppressWarnings("serial")
     private com.google.protobuf.MapField<
-        String, com.google.protobuf.Any> context_;
-    private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+        String, com.google.protobuf.Value> context_;
+    private com.google.protobuf.MapField<String, com.google.protobuf.Value>
     internalGetContext() {
       if (context_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -1006,7 +1006,7 @@ com.google.protobuf.Any defaultValue);
       return internalGetContext().getMap().size();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     @Override
     public boolean containsContext(
@@ -1019,38 +1019,38 @@ com.google.protobuf.Any defaultValue);
      */
     @Override
     @Deprecated
-    public java.util.Map<String, com.google.protobuf.Any> getContext() {
+    public java.util.Map<String, com.google.protobuf.Value> getContext() {
       return getContextMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     @Override
-    public java.util.Map<String, com.google.protobuf.Any> getContextMap() {
+    public java.util.Map<String, com.google.protobuf.Value> getContextMap() {
       return internalGetContext().getMap();
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     @Override
     public /* nullable */
-com.google.protobuf.Any getContextOrDefault(
+com.google.protobuf.Value getContextOrDefault(
         String key,
         /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetContext().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+     * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
      */
     @Override
-    public com.google.protobuf.Any getContextOrThrow(
+    public com.google.protobuf.Value getContextOrThrow(
         String key) {
       if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<String, com.google.protobuf.Any> map =
+      java.util.Map<String, com.google.protobuf.Value> map =
           internalGetContext().getMap();
       if (!map.containsKey(key)) {
         throw new IllegalArgumentException();
@@ -1123,9 +1123,9 @@ com.google.protobuf.Any defaultValue) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getScope());
       }
-      for (java.util.Map.Entry<String, com.google.protobuf.Any> entry
+      for (java.util.Map.Entry<String, com.google.protobuf.Value> entry
            : internalGetContext().getMap().entrySet()) {
-        com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+        com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
         context__ = ContextDefaultEntryHolder.defaultEntry.newBuilderForType()
             .setKey(entry.getKey())
             .setValue(entry.getValue())
@@ -1485,7 +1485,7 @@ com.google.protobuf.Any defaultValue) {
                 break;
               } // case 10
               case 18: {
-                com.google.protobuf.MapEntry<String, com.google.protobuf.Any>
+                com.google.protobuf.MapEntry<String, com.google.protobuf.Value>
                 context__ = input.readMessage(
                     ContextDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
                 internalGetMutableContext().getMutableMap().put(
@@ -1637,8 +1637,8 @@ com.google.protobuf.Any defaultValue) {
       }
 
       private com.google.protobuf.MapField<
-          String, com.google.protobuf.Any> context_;
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+          String, com.google.protobuf.Value> context_;
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetContext() {
         if (context_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
@@ -1646,7 +1646,7 @@ com.google.protobuf.Any defaultValue) {
         }
         return context_;
       }
-      private com.google.protobuf.MapField<String, com.google.protobuf.Any>
+      private com.google.protobuf.MapField<String, com.google.protobuf.Value>
           internalGetMutableContext() {
         if (context_ == null) {
           context_ = com.google.protobuf.MapField.newMapField(
@@ -1663,7 +1663,7 @@ com.google.protobuf.Any defaultValue) {
         return internalGetContext().getMap().size();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       @Override
       public boolean containsContext(
@@ -1676,38 +1676,38 @@ com.google.protobuf.Any defaultValue) {
        */
       @Override
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any> getContext() {
+      public java.util.Map<String, com.google.protobuf.Value> getContext() {
         return getContextMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       @Override
-      public java.util.Map<String, com.google.protobuf.Any> getContextMap() {
+      public java.util.Map<String, com.google.protobuf.Value> getContextMap() {
         return internalGetContext().getMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       @Override
       public /* nullable */
-com.google.protobuf.Any getContextOrDefault(
+com.google.protobuf.Value getContextOrDefault(
           String key,
           /* nullable */
-com.google.protobuf.Any defaultValue) {
+com.google.protobuf.Value defaultValue) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetContext().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       @Override
-      public com.google.protobuf.Any getContextOrThrow(
+      public com.google.protobuf.Value getContextOrThrow(
           String key) {
         if (key == null) { throw new NullPointerException("map key"); }
-        java.util.Map<String, com.google.protobuf.Any> map =
+        java.util.Map<String, com.google.protobuf.Value> map =
             internalGetContext().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
@@ -1721,7 +1721,7 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       public Builder removeContext(
           String key) {
@@ -1734,17 +1734,17 @@ com.google.protobuf.Any defaultValue) {
        * Use alternate mutation accessors instead.
        */
       @Deprecated
-      public java.util.Map<String, com.google.protobuf.Any>
+      public java.util.Map<String, com.google.protobuf.Value>
           getMutableContext() {
         bitField0_ |= 0x00000002;
         return internalGetMutableContext().getMutableMap();
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       public Builder putContext(
           String key,
-          com.google.protobuf.Any value) {
+          com.google.protobuf.Value value) {
         if (key == null) { throw new NullPointerException("map key"); }
         if (value == null) { throw new NullPointerException("map value"); }
         internalGetMutableContext().getMutableMap()
@@ -1753,10 +1753,10 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
       /**
-       * <code>map&lt;string, .google.protobuf.Any&gt; context = 2;</code>
+       * <code>map&lt;string, .google.protobuf.Value&gt; context = 2;</code>
        */
       public Builder putAllContext(
-          java.util.Map<String, com.google.protobuf.Any> values) {
+          java.util.Map<String, com.google.protobuf.Value> values) {
         internalGetMutableContext().getMutableMap()
             .putAll(values);
         bitField0_ |= 0x00000002;
@@ -1970,24 +1970,25 @@ com.google.protobuf.Any defaultValue) {
   static {
     String[] descriptorData = {
       "\n\032proof_request_entity.proto\022%technology" +
-      ".polygon.polygonid_protobuf\032\031google/prot" +
-      "obuf/any.proto\032\031proof_scope_request.prot" +
-      "o\"\253\003\n\022ProofRequestEntity\022G\n\005scope\030\001 \001(\0132" +
-      "8.technology.polygon.polygonid_protobuf." +
-      "ProofScopeRequest\022W\n\007context\030\002 \003(\0132F.tec" +
-      "hnology.polygon.polygonid_protobuf.Proof" +
-      "RequestEntity.ContextEntry\022c\n\nqueryParam" +
-      "\030\003 \001(\0132O.technology.polygon.polygonid_pr" +
-      "otobuf.ProofRequestEntity.ProofQueryPara" +
-      "mEntity\032D\n\014ContextEntry\022\013\n\003key\030\001 \001(\t\022#\n\005" +
-      "value\030\002 \001(\0132\024.google.protobuf.Any:\0028\001\032H\n" +
-      "\025ProofQueryParamEntity\022\r\n\005field\030\001 \001(\t\022\016\n" +
-      "\006values\030\002 \003(\005\022\020\n\010operator\030\003 \001(\005b\006proto3"
+      ".polygon.polygonid_protobuf\032\034google/prot" +
+      "obuf/struct.proto\032\031proof_scope_request.p" +
+      "roto\"\255\003\n\022ProofRequestEntity\022G\n\005scope\030\001 \001" +
+      "(\01328.technology.polygon.polygonid_protob" +
+      "uf.ProofScopeRequest\022W\n\007context\030\002 \003(\0132F." +
+      "technology.polygon.polygonid_protobuf.Pr" +
+      "oofRequestEntity.ContextEntry\022c\n\nqueryPa" +
+      "ram\030\003 \001(\0132O.technology.polygon.polygonid" +
+      "_protobuf.ProofRequestEntity.ProofQueryP" +
+      "aramEntity\032F\n\014ContextEntry\022\013\n\003key\030\001 \001(\t\022" +
+      "%\n\005value\030\002 \001(\0132\026.google.protobuf.Value:\002" +
+      "8\001\032H\n\025ProofQueryParamEntity\022\r\n\005field\030\001 \001" +
+      "(\t\022\016\n\006values\030\002 \003(\005\022\020\n\010operator\030\003 \001(\005b\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.google.protobuf.AnyProto.getDescriptor(),
+          com.google.protobuf.StructProto.getDescriptor(),
           ProofScopeRequestOuterClass.getDescriptor(),
         });
     internal_static_technology_polygon_polygonid_protobuf_ProofRequestEntity_descriptor =
@@ -2008,7 +2009,7 @@ com.google.protobuf.Any defaultValue) {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_technology_polygon_polygonid_protobuf_ProofRequestEntity_ProofQueryParamEntity_descriptor,
         new String[] { "Field", "Values", "Operator", });
-    com.google.protobuf.AnyProto.getDescriptor();
+    com.google.protobuf.StructProto.getDescriptor();
     ProofScopeRequestOuterClass.getDescriptor();
   }
 
