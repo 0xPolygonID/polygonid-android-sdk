@@ -42,10 +42,10 @@
         android:text="Get identities" />
 
     <Button
-        android:id="@+id/button_get_did_identifier"
+        android:id="@+id/button_get_claims"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get DID identifier" />
+        android:text="Get claims" />
 
     <Button
         android:id="@+id/button_authenticate"
@@ -54,10 +54,10 @@
         android:text="Authenticate" />
 
     <Button
-        android:id="@+id/button_stop_stream"
+        android:id="@+id/button_fetch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop stream" />
+        android:text="Fetch" />
 
     <TextView
         android:id="@+id/text_result"

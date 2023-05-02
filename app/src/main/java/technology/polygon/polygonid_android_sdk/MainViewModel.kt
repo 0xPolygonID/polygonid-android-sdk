@@ -11,7 +11,10 @@ import java.math.BigInteger
 const val TAG = "PolygonIdSdk"
 const val secret = "some secret table yep fff so GJ"
 const val apiKey = "b936512326ea4e22a2a8552b6e9db7b7"
-const val authMessage = "{\"id\":\"0e9f213b-b9b2-4c7c-95e9-9e442672d739\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"0e9f213b-b9b2-4c7c-95e9-9e442672d739\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=534374\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
+const val authMessage =
+    "{\"id\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=228509\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
+const val fetchMessage =
+    "{\"id\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/credentials/1.0/offer\",\"thid\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"body\":{\"url\":\"https://issuer-testing.polygonid.me/v1/agent\",\"credentials\":[{\"id\":\"2bcb98bc-e8db-11ed-938b-0242ac180006\",\"description\":\"KYCAgeCredential\"}]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\",\"to\":\"did:polygonid:polygon:mumbai:2qLmyLKBkCXDSHku8mgjU9XM7n6aH8Lwvp4XESPyJt\"}"
 
 class MainViewModel : ViewModel() {
     fun init(context: Context) {
@@ -145,6 +148,58 @@ class MainViewModel : ViewModel() {
                 }
             }.thenAccept {
                 println("Authenticated outer")
+            }
+        }
+    }
+
+    fun fetch(context: Context) {
+        viewModelScope.launch {
+            PolygonIdSdk.getInstance().getIden3Message(
+                context,
+                fetchMessage
+            ).thenApply { message ->
+                PolygonIdSdk.getInstance().getPrivateKey(
+                    context = context, secret = secret
+                ).thenApply { privateKey ->
+                    PolygonIdSdk.getInstance().getDidIdentifier(
+                        context = context,
+                        privateKey = privateKey,
+                        blockchain = "polygon",
+                        network = "mumbai",
+                    ).thenApply { did ->
+                        PolygonIdSdk.getInstance().fetchAndSaveClaims(
+                            context = context,
+                            message = message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity,
+                            genesisDid = did,
+                            privateKey = privateKey
+                        ).thenAccept {
+                            println("Fetched")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getClaims(context: Context) {
+        viewModelScope.launch {
+            PolygonIdSdk.getInstance().getPrivateKey(
+                context = context, secret = secret
+            ).thenApply { privateKey ->
+                PolygonIdSdk.getInstance().getDidIdentifier(
+                    context = context,
+                    privateKey = privateKey,
+                    blockchain = "polygon",
+                    network = "mumbai",
+                ).thenApply { did ->
+                    PolygonIdSdk.getInstance().getClaims(
+                        context = context,
+                        genesisDid = did,
+                        privateKey = privateKey
+                    ).thenApply { claims ->
+                        println("Claims: $claims")
+                    }
+                }
             }
         }
     }

@@ -181,15 +181,16 @@ public final class ClaimEntityOuterClass {
         getDidBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
-     * @return The enum numeric value on the wire for state.
-     */
-    int getStateValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
+     * <code>string state = 4;</code>
      * @return The state.
      */
-    ClaimState getState();
+    String getState();
+    /**
+     * <code>string state = 4;</code>
+     * @return The bytes for state.
+     */
+    com.google.protobuf.ByteString
+        getStateBytes();
 
     /**
      * <code>.google.protobuf.StringValue expiration = 5;</code>
@@ -336,7 +337,7 @@ com.google.protobuf.Any defaultValue);
       id_ = "";
       issuer_ = "";
       did_ = "";
-      state_ = 0;
+      state_ = "";
       type_ = "";
     }
 
@@ -499,21 +500,42 @@ com.google.protobuf.Any defaultValue);
     }
 
     public static final int STATE_FIELD_NUMBER = 4;
-    private int state_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object state_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
-     * @return The enum numeric value on the wire for state.
-     */
-    @Override public int getStateValue() {
-      return state_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
+     * <code>string state = 4;</code>
      * @return The state.
      */
-    @Override public ClaimState getState() {
-      ClaimState result = ClaimState.forNumber(state_);
-      return result == null ? ClaimState.UNRECOGNIZED : result;
+    @Override
+    public String getState() {
+      Object ref = state_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        state_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string state = 4;</code>
+     * @return The bytes for state.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getStateBytes() {
+      Object ref = state_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        state_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int EXPIRATION_FIELD_NUMBER = 5;
@@ -841,8 +863,8 @@ com.google.protobuf.Any defaultValue) {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(did_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, did_);
       }
-      if (state_ != ClaimState.active.getNumber()) {
-        output.writeEnum(4, state_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(state_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, state_);
       }
       if (expiration_ != null) {
         output.writeMessage(5, getExpiration());
@@ -886,9 +908,8 @@ com.google.protobuf.Any defaultValue) {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(did_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, did_);
       }
-      if (state_ != ClaimState.active.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, state_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(state_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, state_);
       }
       if (expiration_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -948,7 +969,8 @@ com.google.protobuf.Any defaultValue) {
           .equals(other.getIssuer())) return false;
       if (!getDid()
           .equals(other.getDid())) return false;
-      if (state_ != other.state_) return false;
+      if (!getState()
+          .equals(other.getState())) return false;
       if (hasExpiration() != other.hasExpiration()) return false;
       if (hasExpiration()) {
         if (!getExpiration()
@@ -980,7 +1002,7 @@ com.google.protobuf.Any defaultValue) {
       hash = (37 * hash) + DID_FIELD_NUMBER;
       hash = (53 * hash) + getDid().hashCode();
       hash = (37 * hash) + STATE_FIELD_NUMBER;
-      hash = (53 * hash) + state_;
+      hash = (53 * hash) + getState().hashCode();
       if (hasExpiration()) {
         hash = (37 * hash) + EXPIRATION_FIELD_NUMBER;
         hash = (53 * hash) + getExpiration().hashCode();
@@ -1161,7 +1183,7 @@ com.google.protobuf.Any defaultValue) {
         id_ = "";
         issuer_ = "";
         did_ = "";
-        state_ = 0;
+        state_ = "";
         expiration_ = null;
         if (expirationBuilder_ != null) {
           expirationBuilder_.dispose();
@@ -1297,8 +1319,10 @@ com.google.protobuf.Any defaultValue) {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.state_ != 0) {
-          setStateValue(other.getStateValue());
+        if (!other.getState().isEmpty()) {
+          state_ = other.state_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (other.hasExpiration()) {
           mergeExpiration(other.getExpiration());
@@ -1358,11 +1382,11 @@ com.google.protobuf.Any defaultValue) {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                state_ = input.readEnum();
+              case 34: {
+                state_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
+              } // case 34
               case 42: {
                 input.readMessage(
                     getExpirationFieldBuilder().getBuilder(),
@@ -1635,55 +1659,74 @@ com.google.protobuf.Any defaultValue) {
         return this;
       }
 
-      private int state_ = 0;
+      private Object state_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
-       * @return The enum numeric value on the wire for state.
+       * <code>string state = 4;</code>
+       * @return The state.
        */
-      @Override public int getStateValue() {
-        return state_;
+      public String getState() {
+        Object ref = state_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          state_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
-       * @param value The enum numeric value on the wire for state to set.
+       * <code>string state = 4;</code>
+       * @return The bytes for state.
+       */
+      public com.google.protobuf.ByteString
+          getStateBytes() {
+        Object ref = state_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          state_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string state = 4;</code>
+       * @param value The state to set.
        * @return This builder for chaining.
        */
-      public Builder setStateValue(int value) {
+      public Builder setState(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         state_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
-       * @return The state.
-       */
-      @Override
-      public ClaimState getState() {
-        ClaimState result = ClaimState.forNumber(state_);
-        return result == null ? ClaimState.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
-       * @param value The state to set.
+       * <code>string state = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder setState(ClaimState value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        state_ = value.getNumber();
+      public Builder clearState() {
+        state_ = getDefaultInstance().getState();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.ClaimState state = 4;</code>
+       * <code>string state = 4;</code>
+       * @param value The bytes for state to set.
        * @return This builder for chaining.
        */
-      public Builder clearState() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        state_ = 0;
+      public Builder setStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        state_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -2355,25 +2398,23 @@ com.google.protobuf.Any defaultValue) {
       "\n\022claim_entity.proto\022%technology.polygon" +
       ".polygonid_protobuf\032\031google/protobuf/any" +
       ".proto\032\036google/protobuf/wrappers.proto\032\023" +
-      "field_options.proto\"\372\004\n\013ClaimEntity\022\n\n\002i" +
-      "d\030\001 \001(\t\022\016\n\006issuer\030\002 \001(\t\022\013\n\003did\030\003 \001(\t\022@\n\005" +
-      "state\030\004 \001(\01621.technology.polygon.polygon" +
-      "id_protobuf.ClaimState\0220\n\nexpiration\030\005 \001" +
-      "(\0132\034.google.protobuf.StringValue\022T\n\006sche" +
-      "ma\030\006 \003(\0132>.technology.polygon.polygonid_" +
-      "protobuf.ClaimEntity.SchemaEntryB\004\210\265\030\001\022R" +
-      "\n\005vocab\030\007 \003(\0132=.technology.polygon.polyg" +
-      "onid_protobuf.ClaimEntity.VocabEntryB\004\210\265" +
-      "\030\001\022\014\n\004type\030\010 \001(\t\022J\n\004info\030\t \003(\0132<.technol" +
-      "ogy.polygon.polygonid_protobuf.ClaimEnti" +
-      "ty.InfoEntry\032C\n\013SchemaEntry\022\013\n\003key\030\001 \001(\t" +
-      "\022#\n\005value\030\002 \001(\0132\024.google.protobuf.Any:\0028" +
-      "\001\032B\n\nVocabEntry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002 " +
-      "\001(\0132\024.google.protobuf.Any:\0028\001\032A\n\tInfoEnt" +
-      "ry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.google." +
-      "protobuf.Any:\0028\001*?\n\nClaimState\022\n\n\006active" +
-      "\020\000\022\013\n\007expired\020\001\022\013\n\007pending\020\002\022\013\n\007revoked\020" +
-      "\003b\006proto3"
+      "field_options.proto\"\307\004\n\013ClaimEntity\022\n\n\002i" +
+      "d\030\001 \001(\t\022\016\n\006issuer\030\002 \001(\t\022\013\n\003did\030\003 \001(\t\022\r\n\005" +
+      "state\030\004 \001(\t\0220\n\nexpiration\030\005 \001(\0132\034.google" +
+      ".protobuf.StringValue\022T\n\006schema\030\006 \003(\0132>." +
+      "technology.polygon.polygonid_protobuf.Cl" +
+      "aimEntity.SchemaEntryB\004\210\265\030\001\022R\n\005vocab\030\007 \003" +
+      "(\0132=.technology.polygon.polygonid_protob" +
+      "uf.ClaimEntity.VocabEntryB\004\210\265\030\001\022\014\n\004type\030" +
+      "\010 \001(\t\022J\n\004info\030\t \003(\0132<.technology.polygon" +
+      ".polygonid_protobuf.ClaimEntity.InfoEntr" +
+      "y\032C\n\013SchemaEntry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002" +
+      " \001(\0132\024.google.protobuf.Any:\0028\001\032B\n\nVocabE" +
+      "ntry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.googl" +
+      "e.protobuf.Any:\0028\001\032A\n\tInfoEntry\022\013\n\003key\030\001" +
+      " \001(\t\022#\n\005value\030\002 \001(\0132\024.google.protobuf.An" +
+      "y:\0028\001*?\n\nClaimState\022\n\n\006active\020\000\022\013\n\007expir" +
+      "ed\020\001\022\013\n\007pending\020\002\022\013\n\007revoked\020\003b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

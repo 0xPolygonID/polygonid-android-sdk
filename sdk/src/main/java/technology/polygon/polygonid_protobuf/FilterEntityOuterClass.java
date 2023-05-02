@@ -190,15 +190,16 @@ public final class FilterEntityOuterClass {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
-     * @return The enum numeric value on the wire for operator.
-     */
-    int getOperatorValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
+     * <code>string operator = 1;</code>
      * @return The operator.
      */
-    FilterOperator getOperator();
+    String getOperator();
+    /**
+     * <code>string operator = 1;</code>
+     * @return The bytes for operator.
+     */
+    com.google.protobuf.ByteString
+        getOperatorBytes();
 
     /**
      * <code>string name = 2;</code>
@@ -240,7 +241,7 @@ public final class FilterEntityOuterClass {
       super(builder);
     }
     private FilterEntity() {
-      operator_ = 0;
+      operator_ = "";
       name_ = "";
     }
 
@@ -270,21 +271,42 @@ public final class FilterEntityOuterClass {
     }
 
     public static final int OPERATOR_FIELD_NUMBER = 1;
-    private int operator_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object operator_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
-     * @return The enum numeric value on the wire for operator.
-     */
-    @Override public int getOperatorValue() {
-      return operator_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
+     * <code>string operator = 1;</code>
      * @return The operator.
      */
-    @Override public FilterOperator getOperator() {
-      FilterOperator result = FilterOperator.forNumber(operator_);
-      return result == null ? FilterOperator.UNRECOGNIZED : result;
+    @Override
+    public String getOperator() {
+      Object ref = operator_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        operator_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string operator = 1;</code>
+     * @return The bytes for operator.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getOperatorBytes() {
+      Object ref = operator_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        operator_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int NAME_FIELD_NUMBER = 2;
@@ -366,8 +388,8 @@ public final class FilterEntityOuterClass {
     @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (operator_ != FilterOperator.equal.getNumber()) {
-        output.writeEnum(1, operator_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(operator_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, operator_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
@@ -384,9 +406,8 @@ public final class FilterEntityOuterClass {
       if (size != -1) return size;
 
       size = 0;
-      if (operator_ != FilterOperator.equal.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, operator_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(operator_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, operator_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
@@ -410,7 +431,8 @@ public final class FilterEntityOuterClass {
       }
       FilterEntity other = (FilterEntity) obj;
 
-      if (operator_ != other.operator_) return false;
+      if (!getOperator()
+          .equals(other.getOperator())) return false;
       if (!getName()
           .equals(other.getName())) return false;
       if (hasValue() != other.hasValue()) return false;
@@ -430,7 +452,7 @@ public final class FilterEntityOuterClass {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + OPERATOR_FIELD_NUMBER;
-      hash = (53 * hash) + operator_;
+      hash = (53 * hash) + getOperator().hashCode();
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
       if (hasValue()) {
@@ -566,7 +588,7 @@ public final class FilterEntityOuterClass {
       public Builder clear() {
         super.clear();
         bitField0_ = 0;
-        operator_ = 0;
+        operator_ = "";
         name_ = "";
         value_ = null;
         if (valueBuilder_ != null) {
@@ -663,8 +685,10 @@ public final class FilterEntityOuterClass {
 
       public Builder mergeFrom(FilterEntity other) {
         if (other == FilterEntity.getDefaultInstance()) return this;
-        if (other.operator_ != 0) {
-          setOperatorValue(other.getOperatorValue());
+        if (!other.getOperator().isEmpty()) {
+          operator_ = other.operator_;
+          bitField0_ |= 0x00000001;
+          onChanged();
         }
         if (!other.getName().isEmpty()) {
           name_ = other.name_;
@@ -700,11 +724,11 @@ public final class FilterEntityOuterClass {
               case 0:
                 done = true;
                 break;
-              case 8: {
-                operator_ = input.readEnum();
+              case 10: {
+                operator_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000001;
                 break;
-              } // case 8
+              } // case 10
               case 18: {
                 name_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000002;
@@ -734,55 +758,74 @@ public final class FilterEntityOuterClass {
       }
       private int bitField0_;
 
-      private int operator_ = 0;
+      private Object operator_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
-       * @return The enum numeric value on the wire for operator.
+       * <code>string operator = 1;</code>
+       * @return The operator.
        */
-      @Override public int getOperatorValue() {
-        return operator_;
+      public String getOperator() {
+        Object ref = operator_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          operator_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
-       * @param value The enum numeric value on the wire for operator to set.
+       * <code>string operator = 1;</code>
+       * @return The bytes for operator.
+       */
+      public com.google.protobuf.ByteString
+          getOperatorBytes() {
+        Object ref = operator_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          operator_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string operator = 1;</code>
+       * @param value The operator to set.
        * @return This builder for chaining.
        */
-      public Builder setOperatorValue(int value) {
+      public Builder setOperator(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         operator_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
-       * @return The operator.
-       */
-      @Override
-      public FilterOperator getOperator() {
-        FilterOperator result = FilterOperator.forNumber(operator_);
-        return result == null ? FilterOperator.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
-       * @param value The operator to set.
+       * <code>string operator = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder setOperator(FilterOperator value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000001;
-        operator_ = value.getNumber();
+      public Builder clearOperator() {
+        operator_ = getDefaultInstance().getOperator();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.FilterOperator operator = 1;</code>
+       * <code>string operator = 1;</code>
+       * @param value The bytes for operator to set.
        * @return This builder for chaining.
        */
-      public Builder clearOperator() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        operator_ = 0;
+      public Builder setOperatorBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        operator_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1057,14 +1100,13 @@ public final class FilterEntityOuterClass {
     String[] descriptorData = {
       "\n\023filter_entity.proto\022%technology.polygo" +
       "n.polygonid_protobuf\032\031google/protobuf/an" +
-      "y.proto\"\212\001\n\014FilterEntity\022G\n\010operator\030\001 \001" +
-      "(\01625.technology.polygon.polygonid_protob" +
-      "uf.FilterOperator\022\014\n\004name\030\002 \001(\t\022#\n\005value" +
-      "\030\003 \001(\0132\024.google.protobuf.Any*\216\001\n\016FilterO" +
-      "perator\022\t\n\005equal\020\000\022\023\n\017equalsAnyInList\020\001\022" +
-      "\013\n\007greater\020\002\022\n\n\006lesser\020\003\022\020\n\014greaterEqual" +
-      "\020\004\022\017\n\013lesserEqual\020\005\022\n\n\006inList\020\006\022\006\n\002or\020\007\022" +
-      "\014\n\010nonEqual\020\010b\006proto3"
+      "y.proto\"S\n\014FilterEntity\022\020\n\010operator\030\001 \001(" +
+      "\t\022\014\n\004name\030\002 \001(\t\022#\n\005value\030\003 \001(\0132\024.google." +
+      "protobuf.Any*\216\001\n\016FilterOperator\022\t\n\005equal" +
+      "\020\000\022\023\n\017equalsAnyInList\020\001\022\013\n\007greater\020\002\022\n\n\006" +
+      "lesser\020\003\022\020\n\014greaterEqual\020\004\022\017\n\013lesserEqua" +
+      "l\020\005\022\n\n\006inList\020\006\022\006\n\002or\020\007\022\014\n\010nonEqual\020\010b\006p" +
+      "roto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

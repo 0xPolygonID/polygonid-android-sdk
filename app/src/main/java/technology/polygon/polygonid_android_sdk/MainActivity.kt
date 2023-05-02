@@ -48,16 +48,18 @@ class MainActivity : AppCompatActivity() {
             viewModel.getIdentities(applicationContext)
         }
 
-        findViewById<Button>(R.id.button_get_did_identifier).setOnClickListener {
-            viewModel.getDidIdentifier(applicationContext)
+        findViewById<Button>(R.id.button_get_claims).setOnClickListener {
+            // viewModel.getDidIdentifier(applicationContext)
+            viewModel.getClaims(applicationContext)
         }
 
         findViewById<Button>(R.id.button_authenticate).setOnClickListener {
             viewModel.authenticate(applicationContext)
         }
 
-        findViewById<Button>(R.id.button_stop_stream).setOnClickListener {
-            viewModel.stopStream(applicationContext)
+        findViewById<Button>(R.id.button_fetch).setOnClickListener {
+            // viewModel.stopStream(applicationContext)
+            viewModel.fetch(applicationContext)
         }
     }
 }

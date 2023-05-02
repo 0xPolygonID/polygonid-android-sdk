@@ -672,7 +672,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
     fun getClaims(
         context: Context,
-        filters: List<FilterEntity>?,
+        filters: List<FilterEntity>? = null,
         genesisDid: String,
         privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
