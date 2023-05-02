@@ -20,40 +20,48 @@ public final class Iden3MessageEntityOuterClass {
   public enum Iden3MessageType
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>auth = 0;</code>
+     * <code>unknown = 0;</code>
      */
-    auth(0),
+    unknown(0),
     /**
-     * <code>fetch = 1;</code>
+     * <code>auth = 1;</code>
      */
-    fetch(1),
+    auth(1),
     /**
-     * <code>offer = 2;</code>
+     * <code>issuance = 2;</code>
      */
-    offer(2),
+    issuance(2),
     /**
-     * <code>onchain = 3;</code>
+     * <code>offer = 3;</code>
      */
-    onchain(3),
+    offer(3),
+    /**
+     * <code>contractFunctionCall = 4;</code>
+     */
+    contractFunctionCall(4),
     UNRECOGNIZED(-1),
     ;
 
     /**
-     * <code>auth = 0;</code>
+     * <code>unknown = 0;</code>
      */
-    public static final int auth_VALUE = 0;
+    public static final int unknown_VALUE = 0;
     /**
-     * <code>fetch = 1;</code>
+     * <code>auth = 1;</code>
      */
-    public static final int fetch_VALUE = 1;
+    public static final int auth_VALUE = 1;
     /**
-     * <code>offer = 2;</code>
+     * <code>issuance = 2;</code>
      */
-    public static final int offer_VALUE = 2;
+    public static final int issuance_VALUE = 2;
     /**
-     * <code>onchain = 3;</code>
+     * <code>offer = 3;</code>
      */
-    public static final int onchain_VALUE = 3;
+    public static final int offer_VALUE = 3;
+    /**
+     * <code>contractFunctionCall = 4;</code>
+     */
+    public static final int contractFunctionCall_VALUE = 4;
 
 
     public final int getNumber() {
@@ -80,10 +88,11 @@ public final class Iden3MessageEntityOuterClass {
      */
     public static Iden3MessageType forNumber(int value) {
       switch (value) {
-        case 0: return auth;
-        case 1: return fetch;
-        case 2: return offer;
-        case 3: return onchain;
+        case 0: return unknown;
+        case 1: return auth;
+        case 2: return issuance;
+        case 3: return offer;
+        case 4: return contractFunctionCall;
         default: return null;
       }
     }
@@ -181,15 +190,16 @@ public final class Iden3MessageEntityOuterClass {
         getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    int getMessageTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    Iden3MessageType getMessageType();
+    String getMessageType();
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    com.google.protobuf.ByteString
+        getMessageTypeBytes();
 
     /**
      * <code>string thid = 5;</code>
@@ -258,7 +268,7 @@ public final class Iden3MessageEntityOuterClass {
       id_ = "";
       typ_ = "";
       type_ = "";
-      messageType_ = 0;
+      messageType_ = "";
       thid_ = "";
       from_ = "";
       to_ = "";
@@ -406,22 +416,43 @@ public final class Iden3MessageEntityOuterClass {
       }
     }
 
-    public static final int MESSAGE_TYPE_FIELD_NUMBER = 4;
-    private int messageType_ = 0;
+    public static final int MESSAGETYPE_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile Object messageType_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    @Override public int getMessageTypeValue() {
-      return messageType_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    @Override public Iden3MessageType getMessageType() {
-      Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-      return result == null ? Iden3MessageType.UNRECOGNIZED : result;
+    @Override
+    public String getMessageType() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageTypeBytes() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int THID_FIELD_NUMBER = 5;
@@ -590,8 +621,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        output.writeEnum(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, thid_);
@@ -623,9 +654,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, thid_);
@@ -661,7 +691,8 @@ public final class Iden3MessageEntityOuterClass {
           .equals(other.getTyp())) return false;
       if (!getType()
           .equals(other.getType())) return false;
-      if (messageType_ != other.messageType_) return false;
+      if (!getMessageType()
+          .equals(other.getMessageType())) return false;
       if (!getThid()
           .equals(other.getThid())) return false;
       if (hasBody() != other.hasBody()) return false;
@@ -690,8 +721,8 @@ public final class Iden3MessageEntityOuterClass {
       hash = (53 * hash) + getTyp().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getType().hashCode();
-      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + messageType_;
+      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageType().hashCode();
       hash = (37 * hash) + THID_FIELD_NUMBER;
       hash = (53 * hash) + getThid().hashCode();
       if (hasBody()) {
@@ -834,7 +865,7 @@ public final class Iden3MessageEntityOuterClass {
         id_ = "";
         typ_ = "";
         type_ = "";
-        messageType_ = 0;
+        messageType_ = "";
         thid_ = "";
         body_ = null;
         if (bodyBuilder_ != null) {
@@ -963,8 +994,10 @@ public final class Iden3MessageEntityOuterClass {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.messageType_ != 0) {
-          setMessageTypeValue(other.getMessageTypeValue());
+        if (!other.getMessageType().isEmpty()) {
+          messageType_ = other.messageType_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (!other.getThid().isEmpty()) {
           thid_ = other.thid_;
@@ -1025,11 +1058,11 @@ public final class Iden3MessageEntityOuterClass {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                messageType_ = input.readEnum();
+              case 34: {
+                messageType_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
+              } // case 34
               case 42: {
                 thid_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000010;
@@ -1285,55 +1318,74 @@ public final class Iden3MessageEntityOuterClass {
         return this;
       }
 
-      private int messageType_ = 0;
+      private Object messageType_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The enum numeric value on the wire for messageType.
+       * <code>string messageType = 4;</code>
+       * @return The messageType.
        */
-      @Override public int getMessageTypeValue() {
-        return messageType_;
+      public String getMessageType() {
+        Object ref = messageType_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The enum numeric value on the wire for messageType to set.
+       * <code>string messageType = 4;</code>
+       * @return The bytes for messageType.
+       */
+      public com.google.protobuf.ByteString
+          getMessageTypeBytes() {
+        Object ref = messageType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageType = 4;</code>
+       * @param value The messageType to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageTypeValue(int value) {
+      public Builder setMessageType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         messageType_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The messageType.
-       */
-      @Override
-      public Iden3MessageType getMessageType() {
-        Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-        return result == null ? Iden3MessageType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The messageType to set.
+       * <code>string messageType = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder setMessageType(Iden3MessageType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        messageType_ = value.getNumber();
+      public Builder clearMessageType() {
+        messageType_ = getDefaultInstance().getMessageType();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+       * <code>string messageType = 4;</code>
+       * @param value The bytes for messageType to set.
        * @return This builder for chaining.
        */
-      public Builder clearMessageType() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        messageType_ = 0;
+      public Builder setMessageTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageType_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1777,15 +1829,16 @@ public final class Iden3MessageEntityOuterClass {
         getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    int getMessageTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    Iden3MessageType getMessageType();
+    String getMessageType();
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    com.google.protobuf.ByteString
+        getMessageTypeBytes();
 
     /**
      * <code>string thid = 5;</code>
@@ -1858,7 +1911,7 @@ public final class Iden3MessageEntityOuterClass {
       id_ = "";
       typ_ = "";
       type_ = "";
-      messageType_ = 0;
+      messageType_ = "";
       thid_ = "";
       from_ = "";
       to_ = "";
@@ -4749,21 +4802,42 @@ public final class Iden3MessageEntityOuterClass {
     }
 
     public static final int MESSAGETYPE_FIELD_NUMBER = 4;
-    private int messageType_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object messageType_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    @Override public int getMessageTypeValue() {
-      return messageType_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    @Override public Iden3MessageType getMessageType() {
-      Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-      return result == null ? Iden3MessageType.UNRECOGNIZED : result;
+    @Override
+    public String getMessageType() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageTypeBytes() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int THID_FIELD_NUMBER = 5;
@@ -4932,8 +5006,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        output.writeEnum(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, thid_);
@@ -4965,9 +5039,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, thid_);
@@ -5003,7 +5076,8 @@ public final class Iden3MessageEntityOuterClass {
           .equals(other.getTyp())) return false;
       if (!getType()
           .equals(other.getType())) return false;
-      if (messageType_ != other.messageType_) return false;
+      if (!getMessageType()
+          .equals(other.getMessageType())) return false;
       if (!getThid()
           .equals(other.getThid())) return false;
       if (hasBody() != other.hasBody()) return false;
@@ -5033,7 +5107,7 @@ public final class Iden3MessageEntityOuterClass {
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getType().hashCode();
       hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
-      hash = (53 * hash) + messageType_;
+      hash = (53 * hash) + getMessageType().hashCode();
       hash = (37 * hash) + THID_FIELD_NUMBER;
       hash = (53 * hash) + getThid().hashCode();
       if (hasBody()) {
@@ -5180,7 +5254,7 @@ public final class Iden3MessageEntityOuterClass {
         id_ = "";
         typ_ = "";
         type_ = "";
-        messageType_ = 0;
+        messageType_ = "";
         thid_ = "";
         body_ = null;
         if (bodyBuilder_ != null) {
@@ -5309,8 +5383,10 @@ public final class Iden3MessageEntityOuterClass {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.messageType_ != 0) {
-          setMessageTypeValue(other.getMessageTypeValue());
+        if (!other.getMessageType().isEmpty()) {
+          messageType_ = other.messageType_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (!other.getThid().isEmpty()) {
           thid_ = other.thid_;
@@ -5371,11 +5447,11 @@ public final class Iden3MessageEntityOuterClass {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                messageType_ = input.readEnum();
+              case 34: {
+                messageType_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
+              } // case 34
               case 42: {
                 thid_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000010;
@@ -5631,55 +5707,74 @@ public final class Iden3MessageEntityOuterClass {
         return this;
       }
 
-      private int messageType_ = 0;
+      private Object messageType_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
-       * @return The enum numeric value on the wire for messageType.
+       * <code>string messageType = 4;</code>
+       * @return The messageType.
        */
-      @Override public int getMessageTypeValue() {
-        return messageType_;
+      public String getMessageType() {
+        Object ref = messageType_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
-       * @param value The enum numeric value on the wire for messageType to set.
+       * <code>string messageType = 4;</code>
+       * @return The bytes for messageType.
+       */
+      public com.google.protobuf.ByteString
+          getMessageTypeBytes() {
+        Object ref = messageType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageType = 4;</code>
+       * @param value The messageType to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageTypeValue(int value) {
+      public Builder setMessageType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         messageType_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
-       * @return The messageType.
-       */
-      @Override
-      public Iden3MessageType getMessageType() {
-        Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-        return result == null ? Iden3MessageType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
-       * @param value The messageType to set.
+       * <code>string messageType = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder setMessageType(Iden3MessageType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        messageType_ = value.getNumber();
+      public Builder clearMessageType() {
+        messageType_ = getDefaultInstance().getMessageType();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType messageType = 4;</code>
+       * <code>string messageType = 4;</code>
+       * @param value The bytes for messageType to set.
        * @return This builder for chaining.
        */
-      public Builder clearMessageType() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        messageType_ = 0;
+      public Builder setMessageTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageType_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -6123,15 +6218,16 @@ public final class Iden3MessageEntityOuterClass {
         getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    int getMessageTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    Iden3MessageType getMessageType();
+    String getMessageType();
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    com.google.protobuf.ByteString
+        getMessageTypeBytes();
 
     /**
      * <code>string thid = 5;</code>
@@ -6204,7 +6300,7 @@ public final class Iden3MessageEntityOuterClass {
       id_ = "";
       typ_ = "";
       type_ = "";
-      messageType_ = 0;
+      messageType_ = "";
       thid_ = "";
       from_ = "";
       to_ = "";
@@ -6907,22 +7003,43 @@ public final class Iden3MessageEntityOuterClass {
       }
     }
 
-    public static final int MESSAGE_TYPE_FIELD_NUMBER = 4;
-    private int messageType_ = 0;
+    public static final int MESSAGETYPE_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile Object messageType_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    @Override public int getMessageTypeValue() {
-      return messageType_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    @Override public Iden3MessageType getMessageType() {
-      Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-      return result == null ? Iden3MessageType.UNRECOGNIZED : result;
+    @Override
+    public String getMessageType() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageTypeBytes() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int THID_FIELD_NUMBER = 5;
@@ -7091,8 +7208,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        output.writeEnum(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, thid_);
@@ -7124,9 +7241,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, thid_);
@@ -7162,7 +7278,8 @@ public final class Iden3MessageEntityOuterClass {
           .equals(other.getTyp())) return false;
       if (!getType()
           .equals(other.getType())) return false;
-      if (messageType_ != other.messageType_) return false;
+      if (!getMessageType()
+          .equals(other.getMessageType())) return false;
       if (!getThid()
           .equals(other.getThid())) return false;
       if (hasBody() != other.hasBody()) return false;
@@ -7191,8 +7308,8 @@ public final class Iden3MessageEntityOuterClass {
       hash = (53 * hash) + getTyp().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getType().hashCode();
-      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + messageType_;
+      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageType().hashCode();
       hash = (37 * hash) + THID_FIELD_NUMBER;
       hash = (53 * hash) + getThid().hashCode();
       if (hasBody()) {
@@ -7339,7 +7456,7 @@ public final class Iden3MessageEntityOuterClass {
         id_ = "";
         typ_ = "";
         type_ = "";
-        messageType_ = 0;
+        messageType_ = "";
         thid_ = "";
         body_ = null;
         if (bodyBuilder_ != null) {
@@ -7468,8 +7585,10 @@ public final class Iden3MessageEntityOuterClass {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.messageType_ != 0) {
-          setMessageTypeValue(other.getMessageTypeValue());
+        if (!other.getMessageType().isEmpty()) {
+          messageType_ = other.messageType_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (!other.getThid().isEmpty()) {
           thid_ = other.thid_;
@@ -7530,11 +7649,11 @@ public final class Iden3MessageEntityOuterClass {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                messageType_ = input.readEnum();
+              case 34: {
+                messageType_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
+              } // case 34
               case 42: {
                 thid_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000010;
@@ -7790,55 +7909,74 @@ public final class Iden3MessageEntityOuterClass {
         return this;
       }
 
-      private int messageType_ = 0;
+      private Object messageType_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The enum numeric value on the wire for messageType.
+       * <code>string messageType = 4;</code>
+       * @return The messageType.
        */
-      @Override public int getMessageTypeValue() {
-        return messageType_;
+      public String getMessageType() {
+        Object ref = messageType_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The enum numeric value on the wire for messageType to set.
+       * <code>string messageType = 4;</code>
+       * @return The bytes for messageType.
+       */
+      public com.google.protobuf.ByteString
+          getMessageTypeBytes() {
+        Object ref = messageType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageType = 4;</code>
+       * @param value The messageType to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageTypeValue(int value) {
+      public Builder setMessageType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         messageType_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The messageType.
-       */
-      @Override
-      public Iden3MessageType getMessageType() {
-        Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-        return result == null ? Iden3MessageType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The messageType to set.
+       * <code>string messageType = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder setMessageType(Iden3MessageType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        messageType_ = value.getNumber();
+      public Builder clearMessageType() {
+        messageType_ = getDefaultInstance().getMessageType();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+       * <code>string messageType = 4;</code>
+       * @param value The bytes for messageType to set.
        * @return This builder for chaining.
        */
-      public Builder clearMessageType() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        messageType_ = 0;
+      public Builder setMessageTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageType_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -8282,15 +8420,16 @@ public final class Iden3MessageEntityOuterClass {
         getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    int getMessageTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    Iden3MessageType getMessageType();
+    String getMessageType();
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    com.google.protobuf.ByteString
+        getMessageTypeBytes();
 
     /**
      * <code>string thid = 5;</code>
@@ -8363,7 +8502,7 @@ public final class Iden3MessageEntityOuterClass {
       id_ = "";
       typ_ = "";
       type_ = "";
-      messageType_ = 0;
+      messageType_ = "";
       thid_ = "";
       from_ = "";
       to_ = "";
@@ -10195,22 +10334,43 @@ public final class Iden3MessageEntityOuterClass {
       }
     }
 
-    public static final int MESSAGE_TYPE_FIELD_NUMBER = 4;
-    private int messageType_ = 0;
+    public static final int MESSAGETYPE_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile Object messageType_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    @Override public int getMessageTypeValue() {
-      return messageType_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    @Override public Iden3MessageType getMessageType() {
-      Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-      return result == null ? Iden3MessageType.UNRECOGNIZED : result;
+    @Override
+    public String getMessageType() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageTypeBytes() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int THID_FIELD_NUMBER = 5;
@@ -10379,8 +10539,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        output.writeEnum(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, thid_);
@@ -10412,9 +10572,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, thid_);
@@ -10450,7 +10609,8 @@ public final class Iden3MessageEntityOuterClass {
           .equals(other.getTyp())) return false;
       if (!getType()
           .equals(other.getType())) return false;
-      if (messageType_ != other.messageType_) return false;
+      if (!getMessageType()
+          .equals(other.getMessageType())) return false;
       if (!getThid()
           .equals(other.getThid())) return false;
       if (hasBody() != other.hasBody()) return false;
@@ -10479,8 +10639,8 @@ public final class Iden3MessageEntityOuterClass {
       hash = (53 * hash) + getTyp().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getType().hashCode();
-      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + messageType_;
+      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageType().hashCode();
       hash = (37 * hash) + THID_FIELD_NUMBER;
       hash = (53 * hash) + getThid().hashCode();
       if (hasBody()) {
@@ -10627,7 +10787,7 @@ public final class Iden3MessageEntityOuterClass {
         id_ = "";
         typ_ = "";
         type_ = "";
-        messageType_ = 0;
+        messageType_ = "";
         thid_ = "";
         body_ = null;
         if (bodyBuilder_ != null) {
@@ -10756,8 +10916,10 @@ public final class Iden3MessageEntityOuterClass {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.messageType_ != 0) {
-          setMessageTypeValue(other.getMessageTypeValue());
+        if (!other.getMessageType().isEmpty()) {
+          messageType_ = other.messageType_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (!other.getThid().isEmpty()) {
           thid_ = other.thid_;
@@ -10818,11 +10980,11 @@ public final class Iden3MessageEntityOuterClass {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                messageType_ = input.readEnum();
+              case 34: {
+                messageType_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
+              } // case 34
               case 42: {
                 thid_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000010;
@@ -11078,55 +11240,74 @@ public final class Iden3MessageEntityOuterClass {
         return this;
       }
 
-      private int messageType_ = 0;
+      private Object messageType_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The enum numeric value on the wire for messageType.
+       * <code>string messageType = 4;</code>
+       * @return The messageType.
        */
-      @Override public int getMessageTypeValue() {
-        return messageType_;
+      public String getMessageType() {
+        Object ref = messageType_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The enum numeric value on the wire for messageType to set.
+       * <code>string messageType = 4;</code>
+       * @return The bytes for messageType.
+       */
+      public com.google.protobuf.ByteString
+          getMessageTypeBytes() {
+        Object ref = messageType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageType = 4;</code>
+       * @param value The messageType to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageTypeValue(int value) {
+      public Builder setMessageType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         messageType_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The messageType.
-       */
-      @Override
-      public Iden3MessageType getMessageType() {
-        Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-        return result == null ? Iden3MessageType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The messageType to set.
+       * <code>string messageType = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder setMessageType(Iden3MessageType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        messageType_ = value.getNumber();
+      public Builder clearMessageType() {
+        messageType_ = getDefaultInstance().getMessageType();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+       * <code>string messageType = 4;</code>
+       * @param value The bytes for messageType to set.
        * @return This builder for chaining.
        */
-      public Builder clearMessageType() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        messageType_ = 0;
+      public Builder setMessageTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageType_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -11570,15 +11751,16 @@ public final class Iden3MessageEntityOuterClass {
         getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    int getMessageTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    Iden3MessageType getMessageType();
+    String getMessageType();
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    com.google.protobuf.ByteString
+        getMessageTypeBytes();
 
     /**
      * <code>string thid = 5;</code>
@@ -11639,7 +11821,7 @@ public final class Iden3MessageEntityOuterClass {
       id_ = "";
       typ_ = "";
       type_ = "";
-      messageType_ = 0;
+      messageType_ = "";
       thid_ = "";
       from_ = "";
     }
@@ -13892,22 +14074,43 @@ public final class Iden3MessageEntityOuterClass {
       }
     }
 
-    public static final int MESSAGE_TYPE_FIELD_NUMBER = 4;
-    private int messageType_ = 0;
+    public static final int MESSAGETYPE_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile Object messageType_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-     * @return The enum numeric value on the wire for messageType.
-     */
-    @Override public int getMessageTypeValue() {
-      return messageType_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+     * <code>string messageType = 4;</code>
      * @return The messageType.
      */
-    @Override public Iden3MessageType getMessageType() {
-      Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-      return result == null ? Iden3MessageType.UNRECOGNIZED : result;
+    @Override
+    public String getMessageType() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageType = 4;</code>
+     * @return The bytes for messageType.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageTypeBytes() {
+      Object ref = messageType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int THID_FIELD_NUMBER = 5;
@@ -14037,8 +14240,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        output.writeEnum(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, thid_);
@@ -14067,9 +14270,8 @@ public final class Iden3MessageEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (messageType_ != Iden3MessageType.auth.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, messageType_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(thid_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, thid_);
@@ -14102,7 +14304,8 @@ public final class Iden3MessageEntityOuterClass {
           .equals(other.getTyp())) return false;
       if (!getType()
           .equals(other.getType())) return false;
-      if (messageType_ != other.messageType_) return false;
+      if (!getMessageType()
+          .equals(other.getMessageType())) return false;
       if (!getThid()
           .equals(other.getThid())) return false;
       if (hasBody() != other.hasBody()) return false;
@@ -14129,8 +14332,8 @@ public final class Iden3MessageEntityOuterClass {
       hash = (53 * hash) + getTyp().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getType().hashCode();
-      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + messageType_;
+      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageType().hashCode();
       hash = (37 * hash) + THID_FIELD_NUMBER;
       hash = (53 * hash) + getThid().hashCode();
       if (hasBody()) {
@@ -14275,7 +14478,7 @@ public final class Iden3MessageEntityOuterClass {
         id_ = "";
         typ_ = "";
         type_ = "";
-        messageType_ = 0;
+        messageType_ = "";
         thid_ = "";
         body_ = null;
         if (bodyBuilder_ != null) {
@@ -14400,8 +14603,10 @@ public final class Iden3MessageEntityOuterClass {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.messageType_ != 0) {
-          setMessageTypeValue(other.getMessageTypeValue());
+        if (!other.getMessageType().isEmpty()) {
+          messageType_ = other.messageType_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (!other.getThid().isEmpty()) {
           thid_ = other.thid_;
@@ -14457,11 +14662,11 @@ public final class Iden3MessageEntityOuterClass {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                messageType_ = input.readEnum();
+              case 34: {
+                messageType_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
+              } // case 34
               case 42: {
                 thid_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000010;
@@ -14712,55 +14917,74 @@ public final class Iden3MessageEntityOuterClass {
         return this;
       }
 
-      private int messageType_ = 0;
+      private Object messageType_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The enum numeric value on the wire for messageType.
+       * <code>string messageType = 4;</code>
+       * @return The messageType.
        */
-      @Override public int getMessageTypeValue() {
-        return messageType_;
+      public String getMessageType() {
+        Object ref = messageType_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The enum numeric value on the wire for messageType to set.
+       * <code>string messageType = 4;</code>
+       * @return The bytes for messageType.
+       */
+      public com.google.protobuf.ByteString
+          getMessageTypeBytes() {
+        Object ref = messageType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageType = 4;</code>
+       * @param value The messageType to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageTypeValue(int value) {
+      public Builder setMessageType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         messageType_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @return The messageType.
-       */
-      @Override
-      public Iden3MessageType getMessageType() {
-        Iden3MessageType result = Iden3MessageType.forNumber(messageType_);
-        return result == null ? Iden3MessageType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
-       * @param value The messageType to set.
+       * <code>string messageType = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder setMessageType(Iden3MessageType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        messageType_ = value.getNumber();
+      public Builder clearMessageType() {
+        messageType_ = getDefaultInstance().getMessageType();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageType message_type = 4;</code>
+       * <code>string messageType = 4;</code>
+       * @param value The bytes for messageType to set.
        * @return This builder for chaining.
        */
-      public Builder clearMessageType() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        messageType_ = 0;
+      public Builder setMessageTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageType_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -15164,77 +15388,69 @@ public final class Iden3MessageEntityOuterClass {
       ".polygon.polygonid_protobuf.iden3_messag" +
       "e\032\031google/protobuf/any.proto\032\036google/pro" +
       "tobuf/wrappers.proto\032\023field_options.prot" +
-      "o\032\031proof_scope_request.proto\"\352\001\n\022Iden3Me" +
+      "o\032\031proof_scope_request.proto\"\242\001\n\022Iden3Me" +
       "ssageEntity\022\n\n\002id\030\001 \001(\t\022\013\n\003typ\030\002 \001(\t\022\014\n\004" +
-      "type\030\003 \001(\t\022[\n\014message_type\030\004 \001(\0162E.techn" +
-      "ology.polygon.polygonid_protobuf.iden3_m" +
-      "essage.Iden3MessageType\022\014\n\004thid\030\005 \001(\t\022\"\n" +
-      "\004body\030\006 \001(\0132\024.google.protobuf.Any\022\014\n\004fro" +
-      "m\030\007 \001(\t\022\020\n\002to\030\010 \001(\tB\004\210\265\030\001\"\200\007\n\026AuthIden3M" +
-      "essageEntity\022\n\n\002id\030\001 \001(\t\022\013\n\003typ\030\002 \001(\t\022\014\n" +
-      "\004type\030\003 \001(\t\022Z\n\013messageType\030\004 \001(\0162E.techn" +
-      "ology.polygon.polygonid_protobuf.iden3_m" +
-      "essage.Iden3MessageType\022\014\n\004thid\030\005 \001(\t\022i\n" +
-      "\004body\030\006 \001(\0132[.technology.polygon.polygon" +
-      "id_protobuf.iden3_message.AuthIden3Messa" +
-      "geEntity.AuthBodyRequest\022\014\n\004from\030\007 \001(\t\022\020" +
-      "\n\002to\030\010 \001(\tB\004\210\265\030\001\032\311\004\n\017AuthBodyRequest\0227\n\013" +
-      "callbackUrl\030\001 \001(\0132\034.google.protobuf.Stri" +
-      "ngValueB\004\210\265\030\001\0222\n\006reason\030\002 \001(\0132\034.google.p" +
-      "rotobuf.StringValueB\004\210\265\030\001\0223\n\007message\030\003 \001" +
-      "(\0132\034.google.protobuf.StringValueB\004\210\265\030\001\022G" +
-      "\n\005scope\030\004 \003(\01328.technology.polygon.polyg" +
-      "onid_protobuf.ProofScopeRequest\022/\n\003url\030\005" +
-      " \001(\0132\034.google.protobuf.StringValueB\004\210\265\030\001" +
-      "\022\221\001\n\013credentials\030\006 \003(\0132v.technology.poly" +
-      "gon.polygonid_protobuf.iden3_message.Aut" +
-      "hIden3MessageEntity.AuthBodyRequest.Auth" +
-      "BodyCredentialsRequestB\004\210\265\030\001\032\205\001\n\032AuthBod" +
-      "yCredentialsRequest\022.\n\002id\030\001 \001(\0132\034.google" +
-      ".protobuf.StringValueB\004\210\265\030\001\0227\n\013descripti" +
-      "on\030\002 \001(\0132\034.google.protobuf.StringValueB\004" +
-      "\210\265\030\001\"\322\002\n\027FetchIden3MessageEntity\022\n\n\002id\030\001" +
-      " \001(\t\022\013\n\003typ\030\002 \001(\t\022\014\n\004type\030\003 \001(\t\022[\n\014messa" +
-      "ge_type\030\004 \001(\0162E.technology.polygon.polyg" +
-      "onid_protobuf.iden3_message.Iden3Message" +
-      "Type\022\014\n\004thid\030\005 \001(\t\022k\n\004body\030\006 \001(\0132].techn" +
-      "ology.polygon.polygonid_protobuf.iden3_m" +
-      "essage.FetchIden3MessageEntity.FetchBody" +
-      "Request\022\014\n\004from\030\007 \001(\t\022\n\n\002to\030\010 \001(\t\032\036\n\020Fet" +
-      "chBodyRequest\022\n\n\002id\030\001 \001(\t\"\277\004\n\027OfferIden3" +
-      "MessageEntity\022\n\n\002id\030\001 \001(\t\022\013\n\003typ\030\002 \001(\t\022\014" +
-      "\n\004type\030\003 \001(\t\022[\n\014message_type\030\004 \001(\0162E.tec" +
+      "type\030\003 \001(\t\022\023\n\013messageType\030\004 \001(\t\022\014\n\004thid\030" +
+      "\005 \001(\t\022\"\n\004body\030\006 \001(\0132\024.google.protobuf.An" +
+      "y\022\014\n\004from\030\007 \001(\t\022\020\n\002to\030\010 \001(\tB\004\210\265\030\001\"\271\006\n\026Au" +
+      "thIden3MessageEntity\022\n\n\002id\030\001 \001(\t\022\013\n\003typ\030" +
+      "\002 \001(\t\022\014\n\004type\030\003 \001(\t\022\023\n\013messageType\030\004 \001(\t" +
+      "\022\014\n\004thid\030\005 \001(\t\022i\n\004body\030\006 \001(\0132[.technolog" +
+      "y.polygon.polygonid_protobuf.iden3_messa" +
+      "ge.AuthIden3MessageEntity.AuthBodyReques" +
+      "t\022\014\n\004from\030\007 \001(\t\022\020\n\002to\030\010 \001(\tB\004\210\265\030\001\032\311\004\n\017Au" +
+      "thBodyRequest\0227\n\013callbackUrl\030\001 \001(\0132\034.goo" +
+      "gle.protobuf.StringValueB\004\210\265\030\001\0222\n\006reason" +
+      "\030\002 \001(\0132\034.google.protobuf.StringValueB\004\210\265" +
+      "\030\001\0223\n\007message\030\003 \001(\0132\034.google.protobuf.St" +
+      "ringValueB\004\210\265\030\001\022G\n\005scope\030\004 \003(\01328.technol" +
+      "ogy.polygon.polygonid_protobuf.ProofScop" +
+      "eRequest\022/\n\003url\030\005 \001(\0132\034.google.protobuf." +
+      "StringValueB\004\210\265\030\001\022\221\001\n\013credentials\030\006 \003(\0132" +
+      "v.technology.polygon.polygonid_protobuf." +
+      "iden3_message.AuthIden3MessageEntity.Aut" +
+      "hBodyRequest.AuthBodyCredentialsRequestB" +
+      "\004\210\265\030\001\032\205\001\n\032AuthBodyCredentialsRequest\022.\n\002" +
+      "id\030\001 \001(\0132\034.google.protobuf.StringValueB\004" +
+      "\210\265\030\001\0227\n\013description\030\002 \001(\0132\034.google.proto" +
+      "buf.StringValueB\004\210\265\030\001\"\212\002\n\027FetchIden3Mess" +
+      "ageEntity\022\n\n\002id\030\001 \001(\t\022\013\n\003typ\030\002 \001(\t\022\014\n\004ty" +
+      "pe\030\003 \001(\t\022\023\n\013messageType\030\004 \001(\t\022\014\n\004thid\030\005 " +
+      "\001(\t\022k\n\004body\030\006 \001(\0132].technology.polygon.p" +
+      "olygonid_protobuf.iden3_message.FetchIde" +
+      "n3MessageEntity.FetchBodyRequest\022\014\n\004from" +
+      "\030\007 \001(\t\022\n\n\002to\030\010 \001(\t\032\036\n\020FetchBodyRequest\022\n" +
+      "\n\002id\030\001 \001(\t\"\367\003\n\027OfferIden3MessageEntity\022\n" +
+      "\n\002id\030\001 \001(\t\022\013\n\003typ\030\002 \001(\t\022\014\n\004type\030\003 \001(\t\022\023\n" +
+      "\013messageType\030\004 \001(\t\022\014\n\004thid\030\005 \001(\t\022k\n\004body" +
+      "\030\006 \001(\0132].technology.polygon.polygonid_pr" +
+      "otobuf.iden3_message.OfferIden3MessageEn" +
+      "tity.OfferBodyRequest\022\014\n\004from\030\007 \001(\t\022\020\n\002t" +
+      "o\030\010 \001(\tB\004\210\265\030\001\032\204\002\n\020OfferBodyRequest\022\013\n\003ur" +
+      "l\030\001 \001(\t\022\206\001\n\013credentials\030\002 \003(\0132q.technolo" +
+      "gy.polygon.polygonid_protobuf.iden3_mess" +
+      "age.OfferIden3MessageEntity.OfferBodyReq" +
+      "uest.CredentialOfferData\032Z\n\023CredentialOf" +
+      "ferData\022\n\n\002id\030\001 \001(\t\0227\n\013description\030\002 \001(\013" +
+      "2\034.google.protobuf.StringValueB\004\210\265\030\001\"\325\004\n" +
+      "\031OnchainIden3MessageEntity\022\n\n\002id\030\001 \001(\t\022\013" +
+      "\n\003typ\030\002 \001(\t\022\014\n\004type\030\003 \001(\t\022\023\n\013messageType" +
+      "\030\004 \001(\t\022\014\n\004thid\030\005 \001(\t\022o\n\004body\030\006 \001(\0132a.tec" +
       "hnology.polygon.polygonid_protobuf.iden3" +
-      "_message.Iden3MessageType\022\014\n\004thid\030\005 \001(\t\022" +
-      "k\n\004body\030\006 \001(\0132].technology.polygon.polyg" +
-      "onid_protobuf.iden3_message.OfferIden3Me" +
-      "ssageEntity.OfferBodyRequest\022\014\n\004from\030\007 \001" +
-      "(\t\022\020\n\002to\030\010 \001(\tB\004\210\265\030\001\032\204\002\n\020OfferBodyReques" +
-      "t\022\013\n\003url\030\001 \001(\t\022\206\001\n\013credentials\030\002 \003(\0132q.t" +
-      "echnology.polygon.polygonid_protobuf.ide" +
-      "n3_message.OfferIden3MessageEntity.Offer" +
-      "BodyRequest.CredentialOfferData\032Z\n\023Crede" +
-      "ntialOfferData\022\n\n\002id\030\001 \001(\t\0227\n\013descriptio" +
-      "n\030\002 \001(\0132\034.google.protobuf.StringValueB\004\210" +
-      "\265\030\001\"\235\005\n\031OnchainIden3MessageEntity\022\n\n\002id\030" +
-      "\001 \001(\t\022\013\n\003typ\030\002 \001(\t\022\014\n\004type\030\003 \001(\t\022[\n\014mess" +
-      "age_type\030\004 \001(\0162E.technology.polygon.poly" +
-      "gonid_protobuf.iden3_message.Iden3Messag" +
-      "eType\022\014\n\004thid\030\005 \001(\t\022o\n\004body\030\006 \001(\0132a.tech" +
-      "nology.polygon.polygonid_protobuf.iden3_" +
-      "message.OnchainIden3MessageEntity.Onchai" +
-      "nBodyRequest\022\014\n\004from\030\007 \001(\t\032\356\002\n\022OnchainBo" +
-      "dyRequest\022\204\001\n\013transaction\030\001 \003(\0132o.techno" +
-      "logy.polygon.polygonid_protobuf.iden3_me" +
-      "ssage.OnchainIden3MessageEntity.OnchainB" +
-      "odyRequest.OnchainTxData\0222\n\006reason\030\002 \001(\013" +
-      "2\034.google.protobuf.StringValueB\004\210\265\030\001\022M\n\005" +
-      "scope\030\003 \003(\01328.technology.polygon.polygon" +
-      "id_protobuf.ProofScopeRequestB\004\210\265\030\001\032N\n\rO" +
-      "nchainTxData\022\n\n\002id\030\001 \001(\t\0221\n\013description\030" +
-      "\002 \001(\0132\034.google.protobuf.StringValue*?\n\020I" +
-      "den3MessageType\022\010\n\004auth\020\000\022\t\n\005fetch\020\001\022\t\n\005" +
-      "offer\020\002\022\013\n\007onchain\020\003b\006proto3"
+      "_message.OnchainIden3MessageEntity.Oncha" +
+      "inBodyRequest\022\014\n\004from\030\007 \001(\t\032\356\002\n\022OnchainB" +
+      "odyRequest\022\204\001\n\013transaction\030\001 \003(\0132o.techn" +
+      "ology.polygon.polygonid_protobuf.iden3_m" +
+      "essage.OnchainIden3MessageEntity.Onchain" +
+      "BodyRequest.OnchainTxData\0222\n\006reason\030\002 \001(" +
+      "\0132\034.google.protobuf.StringValueB\004\210\265\030\001\022M\n" +
+      "\005scope\030\003 \003(\01328.technology.polygon.polygo" +
+      "nid_protobuf.ProofScopeRequestB\004\210\265\030\001\032N\n\r" +
+      "OnchainTxData\022\n\n\002id\030\001 \001(\t\0221\n\013description" +
+      "\030\002 \001(\0132\034.google.protobuf.StringValue*\\\n\020" +
+      "Iden3MessageType\022\013\n\007unknown\020\000\022\010\n\004auth\020\001\022" +
+      "\014\n\010issuance\020\002\022\t\n\005offer\020\003\022\030\n\024contractFunc" +
+      "tionCall\020\004b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

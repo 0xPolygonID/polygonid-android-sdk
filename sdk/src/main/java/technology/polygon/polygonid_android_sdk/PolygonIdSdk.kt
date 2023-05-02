@@ -10,6 +10,9 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.DidEntityOuterClass.DidEntity
@@ -26,7 +29,7 @@ const val CHANNEL = "technology.polygon.polygonid_flutter_sdk"
 const val ENGINE = "PolygonIdEngine"
 
 @Suppress("UNCHECKED_CAST")
-class PolygonIdSdk {
+class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>> = mutableMapOf()) {
     companion object {
         private var ref: PolygonIdSdk? = null
 
@@ -38,6 +41,21 @@ class PolygonIdSdk {
         fun init(context: Context, env: EnvEntity? = null) {
             ref = PolygonIdSdk()
 
+            ref!!.getChannel(context = context).setMethodCallHandler { call, _ ->
+                when (call.method) {
+                    "onStreamData" -> {
+                        val key: String? =
+                            call.hasArgument("key").let { call.argument<String>("key") }
+
+                        if (key != null) {
+                            GlobalScope.launch {
+                                ref!!.getFlow(key).emit(call.argument<Any>("data"))
+                            }
+                        }
+                    }
+                }
+            }
+
             Handler(Looper.getMainLooper()).post {
                 ref!!.getEngine(context).dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint(
                     "main.dart", "init"
@@ -46,7 +64,29 @@ class PolygonIdSdk {
         }
     }
 
-    fun getEngine(context: Context): FlutterEngine {
+    fun getFlowKeys(): List<String> {
+        return flows.keys.toList()
+    }
+
+    fun getFlow(key: String): MutableSharedFlow<Any?> {
+        if (flows[key] == null) {
+            flows[key] = MutableSharedFlow()
+        }
+
+        return flows[key]!!
+    }
+
+    fun closeFlow(context: Context, key: String) {
+        call<Void>(
+            context = context,
+            method = "closeStream",
+            arguments = mapOf("key" to key)
+        ).thenAccept {
+            flows.remove(key)
+        }
+    }
+
+    private fun getEngine(context: Context): FlutterEngine {
         return if (FlutterEngineCache.getInstance().contains(ENGINE)) {
             FlutterEngineCache.getInstance().get(ENGINE)!!
         } else {
@@ -55,6 +95,13 @@ class PolygonIdSdk {
 
             flutterEngine
         }
+    }
+
+    private fun getChannel(context: Context): MethodChannel {
+        val engine: FlutterEngine = getEngine(context)
+        return MethodChannel(
+            engine.dartExecutor.binaryMessenger, CHANNEL
+        )
     }
 
     fun callRaw(
@@ -73,64 +120,68 @@ class PolygonIdSdk {
         isListResult: Boolean = false
     ): CompletableFuture<Any> {
         val completable = CompletableFuture<Any>()
-        val engine: FlutterEngine = getEngine(context)
-        val channel = MethodChannel(
-            engine.dartExecutor.binaryMessenger, CHANNEL
-        )
+        val channel = getChannel(context)
 
-        val args = arguments?.mapValues { prepareArg(it.value) }
+        try {
+            val args = arguments?.mapValues { prepareArg(it.value) }
 
-        Handler(Looper.getMainLooper()).post {
-            channel.invokeMethod(
-                method,
-                args,
-                MainThreadResultHandler(result = object : MethodChannel.Result {
-                    override fun success(result: Any?) {
-                        when {
-                            Message::class.java.isAssignableFrom(T::class.java) -> {
-                                val clazz = T::class.java
-                                val builderMethod = clazz.getMethod("newBuilder")
+            Handler(Looper.getMainLooper()).post {
+                channel.invokeMethod(
+                    method,
+                    args,
+                    MainThreadResultHandler(result = object : MethodChannel.Result {
+                        override fun success(result: Any?) {
+                            when {
+                                Message::class.java.isAssignableFrom(T::class.java) -> {
+                                    val clazz = T::class.java
+                                    val builderMethod = clazz.getMethod("newBuilder")
 
-                                if (isListResult) {
-                                    val resultList = mutableListOf<T>()
+                                    if (isListResult) {
+                                        val resultList = mutableListOf<T>()
 
-                                    for (element: String in (result as List<String>)) {
+                                        for (element: String in (result as List<String>)) {
+                                            val builder =
+                                                builderMethod.invoke(null) as Message.Builder
+                                            JsonFormat.parser().merge(element, builder)
+                                            resultList.add(builder.build() as T)
+                                        }
+
+                                        completable.complete(resultList)
+                                    } else {
                                         val builder = builderMethod.invoke(null) as Message.Builder
-                                        JsonFormat.parser().merge(element, builder)
-                                        resultList.add(builder.build() as T)
+                                        JsonFormat.parser().merge(result as String, builder)
+                                        completable.complete(builder.build() as T)
                                     }
-
-                                    completable.complete(resultList)
-                                } else {
-                                    val builder = builderMethod.invoke(null) as Message.Builder
-                                    JsonFormat.parser().merge(result as String, builder)
-                                    completable.complete(builder.build() as T)
                                 }
-                            }
-                            else -> {
-                                if (isListResult) {
-                                    completable.complete(result as? List<T>)
-                                } else {
-                                    completable.complete(result as? T)
+                                else -> {
+                                    if (isListResult) {
+                                        completable.complete(result as? List<T>)
+                                    } else {
+                                        completable.complete(result as? T)
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    override fun error(
-                        errorCode: String,
-                        errorMessage: String?,
-                        errorDetails: Any?
-                    ) {
-                        completable.completeExceptionally(Throwable(errorMessage))
-                    }
+                        override fun error(
+                            errorCode: String,
+                            errorMessage: String?,
+                            errorDetails: Any?
+                        ) {
+                            completable.completeExceptionally(Throwable(errorMessage))
+                        }
 
-                    override fun notImplemented() {
-                        completable.completeExceptionally(Throwable("notImplemented"))
-                    }
-                })
-            )
+                        override fun notImplemented() {
+                            completable.completeExceptionally(Throwable("notImplemented"))
+                        }
+                    })
+                )
+            }
+        } catch (e: Exception) {
+            completable.completeExceptionally(e)
         }
+
+
 
         return completable
     }
@@ -210,15 +261,15 @@ class PolygonIdSdk {
         context: Context,
         message: AuthIden3MessageEntity,
         genesisDid: String,
-        profileNonce: BigInteger,
+        profileNonce: BigInteger? = null,
         privateKey: String,
-        pushToken: String?
+        pushToken: String? = null
     ): CompletableFuture<Void> {
         return call(
             context = context, method = "authenticate", arguments = mapOf(
                 "message" to message,
                 "genesisDid" to genesisDid,
-                "profileNonce" to profileNonce.toString(),
+                "profileNonce" to profileNonce?.toString(),
                 "privateKey" to privateKey,
                 "pushToken" to pushToken
             )
@@ -229,7 +280,7 @@ class PolygonIdSdk {
         context: Context,
         message: Message,
         genesisDid: String,
-        profileNonce: BigInteger?,
+        profileNonce: BigInteger? = null,
         privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
         message.isOf(listOf(OfferIden3MessageEntity::class))
@@ -248,7 +299,7 @@ class PolygonIdSdk {
         context: Context,
         message: Message,
         genesisDid: String,
-        profileNonce: BigInteger?,
+        profileNonce: BigInteger? = null,
         privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
         message.isOf(
@@ -294,13 +345,13 @@ class PolygonIdSdk {
                     Iden3MessageType.auth.name -> {
                         AuthIden3MessageEntity.newBuilder()
                     }
-                    Iden3MessageType.fetch.name -> {
+                    Iden3MessageType.issuance.name -> {
                         FetchIden3MessageEntity.newBuilder()
                     }
                     Iden3MessageType.offer.name -> {
                         OfferIden3MessageEntity.newBuilder()
                     }
-                    Iden3MessageType.onchain.name -> {
+                    Iden3MessageType.contractFunctionCall.name -> {
                         OnchainIden3MessageEntity.newBuilder()
                     }
                     else -> {
@@ -348,12 +399,12 @@ class PolygonIdSdk {
 
     fun getInteractions(
         context: Context,
-        genesisDid: String?,
-        profileNonce: BigInteger?,
-        privateKey: String?,
-        type: List<InteractionType>?,
-        states: List<InteractionState>?,
-        filters: List<FilterEntity>?
+        genesisDid: String? = null,
+        profileNonce: BigInteger? = null,
+        privateKey: String? = null,
+        type: List<InteractionType>? = null,
+        states: List<InteractionState>? = null,
+        filters: List<FilterEntity>? = null
     ): CompletableFuture<List<Any>> {
         return callAsList<String>(
             context = context,
@@ -386,9 +437,9 @@ class PolygonIdSdk {
         context: Context,
         message: Message,
         genesisDid: String,
-        profileNonce: BigInteger?,
+        profileNonce: BigInteger? = null,
         privateKey: String,
-        challenge: String?
+        challenge: String? = null
     ): CompletableFuture<List<String>> {
         return callAsList(
             context = context,
@@ -419,7 +470,7 @@ class PolygonIdSdk {
     }
 
     fun removeInteractions(
-        context: Context, genesisDid: String?, privateKey: String?, ids: List<String>
+        context: Context, genesisDid: String? = null, privateKey: String? = null, ids: List<String>
     ): CompletableFuture<Void> {
         return call(
             context = context,
@@ -433,7 +484,10 @@ class PolygonIdSdk {
     }
 
     fun updateInteraction(
-        context: Context, genesisDid: String?, privateKey: String?, state: InteractionState?
+        context: Context,
+        genesisDid: String? = null,
+        privateKey: String? = null,
+        state: InteractionState? = null
     ): CompletableFuture<Any> {
         return call<String>(
             context = context,
@@ -523,7 +577,7 @@ class PolygonIdSdk {
     }
 
     fun getIdentity(
-        context: Context, privateKey: String?
+        context: Context, privateKey: String? = null
     ): CompletableFuture<Message> {
         return call<String>(
             context = context, method = "getIdentity", arguments = mapOf("privateKey" to privateKey)
@@ -595,7 +649,7 @@ class PolygonIdSdk {
     }
 
     fun restoreIdentity(
-        context: Context, genesisDid: String, privateKey: String, encryptedDb: String?
+        context: Context, genesisDid: String, privateKey: String, encryptedDb: String? = null
     ): CompletableFuture<PrivateIdentityEntity> {
         return call(
             context = context, method = "restoreIdentity", arguments = mapOf(
@@ -682,12 +736,12 @@ class PolygonIdSdk {
     fun updateClaim(
         context: Context,
         claimId: String,
-        issuer: String?,
+        issuer: String? = null,
         genesisDid: String,
-        state: ClaimState?,
-        expiration: String?,
-        type: String?,
-        data: Map<String, Any?>?,
+        state: ClaimState? = null,
+        expiration: String? = null,
+        type: String? = null,
+        data: Map<String, Any?>? = null,
         privateKey: String
     ): CompletableFuture<ClaimEntity> {
         return call(
@@ -704,14 +758,37 @@ class PolygonIdSdk {
         )
     }
 
-//    fun initCircuitsDownloadAndGetInfoStream(
-//        context: Context
-//
-//        fun isAlreadyDownloadedCircuitsFromServer(
-//    context: Context
-//
-//    fun proofGenerationStepsStream(
-//        context: Context
+    fun startDownloadCircuits(
+        context: Context
+    ): CompletableFuture<String> {
+        return call(
+            context = context, method = "startDownloadCircuits"
+        )
+    }
+
+    fun isAlreadyDownloadedCircuitsFromServer(
+        context: Context
+    ): CompletableFuture<Boolean> {
+        return call(
+            context = context, method = "isAlreadyDownloadedCircuitsFromServer"
+        )
+    }
+
+    fun cancelDownloadCircuits(
+        context: Context
+    ): CompletableFuture<Void> {
+        return call(
+            context = context, method = "cancelDownloadCircuits"
+        )
+    }
+
+    fun proofGenerationStepsStream(
+        context: Context
+    ): CompletableFuture<String> {
+        return call(
+            context = context, method = "proofGenerationStepsStream"
+        )
+    }
 
     // We are returning the json representation of the proof because the
     // protobuf doesn't support nested lists
@@ -723,8 +800,8 @@ class PolygonIdSdk {
         claim: ClaimEntity,
         circuitData: CircuitDataEntity,
         request: ProofScopeRequest,
-        privateKey: String?,
-        challenge: String?
+        privateKey: String? = null,
+        challenge: String? = null
     ): CompletableFuture<String> {
         return call(
             context = context, method = "prove", arguments = mapOf(
@@ -752,5 +829,17 @@ class PolygonIdSdk {
 //                entity
 //            }
 //        }
+    }
+
+    fun startOne(
+        context: Context
+    ): CompletableFuture<Void> {
+        return call(context = context, method = "getOne")
+    }
+
+    fun stopOne(
+        context: Context
+    ): CompletableFuture<Void> {
+        return call(context = context, method = "closeStream", arguments = mapOf("key" to "one"))
     }
 }

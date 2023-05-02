@@ -295,26 +295,28 @@ public final class InteractionEntityOuterClass {
         getFromBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-     * @return The enum numeric value on the wire for type.
-     */
-    int getTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
+     * <code>string type = 3;</code>
      * @return The type.
      */
-    InteractionType getType();
+    String getType();
+    /**
+     * <code>string type = 3;</code>
+     * @return The bytes for type.
+     */
+    com.google.protobuf.ByteString
+        getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-     * @return The enum numeric value on the wire for state.
-     */
-    int getStateValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
+     * <code>string state = 5;</code>
      * @return The state.
      */
-    InteractionState getState();
+    String getState();
+    /**
+     * <code>string state = 5;</code>
+     * @return The bytes for state.
+     */
+    com.google.protobuf.ByteString
+        getStateBytes();
 
     /**
      * <code>int32 timestamp = 6;</code>
@@ -349,8 +351,8 @@ public final class InteractionEntityOuterClass {
     private InteractionBaseEntity() {
       id_ = "";
       from_ = "";
-      type_ = 0;
-      state_ = 0;
+      type_ = "";
+      state_ = "";
       message_ = "";
     }
 
@@ -458,39 +460,81 @@ public final class InteractionEntityOuterClass {
     }
 
     public static final int TYPE_FIELD_NUMBER = 3;
-    private int type_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object type_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-     * @return The enum numeric value on the wire for type.
-     */
-    @Override public int getTypeValue() {
-      return type_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
+     * <code>string type = 3;</code>
      * @return The type.
      */
-    @Override public InteractionType getType() {
-      InteractionType result = InteractionType.forNumber(type_);
-      return result == null ? InteractionType.UNRECOGNIZED : result;
+    @Override
+    public String getType() {
+      Object ref = type_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string type = 3;</code>
+     * @return The bytes for type.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int STATE_FIELD_NUMBER = 5;
-    private int state_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object state_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-     * @return The enum numeric value on the wire for state.
-     */
-    @Override public int getStateValue() {
-      return state_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
+     * <code>string state = 5;</code>
      * @return The state.
      */
-    @Override public InteractionState getState() {
-      InteractionState result = InteractionState.forNumber(state_);
-      return result == null ? InteractionState.UNRECOGNIZED : result;
+    @Override
+    public String getState() {
+      Object ref = state_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        state_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string state = 5;</code>
+     * @return The bytes for state.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getStateBytes() {
+      Object ref = state_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        state_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int TIMESTAMP_FIELD_NUMBER = 6;
@@ -563,11 +607,11 @@ public final class InteractionEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(from_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, from_);
       }
-      if (type_ != InteractionType.offer.getNumber()) {
-        output.writeEnum(3, type_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (state_ != InteractionState.received.getNumber()) {
-        output.writeEnum(5, state_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(state_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, state_);
       }
       if (timestamp_ != 0) {
         output.writeInt32(6, timestamp_);
@@ -590,13 +634,11 @@ public final class InteractionEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(from_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, from_);
       }
-      if (type_ != InteractionType.offer.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, type_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (state_ != InteractionState.received.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, state_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(state_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, state_);
       }
       if (timestamp_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -624,8 +666,10 @@ public final class InteractionEntityOuterClass {
           .equals(other.getId())) return false;
       if (!getFrom()
           .equals(other.getFrom())) return false;
-      if (type_ != other.type_) return false;
-      if (state_ != other.state_) return false;
+      if (!getType()
+          .equals(other.getType())) return false;
+      if (!getState()
+          .equals(other.getState())) return false;
       if (getTimestamp()
           != other.getTimestamp()) return false;
       if (!getMessage()
@@ -646,9 +690,9 @@ public final class InteractionEntityOuterClass {
       hash = (37 * hash) + FROM_FIELD_NUMBER;
       hash = (53 * hash) + getFrom().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + type_;
+      hash = (53 * hash) + getType().hashCode();
       hash = (37 * hash) + STATE_FIELD_NUMBER;
-      hash = (53 * hash) + state_;
+      hash = (53 * hash) + getState().hashCode();
       hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
       hash = (53 * hash) + getTimestamp();
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
@@ -784,8 +828,8 @@ public final class InteractionEntityOuterClass {
         bitField0_ = 0;
         id_ = "";
         from_ = "";
-        type_ = 0;
-        state_ = 0;
+        type_ = "";
+        state_ = "";
         timestamp_ = 0;
         message_ = "";
         return this;
@@ -895,11 +939,15 @@ public final class InteractionEntityOuterClass {
           bitField0_ |= 0x00000002;
           onChanged();
         }
-        if (other.type_ != 0) {
-          setTypeValue(other.getTypeValue());
+        if (!other.getType().isEmpty()) {
+          type_ = other.type_;
+          bitField0_ |= 0x00000004;
+          onChanged();
         }
-        if (other.state_ != 0) {
-          setStateValue(other.getStateValue());
+        if (!other.getState().isEmpty()) {
+          state_ = other.state_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (other.getTimestamp() != 0) {
           setTimestamp(other.getTimestamp());
@@ -945,16 +993,16 @@ public final class InteractionEntityOuterClass {
                 bitField0_ |= 0x00000002;
                 break;
               } // case 18
-              case 24: {
-                type_ = input.readEnum();
+              case 26: {
+                type_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000004;
                 break;
-              } // case 24
-              case 40: {
-                state_ = input.readEnum();
+              } // case 26
+              case 42: {
+                state_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 40
+              } // case 42
               case 48: {
                 timestamp_ = input.readInt32();
                 bitField0_ |= 0x00000010;
@@ -1126,108 +1174,146 @@ public final class InteractionEntityOuterClass {
         return this;
       }
 
-      private int type_ = 0;
+      private Object type_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @return The enum numeric value on the wire for type.
+       * <code>string type = 3;</code>
+       * @return The type.
        */
-      @Override public int getTypeValue() {
-        return type_;
+      public String getType() {
+        Object ref = type_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          type_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @param value The enum numeric value on the wire for type to set.
+       * <code>string type = 3;</code>
+       * @return The bytes for type.
+       */
+      public com.google.protobuf.ByteString
+          getTypeBytes() {
+        Object ref = type_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          type_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string type = 3;</code>
+       * @param value The type to set.
        * @return This builder for chaining.
        */
-      public Builder setTypeValue(int value) {
+      public Builder setType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         type_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @return The type.
-       */
-      @Override
-      public InteractionType getType() {
-        InteractionType result = InteractionType.forNumber(type_);
-        return result == null ? InteractionType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @param value The type to set.
+       * <code>string type = 3;</code>
        * @return This builder for chaining.
        */
-      public Builder setType(InteractionType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000004;
-        type_ = value.getNumber();
+      public Builder clearType() {
+        type_ = getDefaultInstance().getType();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
+       * <code>string type = 3;</code>
+       * @param value The bytes for type to set.
        * @return This builder for chaining.
        */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        type_ = 0;
+      public Builder setTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        type_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
 
-      private int state_ = 0;
+      private Object state_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @return The enum numeric value on the wire for state.
+       * <code>string state = 5;</code>
+       * @return The state.
        */
-      @Override public int getStateValue() {
-        return state_;
+      public String getState() {
+        Object ref = state_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          state_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @param value The enum numeric value on the wire for state to set.
+       * <code>string state = 5;</code>
+       * @return The bytes for state.
+       */
+      public com.google.protobuf.ByteString
+          getStateBytes() {
+        Object ref = state_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          state_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string state = 5;</code>
+       * @param value The state to set.
        * @return This builder for chaining.
        */
-      public Builder setStateValue(int value) {
+      public Builder setState(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         state_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @return The state.
-       */
-      @Override
-      public InteractionState getState() {
-        InteractionState result = InteractionState.forNumber(state_);
-        return result == null ? InteractionState.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @param value The state to set.
+       * <code>string state = 5;</code>
        * @return This builder for chaining.
        */
-      public Builder setState(InteractionState value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        state_ = value.getNumber();
+      public Builder clearState() {
+        state_ = getDefaultInstance().getState();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
+       * <code>string state = 5;</code>
+       * @param value The bytes for state to set.
        * @return This builder for chaining.
        */
-      public Builder clearState() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        state_ = 0;
+      public Builder setStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        state_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1428,26 +1514,28 @@ public final class InteractionEntityOuterClass {
         getFromBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-     * @return The enum numeric value on the wire for type.
-     */
-    int getTypeValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
+     * <code>string type = 3;</code>
      * @return The type.
      */
-    InteractionType getType();
+    String getType();
+    /**
+     * <code>string type = 3;</code>
+     * @return The bytes for type.
+     */
+    com.google.protobuf.ByteString
+        getTypeBytes();
 
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-     * @return The enum numeric value on the wire for state.
-     */
-    int getStateValue();
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
+     * <code>string state = 5;</code>
      * @return The state.
      */
-    InteractionState getState();
+    String getState();
+    /**
+     * <code>string state = 5;</code>
+     * @return The bytes for state.
+     */
+    com.google.protobuf.ByteString
+        getStateBytes();
 
     /**
      * <code>int32 timestamp = 6;</code>
@@ -1500,8 +1588,8 @@ public final class InteractionEntityOuterClass {
     private InteractionEntity() {
       id_ = "";
       from_ = "";
-      type_ = 0;
-      state_ = 0;
+      type_ = "";
+      state_ = "";
       message_ = "";
       genesisDid_ = "";
     }
@@ -1610,39 +1698,81 @@ public final class InteractionEntityOuterClass {
     }
 
     public static final int TYPE_FIELD_NUMBER = 3;
-    private int type_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object type_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-     * @return The enum numeric value on the wire for type.
-     */
-    @Override public int getTypeValue() {
-      return type_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
+     * <code>string type = 3;</code>
      * @return The type.
      */
-    @Override public InteractionType getType() {
-      InteractionType result = InteractionType.forNumber(type_);
-      return result == null ? InteractionType.UNRECOGNIZED : result;
+    @Override
+    public String getType() {
+      Object ref = type_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string type = 3;</code>
+     * @return The bytes for type.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int STATE_FIELD_NUMBER = 5;
-    private int state_ = 0;
+    @SuppressWarnings("serial")
+    private volatile Object state_ = "";
     /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-     * @return The enum numeric value on the wire for state.
-     */
-    @Override public int getStateValue() {
-      return state_;
-    }
-    /**
-     * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
+     * <code>string state = 5;</code>
      * @return The state.
      */
-    @Override public InteractionState getState() {
-      InteractionState result = InteractionState.forNumber(state_);
-      return result == null ? InteractionState.UNRECOGNIZED : result;
+    @Override
+    public String getState() {
+      Object ref = state_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        state_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string state = 5;</code>
+     * @return The bytes for state.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getStateBytes() {
+      Object ref = state_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        state_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int TIMESTAMP_FIELD_NUMBER = 6;
@@ -1765,11 +1895,11 @@ public final class InteractionEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(from_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, from_);
       }
-      if (type_ != InteractionType.offer.getNumber()) {
-        output.writeEnum(3, type_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
       }
-      if (state_ != InteractionState.received.getNumber()) {
-        output.writeEnum(5, state_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(state_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, state_);
       }
       if (timestamp_ != 0) {
         output.writeInt32(6, timestamp_);
@@ -1798,13 +1928,11 @@ public final class InteractionEntityOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(from_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, from_);
       }
-      if (type_ != InteractionType.offer.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, type_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
       }
-      if (state_ != InteractionState.received.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, state_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(state_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, state_);
       }
       if (timestamp_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -1839,8 +1967,10 @@ public final class InteractionEntityOuterClass {
           .equals(other.getId())) return false;
       if (!getFrom()
           .equals(other.getFrom())) return false;
-      if (type_ != other.type_) return false;
-      if (state_ != other.state_) return false;
+      if (!getType()
+          .equals(other.getType())) return false;
+      if (!getState()
+          .equals(other.getState())) return false;
       if (getTimestamp()
           != other.getTimestamp()) return false;
       if (!getMessage()
@@ -1865,9 +1995,9 @@ public final class InteractionEntityOuterClass {
       hash = (37 * hash) + FROM_FIELD_NUMBER;
       hash = (53 * hash) + getFrom().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + type_;
+      hash = (53 * hash) + getType().hashCode();
       hash = (37 * hash) + STATE_FIELD_NUMBER;
-      hash = (53 * hash) + state_;
+      hash = (53 * hash) + getState().hashCode();
       hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
       hash = (53 * hash) + getTimestamp();
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
@@ -2008,8 +2138,8 @@ public final class InteractionEntityOuterClass {
         bitField0_ = 0;
         id_ = "";
         from_ = "";
-        type_ = 0;
-        state_ = 0;
+        type_ = "";
+        state_ = "";
         timestamp_ = 0;
         message_ = "";
         genesisDid_ = "";
@@ -2127,11 +2257,15 @@ public final class InteractionEntityOuterClass {
           bitField0_ |= 0x00000002;
           onChanged();
         }
-        if (other.type_ != 0) {
-          setTypeValue(other.getTypeValue());
+        if (!other.getType().isEmpty()) {
+          type_ = other.type_;
+          bitField0_ |= 0x00000004;
+          onChanged();
         }
-        if (other.state_ != 0) {
-          setStateValue(other.getStateValue());
+        if (!other.getState().isEmpty()) {
+          state_ = other.state_;
+          bitField0_ |= 0x00000008;
+          onChanged();
         }
         if (other.getTimestamp() != 0) {
           setTimestamp(other.getTimestamp());
@@ -2185,16 +2319,16 @@ public final class InteractionEntityOuterClass {
                 bitField0_ |= 0x00000002;
                 break;
               } // case 18
-              case 24: {
-                type_ = input.readEnum();
+              case 26: {
+                type_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000004;
                 break;
-              } // case 24
-              case 40: {
-                state_ = input.readEnum();
+              } // case 26
+              case 42: {
+                state_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 40
+              } // case 42
               case 48: {
                 timestamp_ = input.readInt32();
                 bitField0_ |= 0x00000010;
@@ -2376,108 +2510,146 @@ public final class InteractionEntityOuterClass {
         return this;
       }
 
-      private int type_ = 0;
+      private Object type_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @return The enum numeric value on the wire for type.
+       * <code>string type = 3;</code>
+       * @return The type.
        */
-      @Override public int getTypeValue() {
-        return type_;
+      public String getType() {
+        Object ref = type_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          type_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @param value The enum numeric value on the wire for type to set.
+       * <code>string type = 3;</code>
+       * @return The bytes for type.
+       */
+      public com.google.protobuf.ByteString
+          getTypeBytes() {
+        Object ref = type_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          type_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string type = 3;</code>
+       * @param value The type to set.
        * @return This builder for chaining.
        */
-      public Builder setTypeValue(int value) {
+      public Builder setType(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         type_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @return The type.
-       */
-      @Override
-      public InteractionType getType() {
-        InteractionType result = InteractionType.forNumber(type_);
-        return result == null ? InteractionType.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
-       * @param value The type to set.
+       * <code>string type = 3;</code>
        * @return This builder for chaining.
        */
-      public Builder setType(InteractionType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000004;
-        type_ = value.getNumber();
+      public Builder clearType() {
+        type_ = getDefaultInstance().getType();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionType type = 3;</code>
+       * <code>string type = 3;</code>
+       * @param value The bytes for type to set.
        * @return This builder for chaining.
        */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        type_ = 0;
+      public Builder setTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        type_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
 
-      private int state_ = 0;
+      private Object state_ = "";
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @return The enum numeric value on the wire for state.
+       * <code>string state = 5;</code>
+       * @return The state.
        */
-      @Override public int getStateValue() {
-        return state_;
+      public String getState() {
+        Object ref = state_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          state_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @param value The enum numeric value on the wire for state to set.
+       * <code>string state = 5;</code>
+       * @return The bytes for state.
+       */
+      public com.google.protobuf.ByteString
+          getStateBytes() {
+        Object ref = state_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          state_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string state = 5;</code>
+       * @param value The state to set.
        * @return This builder for chaining.
        */
-      public Builder setStateValue(int value) {
+      public Builder setState(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
         state_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @return The state.
-       */
-      @Override
-      public InteractionState getState() {
-        InteractionState result = InteractionState.forNumber(state_);
-        return result == null ? InteractionState.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
-       * @param value The state to set.
+       * <code>string state = 5;</code>
        * @return This builder for chaining.
        */
-      public Builder setState(InteractionState value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        state_ = value.getNumber();
+      public Builder clearState() {
+        state_ = getDefaultInstance().getState();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>.technology.polygon.polygonid_protobuf.InteractionState state = 5;</code>
+       * <code>string state = 5;</code>
+       * @param value The bytes for state to set.
        * @return This builder for chaining.
        */
-      public Builder clearState() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        state_ = 0;
+      public Builder setStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        state_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -2773,23 +2945,18 @@ public final class InteractionEntityOuterClass {
   static {
     String[] descriptorData = {
       "\n\030interaction_entity.proto\022%technology.p" +
-      "olygon.polygonid_protobuf\"\343\001\n\025Interactio" +
-      "nBaseEntity\022\n\n\002id\030\001 \001(\t\022\014\n\004from\030\002 \001(\t\022D\n" +
-      "\004type\030\003 \001(\01626.technology.polygon.polygon" +
-      "id_protobuf.InteractionType\022F\n\005state\030\005 \001" +
-      "(\01627.technology.polygon.polygonid_protob" +
-      "uf.InteractionState\022\021\n\ttimestamp\030\006 \001(\005\022\017" +
-      "\n\007message\030\007 \001(\t\"\211\002\n\021InteractionEntity\022\n\n" +
-      "\002id\030\001 \001(\t\022\014\n\004from\030\002 \001(\t\022D\n\004type\030\003 \001(\01626." +
-      "technology.polygon.polygonid_protobuf.In" +
-      "teractionType\022F\n\005state\030\005 \001(\01627.technolog" +
-      "y.polygon.polygonid_protobuf.Interaction" +
-      "State\022\021\n\ttimestamp\030\006 \001(\005\022\017\n\007message\030\007 \001(" +
-      "\t\022\022\n\ngenesisDid\030\010 \001(\t\022\024\n\014profileNonce\030\t " +
-      "\001(\003*I\n\017InteractionType\022\t\n\005offer\020\000\022\016\n\nrev" +
-      "ocation\020\001\022\n\n\006update\020\002\022\017\n\013authRequest\020\003*H" +
-      "\n\020InteractionState\022\014\n\010received\020\000\022\n\n\006open" +
-      "ed\020\001\022\014\n\010accepted\020\002\022\014\n\010declined\020\003b\006proto3"
+      "olygon.polygonid_protobuf\"r\n\025Interaction" +
+      "BaseEntity\022\n\n\002id\030\001 \001(\t\022\014\n\004from\030\002 \001(\t\022\014\n\004" +
+      "type\030\003 \001(\t\022\r\n\005state\030\005 \001(\t\022\021\n\ttimestamp\030\006" +
+      " \001(\005\022\017\n\007message\030\007 \001(\t\"\230\001\n\021InteractionEnt" +
+      "ity\022\n\n\002id\030\001 \001(\t\022\014\n\004from\030\002 \001(\t\022\014\n\004type\030\003 " +
+      "\001(\t\022\r\n\005state\030\005 \001(\t\022\021\n\ttimestamp\030\006 \001(\005\022\017\n" +
+      "\007message\030\007 \001(\t\022\022\n\ngenesisDid\030\010 \001(\t\022\024\n\014pr" +
+      "ofileNonce\030\t \001(\003*I\n\017InteractionType\022\t\n\005o" +
+      "ffer\020\000\022\016\n\nrevocation\020\001\022\n\n\006update\020\002\022\017\n\013au" +
+      "thRequest\020\003*H\n\020InteractionState\022\014\n\010recei" +
+      "ved\020\000\022\n\n\006opened\020\001\022\014\n\010accepted\020\002\022\014\n\010decli" +
+      "ned\020\003b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

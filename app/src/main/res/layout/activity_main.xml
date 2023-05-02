@@ -12,6 +12,12 @@
         android:text="Init SDK" />
 
     <Button
+        android:id="@+id/button_start_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start circuits download" />
+
+    <Button
         android:id="@+id/button_get_env"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,4 +46,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get DID identifier" />
+
+    <Button
+        android:id="@+id/button_authenticate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Authenticate" />
+
+    <Button
+        android:id="@+id/button_stop_stream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop stream" />
+
+    <TextView
+        android:id="@+id/text_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
