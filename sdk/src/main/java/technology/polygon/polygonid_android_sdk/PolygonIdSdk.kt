@@ -153,6 +153,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                                         completable.complete(builder.build() as T)
                                     }
                                 }
+
                                 else -> {
                                     if (isListResult) {
                                         completable.complete(result as? List<T>)
@@ -345,15 +346,19 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                     Iden3MessageType.auth.name -> {
                         AuthIden3MessageEntity.newBuilder()
                     }
+
                     Iden3MessageType.issuance.name -> {
                         FetchIden3MessageEntity.newBuilder()
                     }
+
                     Iden3MessageType.offer.name -> {
                         OfferIden3MessageEntity.newBuilder()
                     }
+
                     Iden3MessageType.contractFunctionCall.name -> {
                         OnchainIden3MessageEntity.newBuilder()
                     }
+
                     else -> {
                         throw IllegalStateException("Unsupported type")
                     }
@@ -577,10 +582,12 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     fun getIdentity(
-        context: Context, privateKey: String? = null
+        context: Context, privateKey: String? = null, genesisDid: String? = null
     ): CompletableFuture<Message> {
         return call<String>(
-            context = context, method = "getIdentity", arguments = mapOf("privateKey" to privateKey)
+            context = context,
+            method = "getIdentity",
+            arguments = mapOf("privateKey" to privateKey, "genesisDid" to genesisDid)
         ).thenApply {
             when {
                 privateKey != null -> {
@@ -588,6 +595,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                     JsonFormat.parser().merge(it, builder)
                     builder.build()
                 }
+
                 else -> {
                     val builder: Message.Builder =
                         IdentityEntity.newBuilder()
@@ -639,11 +647,13 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     fun removeProfile(
-        context: Context, privateKey: String, profileNonce: BigInteger
+        context: Context, privateKey: String, profileNonce: BigInteger, genesisDid: String? = null
     ): CompletableFuture<Void> {
         return call(
             context = context, method = "removeProfile", arguments = mapOf(
-                "privateKey" to privateKey, "profileNonce" to profileNonce.toString()
+                "privateKey" to privateKey,
+                "profileNonce" to profileNonce.toString(),
+                "genesisDid" to genesisDid
             )
         )
     }

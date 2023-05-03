@@ -61,5 +61,73 @@ class MainActivity : AppCompatActivity() {
             // viewModel.stopStream(applicationContext)
             viewModel.fetch(applicationContext)
         }
+
+        findViewById<Button>(R.id.button_get_identity).setOnClickListener {
+            viewModel.getIdentity(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_backup_identity).setOnClickListener {
+            viewModel.backupIdentity(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_restore_identity).setOnClickListener {
+            viewModel.restoreIdentity(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_did_entity).setOnClickListener {
+            viewModel.getDidEntity(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_check_identity_validity).setOnClickListener {
+            viewModel.checkIdentityValidity(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_state).setOnClickListener {
+            viewModel.getState(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_remove_identity).setOnClickListener {
+            viewModel.removeIdentity(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_remove_profile).setOnClickListener {
+            viewModel.removeProfile(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_sign_message).setOnClickListener {
+            viewModel.sign(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_claims_by_ids).setOnClickListener {
+            viewModel.getClaimsByIds(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_remove_claim).setOnClickListener {
+            viewModel.removeClaim(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_remove_claims_by_ids).setOnClickListener {
+            viewModel.removeClaims(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_save_claims).setOnClickListener {
+            viewModel.saveClaims(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_check_download_circuits).setOnClickListener {
+            viewModel.checkDownloadCircuits(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_cancel_download_circuits).setOnClickListener {
+            viewModel.cancelDownloadCircuits(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_add_interaction).setOnClickListener {
+            viewModel.addInteraction(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_interactions).setOnClickListener {
+            viewModel.getInteractions(applicationContext)
+        }
     }
 }
