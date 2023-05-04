@@ -171,6 +171,50 @@
                 android:layout_height="wrap_content"
                 android:text="Get interactions" />
 
+            <Button
+                android:id="@+id/button_remove_interactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove interactions" />
+
+            <Button
+                android:id="@+id/button_update_interaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update interaction" />
+
+            <Button
+                android:id="@+id/button_get_claims_from_iden3message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get claims from iden3message" />
+
+            <Button
+                android:id="@+id/button_get_filters_from_iden3message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get filters from iden3message" />
+
+            <Button
+                android:id="@+id/button_get_schemas_from_iden3message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get schemas from iden3message" />
+
+            <Button
+                android:id="@+id/button_get_vocabs_from_iden3message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get vocabs from iden3message" />
+
+            <Button
+                android:id="@+id/button_get_proofs_from_iden3message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get proofs from iden3message" />
+
+
+
 
         </LinearLayout>
 

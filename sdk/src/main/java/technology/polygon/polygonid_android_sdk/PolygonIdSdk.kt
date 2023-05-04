@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.ToNumberPolicy
 import com.google.protobuf.Message
 import com.google.protobuf.util.JsonFormat
 import io.flutter.embedding.engine.FlutterEngine
@@ -24,6 +26,7 @@ import technology.polygon.polygonid_protobuf.ProofScopeRequestOuterClass.ProofSc
 import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass.*
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
+
 
 const val CHANNEL = "technology.polygon.polygonid_flutter_sdk"
 const val ENGINE = "PolygonIdEngine"
@@ -240,6 +243,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun addInteraction(
         context: Context, genesisDid: String, interaction: Message
     ): CompletableFuture<Message> {
+        println("addInteractionSDK $interaction")
         interaction.isOf(listOf(InteractionEntity::class, InteractionBaseEntity::class))
 
         return call<String>(
@@ -247,6 +251,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "genesisDid" to genesisDid, "interaction" to interaction
             )
         ).thenApply {
+            println("addInteractionCallResponse $it")
             val builder: Message.Builder =
                 when (Gson().fromJson(it, Map::class.java)["genesisDid"] != null) {
                     true -> InteractionEntity.newBuilder()
@@ -305,7 +310,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     ): CompletableFuture<List<ClaimEntity>> {
         message.isOf(
             listOf(
-                AuthIden3MessageEntity::class, OnchainIden3MessageEntity::class
+                AuthIden3MessageEntity::class, OnchainIden3MessageEntity::class,
             )
         )
 
@@ -490,6 +495,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
     fun updateInteraction(
         context: Context,
+        id: String,
         genesisDid: String? = null,
         privateKey: String? = null,
         state: InteractionState? = null
@@ -500,7 +506,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "privateKey" to privateKey,
-                "state" to state?.name
+                "state" to state?.name,
+                "id" to id
             )
         ).thenApply {
             val builder: Message.Builder =

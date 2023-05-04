@@ -129,5 +129,33 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button_get_interactions).setOnClickListener {
             viewModel.getInteractions(applicationContext)
         }
+
+        findViewById<Button>(R.id.button_get_claims_from_iden3message).setOnClickListener {
+            viewModel.getClaimsFromIden3Message(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_filters_from_iden3message).setOnClickListener {
+            viewModel.getFiltersFromIden3Message(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_schemas_from_iden3message).setOnClickListener {
+            viewModel.getSchemasFromIden3Message(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_vocabs_from_iden3message).setOnClickListener {
+            viewModel.getVocabsFromIden3Message(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_get_proofs_from_iden3message).setOnClickListener {
+            viewModel.getProofsFromIden3Message(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_remove_interactions).setOnClickListener {
+            viewModel.removeInteractions(applicationContext)
+        }
+
+        findViewById<Button>(R.id.button_update_interaction).setOnClickListener {
+            viewModel.updateInteraction(applicationContext)
+        }
     }
 }
