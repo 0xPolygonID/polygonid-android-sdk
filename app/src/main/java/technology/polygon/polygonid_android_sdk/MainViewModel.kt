@@ -15,6 +15,7 @@ import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionBaseEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionState
+import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionType
 import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass
 import java.math.BigInteger
 
@@ -588,9 +589,9 @@ class MainViewModel : ViewModel() {
                             .setId(iden3message.id)
                             .setMessage(fetchMessage)
                             .setFrom(iden3message.from)
-                            .setState("received")
-                            .setType("offer")
-                            .setTimestamp(1244555939)
+                            .setState("InteractionState.${InteractionState.received.name}")
+                            .setType("InteractionType.${InteractionType.offer.name}")
+                            .setTimestamp(1683286535)
                             .setProfileNonce(0)
                             .build()
 
@@ -678,7 +679,7 @@ class MainViewModel : ViewModel() {
                             genesisDid = did,
                             privateKey = privateKey,
                             state = InteractionState.opened,
-                        ).thenApply {interaction ->
+                        ).thenApply { interaction ->
                             println("UpdateInteraction: $interaction")
                         }.exceptionally {
                             println("UpdateInteractionError: $it")
