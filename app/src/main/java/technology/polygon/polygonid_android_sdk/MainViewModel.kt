@@ -10,7 +10,7 @@ import java.math.BigInteger
 
 const val TAG = "PolygonIdSdk"
 const val secret = "some secret table yep fff so GJ"
-const val apiKey = "b936512326ea4e22a2a8552b6e9db7b7"
+const val apiKey = "theApiKey"
 const val authMessage =
     "{\"id\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=228509\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
 const val fetchMessage =

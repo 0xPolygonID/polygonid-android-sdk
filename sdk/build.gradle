@@ -37,9 +37,10 @@ android {
 dependencies {
     // PolygonID SDK
     // implementation project(':flutter')
-    debugApi 'technology.polygon.polygonid_flutter_wrapper:flutter_debug:1.0'
-    profileApi 'technology.polygon.polygonid_flutter_wrapper:flutter_profile:1.0'
-    releaseApi 'technology.polygon.polygonid_flutter_wrapper:flutter_release:1.0'
+    //debugApi 'io.github.0xpolygonid.polygonid_flutter_wrapper:flutter_debug:1.0'
+    //profileApi 'io.github.0xpolygonid.polygonid_flutter_wrapper:flutter_profile:1.0'
+    api 'io.github.0xpolygonid.polygonid_flutter_wrapper:flutter_release:1.0.1'
+    //api 'io.github.0xpolygonid.polygonid_flutter_sdk:polygonid_flutter_sdk_release:1.0'
 
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
