@@ -185,8 +185,6 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             completable.completeExceptionally(e)
         }
 
-
-
         return completable
     }
 
@@ -243,7 +241,6 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun addInteraction(
         context: Context, genesisDid: String, interaction: Message
     ): CompletableFuture<Message> {
-        println("addInteractionSDK $interaction")
         interaction.isOf(listOf(InteractionEntity::class, InteractionBaseEntity::class))
 
         return call<String>(
@@ -251,7 +248,6 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "genesisDid" to genesisDid, "interaction" to interaction
             )
         ).thenApply {
-            println("addInteractionCallResponse $it")
             val builder: Message.Builder =
                 when (Gson().fromJson(it, Map::class.java)["genesisDid"] != null) {
                     true -> InteractionEntity.newBuilder()
