@@ -12,7 +12,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         maven {
-            url '/Users/fluck/Dev/Flutter/PolygonID/Iden3/polygonid-flutter-sdk/polygonid-flutter-wrapper/build/host/outputs/repo'
+            // url '/Users/fluck/Dev/Flutter/PolygonID/Iden3/polygonid-flutter-sdk/polygonid-flutter-wrapper/build/host/outputs/repo'
+            url '/Users/fluck/Dev/Flutter/PolygonID/Iden3/Native/polygonid-flutter-wrapper/build/host/outputs/repo'
+            // url 'sdk/m2'
         }
         mavenCentral()
         maven {
