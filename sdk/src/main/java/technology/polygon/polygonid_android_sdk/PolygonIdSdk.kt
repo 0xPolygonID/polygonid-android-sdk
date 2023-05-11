@@ -4,8 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.ToNumberPolicy
 import com.google.protobuf.Message
 import com.google.protobuf.util.JsonFormat
 import io.flutter.embedding.engine.FlutterEngine
@@ -27,20 +25,38 @@ import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOut
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
-
 const val CHANNEL = "technology.polygon.polygonid_flutter_sdk"
 const val ENGINE = "PolygonIdEngine"
 
+/** The PolygonIdSdk class which is used to interact with the PolygonId Flutter SDK through [MethodChannel].
+ * The [PolygonIdSdk] is a singleton and needs to be initialized through [init] before being used.
+ *
+ * Each method needs a [Context] to be called because it uses the [FlutterEngine] to communicate with the Flutter SDK.
+ * Each method call is asynchronous and returns a [CompletableFuture].
+ *
+ * @property flows A map of [MutableSharedFlow]. In some circumstances, the Flutter SDK uses Streams
+ * which are emitting data (like Kotlin Flow). As there is no way of directly using a Stream though [MethodChannel],
+ * we emit the data through [MutableSharedFlow] which are stored in this map.
+ * The key of the map is the name returned by the method starting the Stream, you can get the list of all the keys
+ * with [getFlowKeys].
+ */
 @Suppress("UNCHECKED_CAST")
 class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>> = mutableMapOf()) {
     companion object {
         private var ref: PolygonIdSdk? = null
 
+        /** Get the singleton instance of the PolygonIdSdk.
+         * @throws IllegalStateException if the SDK has not been initialized through [init].
+         */
         fun getInstance(): PolygonIdSdk {
             return ref
                 ?: throw IllegalStateException("PolygonIdSdk not initialized, please call init() first")
         }
 
+        /** Initialize the PolygonIdSdk.
+         * @param context A context.
+         * @param env An optional [EnvEntity] to initialize the SDK with.
+         */
         fun init(context: Context, env: EnvEntity? = null) {
             ref = PolygonIdSdk()
 
@@ -67,10 +83,19 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
     }
 
+    /** Get the list of all the keys of the [MutableSharedFlow] stored in [flows].
+     *
+     */
     fun getFlowKeys(): List<String> {
         return flows.keys.toList()
     }
 
+    /** Get a [MutableSharedFlow] from [flows] with the given key.
+     *
+     * @param key The key of the [MutableSharedFlow] to get.
+     *
+     * @return The [MutableSharedFlow].
+     */
     fun getFlow(key: String): MutableSharedFlow<Any?> {
         if (flows[key] == null) {
             flows[key] = MutableSharedFlow()
@@ -79,11 +104,12 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         return flows[key]!!
     }
 
+    /** Close a flow and cleanup the Flutter SDK counterpart.
+     *
+     */
     fun closeFlow(context: Context, key: String) {
         call<Void>(
-            context = context,
-            method = "closeStream",
-            arguments = mapOf("key" to key)
+            context = context, method = "closeStream", arguments = mapOf("key" to key)
         ).thenAccept {
             flows.remove(key)
         }
@@ -107,6 +133,16 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Call a method from the Flutter SDK.
+     * Shortcut to [callFlutterMethod] with an [Any] return type.
+     *
+     * @param context is an Android context.
+     * @param method is the name of the method to call.
+     * @param arguments is an optional map of arguments to pass to the method.
+     * @param isListResult is a boolean indicating if the result of the method is a list.
+     *
+     * @return a [CompletableFuture] containing the result of the method call.
+     */
     fun callRaw(
         context: Context,
         method: String,
@@ -130,9 +166,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
             Handler(Looper.getMainLooper()).post {
                 channel.invokeMethod(
-                    method,
-                    args,
-                    MainThreadResultHandler(result = object : MethodChannel.Result {
+                    method, args, MainThreadResultHandler(result = object : MethodChannel.Result {
                         override fun success(result: Any?) {
                             when {
                                 Message::class.java.isAssignableFrom(T::class.java) -> {
@@ -168,9 +202,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                         }
 
                         override fun error(
-                            errorCode: String,
-                            errorMessage: String?,
-                            errorDetails: Any?
+                            errorCode: String, errorMessage: String?, errorDetails: Any?
                         ) {
                             completable.completeExceptionally(Throwable(errorMessage))
                         }
@@ -189,9 +221,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     private inline fun <reified T> call(
-        context: Context,
-        method: String,
-        arguments: Map<String, Any?>? = null
+        context: Context, method: String, arguments: Map<String, Any?>? = null
     ): CompletableFuture<T> {
         return callFlutterMethod<T>(
             context = context, method = method, arguments = arguments
@@ -199,9 +229,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     private inline fun <reified T> callAsList(
-        context: Context,
-        method: String,
-        arguments: Map<String, Any?>? = null
+        context: Context, method: String, arguments: Map<String, Any?>? = null
     ): CompletableFuture<List<T>> {
         return callFlutterMethod<T>(
             context = context, method = method, arguments = arguments, isListResult = true
@@ -217,18 +245,34 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     // SDK
+    /**
+     * Initializes the SDK.
+     * @param context is an Android context.
+     * @return A [CompletableFuture] that completes when the SDK is initialized.
+     */
     fun init(context: Context): CompletableFuture<Void> {
         return call(
             context = context, method = "init"
         )
     }
 
+    /**
+     * Sets the environment.
+     * @param context is an Android context.
+     * @param env The environment to set.
+     */
     fun setEnv(context: Context, env: EnvEntity): CompletableFuture<Void> {
         return call(
             context = context, method = "setEnv", arguments = mapOf("env" to env)
         )
     }
 
+    /**
+     * Gets the current environment.
+     * @param context is an Android context.
+     *
+     * @return A [CompletableFuture] that completes with the current [EnvEntity].
+     */
     fun getEnv(
         context: Context
     ): CompletableFuture<EnvEntity> {
@@ -238,14 +282,30 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     // Iden3comm
+    /** Saves an [InteractionEntity] or [InteractionBaseEntity] in the Polygon ID Sdk
+     *
+     * @param interaction is the interaction to be saved
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * @param genesisDid is the unique id of the identity
+     * @param profileNonce is the nonce of the profile used from identity to obtain the did identifier
+     *
+     * @return A [CompletableFuture] that completes with the saved [InteractionEntity] or [InteractionBaseEntity]
+     */
     fun addInteraction(
-        context: Context, genesisDid: String, interaction: Message
+        context: Context,
+        genesisDid: String,
+        interaction: Message,
+        privateKey: String? = null,
+        profileNonce: BigInteger? = null
     ): CompletableFuture<Message> {
         interaction.isOf(listOf(InteractionEntity::class, InteractionBaseEntity::class))
 
         return call<String>(
             context = context, method = "addInteraction", arguments = mapOf(
-                "genesisDid" to genesisDid, "interaction" to interaction
+                "genesisDid" to genesisDid,
+                "interaction" to interaction,
+                "privateKey" to privateKey,
+                "profileNonce" to profileNonce?.toString()
             )
         ).thenApply {
             val builder: Message.Builder =
@@ -259,6 +319,17 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
     }
 
+    /** Authenticate response from [AuthIden3MessageEntity] sharing the needed (if any) proofs requested by it
+     *
+     * @param message is the iden3comm message entity
+     * @param genesisDid is the unique id of the identity
+     * @param profileNonce is the nonce of the profile used from identity
+     * to obtain the did identifier
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     * @param pushToken is the push notification registration token so the issuer/verifer
+     * can send notifications to the identity.
+     **/
     fun authenticate(
         context: Context,
         message: AuthIden3MessageEntity,
@@ -278,6 +349,16 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Fetch a list of [ClaimEntity] from issuer using iden3comm message and stores them in Polygon Id Sdk.
+     *
+     * @param message is the iden3comm message entity of type [OfferIden3MessageEntity]
+     * @param genesisDid is the unique id of the identity
+     * @param profileNonce is the nonce of the profile used from identity to obtain the did identifier
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     *
+     * @return A [CompletableFuture] that completes with the list of [ClaimEntity] fetched.
+     **/
     fun fetchAndSaveClaims(
         context: Context,
         message: Message,
@@ -297,6 +378,16 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Get a list of [ClaimEntity] from iden3comm message stored in Polygon Id Sdk.
+     *
+     * @param message is the iden3comm message entity
+     * @param genesisDid is the unique id of the identity
+     * @param profileNonce is the nonce of the profile used from identity to obtain the did identifier
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     *
+     * @return A [CompletableFuture] that completes with the list of [ClaimEntity].
+     **/
     fun getClaimsFromIden3Message(
         context: Context,
         message: Message,
@@ -320,6 +411,12 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Get a list of [FilterEntity] from an iden3comm message to apply to [getClaims]
+     *
+     * @param message is the iden3comm message entity of type [AuthIden3MessageEntity] or [OnchainIden3MessageEntity]
+     *
+     * @return A [CompletableFuture] that completes with the list of [FilterEntity].
+     **/
     fun getFilters(
         context: Context, message: Message
     ): CompletableFuture<List<FilterEntity>> {
@@ -330,12 +427,21 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
 
         return callAsList(
-            context = context,
-            method = "getFilters",
-            arguments = mapOf("message" to message)
+            context = context, method = "getFilters", arguments = mapOf("message" to message)
         )
     }
 
+    /** Get an iden3Message object from an iden3comm message string.
+     *
+     * @param message is the iden3comm message in string format
+     *
+     * When communicating through iden3comm with an Issuer or Verifier,
+     * iden3comm message string needs to be parsed to a supported
+     * iden3Message by the PolygonId Sdk using this method.
+     *
+     * @return A [CompletableFuture] that completes with the iden3Message that could be
+     * [AuthIden3MessageEntity], [FetchIden3MessageEntity], [OfferIden3MessageEntity] or [OnchainIden3MessageEntity]
+     **/
     fun getIden3Message(
         context: Context, message: String
     ): CompletableFuture<Message> {
@@ -371,6 +477,12 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
     }
 
+    /**
+     * Get the schemas from an iden3comm message.
+     * @param message is the iden3comm message
+     *
+     * @return A [CompletableFuture] that completes with the schemas.
+     */
     fun getSchemas(
         context: Context, message: Message
     ): CompletableFuture<List<Map<String, Any?>>> {
@@ -387,6 +499,12 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /**
+     * Get the vocabs from an iden3comm message.
+     * @param message is the iden3comm message
+     *
+     * @return A [CompletableFuture] that completes with the vocabs.
+     */
     fun getVocabs(
         context: Context, message: Message
     ): CompletableFuture<List<Map<String, Any?>>> {
@@ -403,6 +521,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Gets a list of interaction associated to the identity previously stored
+     * in the the Polygon ID Sdk
+     *
+     * @param genesisDid is the unique id of the identity
+     * @param profileNonce is the nonce of the profile used from identity
+     * to obtain the did identifier
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     *
+     * @return A [CompletableFuture] that completes with the list of interactions fetched which can be
+     * [InteractionEntity] or [InteractionBaseEntity]
+     **/
     fun getInteractions(
         context: Context,
         genesisDid: String? = null,
@@ -413,9 +543,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         filters: List<FilterEntity>? = null
     ): CompletableFuture<List<Any>> {
         return callAsList<String>(
-            context = context,
-            method = "getInteractions",
-            arguments = mapOf(
+            context = context, method = "getInteractions", arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
                 "privateKey" to privateKey,
@@ -437,8 +565,19 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
     }
 
-    // We are returning the json representation of the proof because the
-    // protobuf doesn't support nested lists
+    /** Get a list of proofs from iden3comm message
+     *
+     * @param message is the iden3comm message entity
+     * @param genesisDid is the unique id of the identity
+     * @param profileNonce is the nonce of the profile used from identity
+     * to obtain the did identifier
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     *
+     * FIXME: return type should be List<JWZProofEntity>
+     * @return We are returning the json representation of the proof because the
+     * protobuf doesn't support nested lists
+     **/
     fun getProofs(
         context: Context,
         message: Message,
@@ -448,9 +587,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         challenge: String? = null
     ): CompletableFuture<List<String>> {
         return callAsList(
-            context = context,
-            method = "getProofs",
-            arguments = mapOf(
+            context = context, method = "getProofs", arguments = mapOf(
                 "message" to message,
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
@@ -475,20 +612,32 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 //        }
     }
 
+    /** Removes a list of interactions from the Polygon ID Sdk by their ids
+     *
+     * @param genesisDid is the unique id of the identity
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * @param ids is the list of ids of the interactions to be removed
+     **/
     fun removeInteractions(
         context: Context, genesisDid: String? = null, privateKey: String? = null, ids: List<String>
     ): CompletableFuture<Void> {
         return call(
-            context = context,
-            method = "removeInteractions",
-            arguments = mapOf(
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey,
-                "ids" to ids
+            context = context, method = "removeInteractions", arguments = mapOf(
+                "genesisDid" to genesisDid, "privateKey" to privateKey, "ids" to ids
             )
         )
     }
 
+    /** Updated the states of a interaction in the Polygon ID Sdk
+     *
+     * @param id is the id of the notification to be updated
+     * @param genesisDid is the unique id of the identity
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * @param state is the new state of the interaction
+     *
+     * @return A [CompletableFuture] that completes with the interaction updated which can be
+     * [InteractionEntity] or [InteractionBaseEntity]
+     **/
     fun updateInteraction(
         context: Context,
         id: String,
@@ -497,9 +646,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         state: InteractionState? = null
     ): CompletableFuture<Any> {
         return call<String>(
-            context = context,
-            method = "updateInteraction",
-            arguments = mapOf(
+            context = context, method = "updateInteraction", arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "privateKey" to privateKey,
                 "state" to state?.name,
@@ -518,6 +665,23 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     // Identity
+    /** Creates and stores an [PrivateIdentityEntity] from a secret
+     * if it doesn't exist already in the Polygon ID Sdk.
+     *
+     * If [secret] is omitted or null, a random one will be used to create a new identity.
+     *
+     * Be aware [secret] is internally converted to a 32 length bytes array
+     * in order to be compatible with the SDK. The following rules will be applied:
+     * - If the byte array is not 32 length, it will be padded with 0s.
+     * - If the byte array is longer than 32, an exception will be thrown.
+     *
+     * The identity will be created using the current env set with [setEnv]
+     *
+     * @param context is an Android context.
+     * @param secret is the secret used to create the identity.
+     *
+     * @return A [CompletableFuture] that completes with the stored identity.
+     * **/
     fun addIdentity(
         context: Context, secret: String
     ): CompletableFuture<PrivateIdentityEntity> {
@@ -526,6 +690,17 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Adds a profile if it doesn't already exist to the identity derived from private key and stored
+     * in the Polygon ID Sdk.
+     *
+     * @param genesisDid is the unique id of the identity which profileNonce is 0.
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     * @param profileNonce is the nonce of the profile used from identity
+     * to obtain the did identifier. Value must be greater than 0 and less than 2^248
+     *
+     * The profile will be added using the current env set with [setEnv]
+     **/
     fun addProfile(
         context: Context, genesisDid: String, privateKey: String, profileNonce: BigInteger
     ): CompletableFuture<Void> {
@@ -538,6 +713,17 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /*** Backup a previously stored [IdentityEntity] from a privateKey
+     * associated to the identity
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     * using the claims associated to the identity
+     *
+     * @return An encrypted Identity's Database.
+     **/
     fun backupIdentity(
         context: Context, genesisDid: String, privateKey: String
     ): CompletableFuture<String> {
@@ -548,6 +734,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Checks the identity validity from a secret
+     *
+     * If [secret] is omitted or null, a random one will be used to create a new identity.
+     *
+     * Be aware [secret] is internally converted to a 32 length bytes array
+     * in order to be compatible with the SDK. The following rules will be applied:
+     * - If the byte array is not 32 length, it will be padded with 0s.
+     * - If the byte array is longer than 32, an exception will be thrown.
+     *
+     * @param context is an Android context.
+     * @param secret is the secret used to create the identity
+     **/
     fun checkIdentityValidity(
         context: Context, secret: String
     ): CompletableFuture<Void> {
@@ -558,6 +756,13 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Get a [DidEntity] from a did
+     *
+     * @param context is an Android context.
+     * @param did is the did of the identity
+     *
+     * @return A [CompletableFuture] that completes with the did entity.
+     */
     fun getDidEntity(
         context: Context, did: String
     ): CompletableFuture<DidEntity> {
@@ -566,6 +771,19 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Returns the did identifier derived from a privateKey
+     *
+     * @param context is an Android context.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     * using the claims associated to the identity
+     * @param blockchain is the blockchain name where the identity
+     * is associated, e.g. Polygon
+     * @param network is the network name of the blockchain where the identity
+     * is associated, e.g. Main
+     *
+     * @return A [CompletableFuture] that completes with the did identifier.
+     **/
     fun getDidIdentifier(
         context: Context, privateKey: String, blockchain: String, network: String
     ): CompletableFuture<String> {
@@ -576,6 +794,14 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Get a list of public info of [IdentityEntity] associated
+     * to the identities stored in the Polygon ID Sdk.
+     * The identities returned will come from the current env set with [setEnv]
+     *
+     * @param context is an Android context.
+     *
+     * @return A [CompletableFuture] that completes with the list of identities.
+     **/
     fun getIdentities(
         context: Context
     ): CompletableFuture<List<IdentityEntity>> {
@@ -584,6 +810,21 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Gets an identity from an identifier.
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     * using the claims associated to the identity
+     *
+     * Be aware the secret is internally converted to a 32 length bytes array
+     * in order to be compatible with the SDK. The following rules will be applied:
+     * - If the byte array is not 32 length, it will be padded with 0s.
+     * - If the byte array is longer than 32, an exception will be thrown.
+     *
+     * @return An identity as a [PrivateIdentityEntity] or [IdentityEntity]
+     **/
     fun getIdentity(
         context: Context, privateKey: String? = null, genesisDid: String? = null
     ): CompletableFuture<Message> {
@@ -600,8 +841,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 }
 
                 else -> {
-                    val builder: Message.Builder =
-                        IdentityEntity.newBuilder()
+                    val builder: Message.Builder = IdentityEntity.newBuilder()
                     JsonFormat.parser().merge(it, builder)
                     builder.build()
                 }
@@ -609,16 +849,37 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
     }
 
+    /** Gets the identity private key from a secret
+     *
+     * Be aware [secret] is internally converted to a 32 length bytes array
+     * in order to be compatible with the SDK. The following rules will be applied:
+     * - If the byte array is not 32 length, it will be padded with 0s.
+     * - If the byte array is longer than 32, an exception will be thrown.
+     *
+     * @param context is an Android context.
+     * @param secret is the secret to get the private key from.
+     *
+     *  @return A [CompletableFuture] that completes with the private key.
+     **/
     fun getPrivateKey(
         context: Context, secret: String
     ): CompletableFuture<String> {
         return call(
-            context = context,
-            method = "getPrivateKey",
-            arguments = mapOf("secret" to secret)
+            context = context, method = "getPrivateKey", arguments = mapOf("secret" to secret)
         )
     }
 
+    /** Gets a map of profile nonce as key and profile did as value associated
+     * to the identity derived from private key and stored in the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     *
+     * The returned profiles will come from the current env set with [setEnv]
+     * @return A [CompletableFuture] that completes with the map of profiles.
+     **/
     fun getProfiles(
         context: Context, genesisDid: String, privateKey: String
     ): CompletableFuture<Map<BigInteger, String>> {
@@ -631,6 +892,13 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
     }
 
+    /** Get the state from a did
+     *
+     *  @param context is an Android context.
+     *  @param did is the did to get the state from.
+     *
+     *  @return A [CompletableFuture] that completes with the state.
+     */
     fun getState(
         context: Context, did: String
     ): CompletableFuture<String> {
@@ -639,6 +907,15 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Remove the previously stored identity associated with the identifier
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     * using the claims associated to the identity.
+     *
+     **/
     fun removeIdentity(
         context: Context, genesisDid: String, privateKey: String
     ): CompletableFuture<Void> {
@@ -649,6 +926,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Removes a profile from the identity derived from private key and stored
+     * in the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0.
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     * @param profileNonce is the nonce of the profile used from identity
+     * to obtain the did identifier. Value must be greater than 0 and less than 2^248.
+     *
+     * The profile will be removed using the current env set with [setEnv]
+     **/
     fun removeProfile(
         context: Context, privateKey: String, profileNonce: BigInteger, genesisDid: String? = null
     ): CompletableFuture<Void> {
@@ -661,18 +950,37 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Restores an [IdentityEntity] from a privateKey and encrypted backup databases
+     * associated to the identity
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs
+     * using the credentials associated to the identity.
+     * @param encryptedDb is an encrypted Identity's Database.
+     *
+     * @return A [CompletableFuture] that completes with the restored identity.
+     **/
     fun restoreIdentity(
         context: Context, genesisDid: String, privateKey: String, encryptedDb: String? = null
     ): CompletableFuture<PrivateIdentityEntity> {
         return call(
             context = context, method = "restoreIdentity", arguments = mapOf(
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey,
-                "encryptedDb" to encryptedDb
+                "genesisDid" to genesisDid, "privateKey" to privateKey, "encryptedDb" to encryptedDb
             )
         )
     }
 
+    /** Sign a message through a identity's private key.
+     *
+     * @param context is an Android context.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     * @param message is the message to sign.
+     *
+     * @return A [CompletableFuture] that completes with the signature.
+     **/
     fun sign(
         context: Context, privateKey: String, message: String
     ): CompletableFuture<String> {
@@ -683,6 +991,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    // Credential
+    /** Get a list of [ClaimEntity] associated to the identity previously stored
+     * in the the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param filters is a list to filter the claims.
+     * @param genesisDid is the unique id of the identity.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     *
+     * @return A [CompletableFuture] that completes with the list of claims.
+     **/
     fun getClaims(
         context: Context,
         filters: List<FilterEntity>? = null,
@@ -691,45 +1011,68 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     ): CompletableFuture<List<ClaimEntity>> {
         return callAsList(
             context = context, method = "getClaims", arguments = mapOf(
-                "filters" to filters,
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey
+                "filters" to filters, "genesisDid" to genesisDid, "privateKey" to privateKey
             )
         )
     }
 
+    /** Get a list of [ClaimEntity] filtered by ids associated to the identity previously stored
+     * in the the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param claimIds is a list of claim ids to filter by.
+     * @param genesisDid is the unique id of the identity.
+     * @param privateKey is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     *
+     *  @return A [CompletableFuture] that completes with the list of claims.
+     **/
     fun getClaimsByIds(
         context: Context, claimIds: List<String>, genesisDid: String, privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
         return callAsList(
             context = context, method = "getClaimsByIds", arguments = mapOf(
-                "claimIds" to claimIds,
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey
+                "claimIds" to claimIds, "genesisDid" to genesisDid, "privateKey" to privateKey
             )
         )
     }
 
+    /** Remove a [ClaimEntity] filtered by id associated to the identity previously stored
+     * in the the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param claimId is the unique id of the claim to remove.
+     * @param genesisDid is the unique id of the identity.
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     *
+     **/
     fun removeClaim(
         context: Context, claimId: String, genesisDid: String, privateKey: String
     ): CompletableFuture<Void> {
         return call(
             context = context, method = "removeClaim", arguments = mapOf(
-                "claimId" to claimId,
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey
+                "claimId" to claimId, "genesisDid" to genesisDid, "privateKey" to privateKey
             )
         )
     }
 
+    /** Remove a list of [ClaimEntity] filtered by ids associated to the identity previously stored
+     * in the the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param claimIds is a list of claim ids to filter by.
+     * @param genesisDid is the unique id of the identity.
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     *
+     **/
     fun removeClaims(
         context: Context, claimIds: List<String>, genesisDid: String, privateKey: String
     ): CompletableFuture<Void> {
         return call(
             context = context, method = "removeClaims", arguments = mapOf(
-                "claimIds" to claimIds,
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey
+                "claimIds" to claimIds, "genesisDid" to genesisDid, "privateKey" to privateKey
             )
         )
     }
@@ -739,13 +1082,27 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     ): CompletableFuture<List<ClaimEntity>> {
         return callAsList(
             context = context, method = "saveClaims", arguments = mapOf(
-                "claims" to claims,
-                "genesisDid" to genesisDid,
-                "privateKey" to privateKey
+                "claims" to claims, "genesisDid" to genesisDid, "privateKey" to privateKey
             )
         )
     }
 
+    /** Update a [ClaimEntity] filtered by id associated to the identity previously stored
+     * in the the Polygon ID Sdk.
+     *
+     * @param context is an Android context.
+     * @param claimId is a claim id to filter by.
+     * @param genesisDid is the unique id of the identity.
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     * @param issuer is the issuer of the claim.
+     * @param state is the state of the claim.
+     * @param expiration is the expiration of the claim.
+     * @param type is the type of the claim.
+     * @param data is the data of the claim and could be subject to validation by the data layer
+     *
+     * @return A [CompletableFuture] that completes with the updated claim.
+     **/
     fun updateClaim(
         context: Context,
         claimId: String,
@@ -771,6 +1128,14 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    // Proof
+    /** Start the download of the circuits from the server.
+     *
+     * @param context is an Android context.
+     *
+     * @return A [CompletableFuture] that completes with the key of the [flows] where the download
+     * will be emitted to.
+     */
     fun startDownloadCircuits(
         context: Context
     ): CompletableFuture<String> {
@@ -779,6 +1144,10 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Check if the circuits are already downloaded from the server.
+     *
+     * @param context is an Android context.
+     */
     fun isAlreadyDownloadedCircuitsFromServer(
         context: Context
     ): CompletableFuture<Boolean> {
@@ -787,6 +1156,10 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Cancel the download of the circuits from the server.
+     *
+     * @param context is an Android context.
+     */
     fun cancelDownloadCircuits(
         context: Context
     ): CompletableFuture<Void> {
@@ -795,6 +1168,13 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
+    /** Get the proof generation steps.
+     *
+     * @param context is an Android context.
+     *
+     * @return A [CompletableFuture] that completes with the key of the [flows] where the download
+     * will be emitted to.
+     */
     fun proofGenerationStepsStream(
         context: Context
     ): CompletableFuture<String> {
@@ -803,8 +1183,24 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         )
     }
 
-    // We are returning the json representation of the proof because the
-    // protobuf doesn't support nested lists
+    /** Get a proof from a [ClaimEntity].
+     *
+     * @param context is an Android context.
+     * @param genesisDid is the unique id of the identity which profileNonce is 0.
+     * @param privateKey  is the key used to access all the sensitive info from the identity
+     * and also to realize operations like generating proofs.
+     * @param profileNonce is the nonce of the profile used from identity
+     * @param claimSubjectProfileNonce is the nonce of the profile used from claim subject
+     * @param claim is the claim to generate the proof from.
+     * @param circuitData is the circuit data to generate the proof from.
+     * @param request is the proof request.
+     * @param challenge is the challenge to generate the proof from.
+     *
+     * FIXME: return type should be List<JWZProofEntity>
+     * @return A [CompletableFuture] that completes with the proof.
+     * We are returning the json representation of the proof because the
+     * protobuf doesn't support nested lists.
+     */
     fun prove(
         context: Context,
         genesisDid: String,
@@ -842,17 +1238,5 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 //                entity
 //            }
 //        }
-    }
-
-    fun startOne(
-        context: Context
-    ): CompletableFuture<Void> {
-        return call(context = context, method = "getOne")
-    }
-
-    fun stopOne(
-        context: Context
-    ): CompletableFuture<Void> {
-        return call(context = context, method = "closeStream", arguments = mapOf("key" to "one"))
     }
 }
