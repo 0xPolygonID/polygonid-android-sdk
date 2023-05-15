@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
+
+group 'io.github.0xpolygonid.polygonid_android_sdk'
+version '1.0'
 
 android {
     namespace 'technology.polygon.polygonid_android_sdk'
@@ -32,23 +36,82 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'io.github.0xpolygonid.polygonid_android_sdk'
+            artifactId = 'release'
+            version = '1.0.0'
+
+            pom {
+                name = 'PolygonID Android SDK'
+                description = 'The Android SDK for PolygonID'
+                url = 'https://polygon.technology/polygon-id'
+
+                licenses {
+                    license {
+                        name = 'Apache License 2.0'
+                        url = 'http://www.apache.org/licenses/'
+                    }
+                    license {
+                        name = 'MIT License'
+                        url = 'https://mit-license.org/'
+                    }
+                }
+
+                developers {
+                    developer {
+                        name = 'Flavien Norindr'
+                        email = 'fnorindr@polygon.technology'
+                        organization = 'Polygon'
+                        organizationUrl = 'https://polygon.technology'
+                    }
+                    developer {
+                        name = 'Emanuel Muroni'
+                        email = 'emuroni@polygon.technology'
+                        organization = 'Polygon'
+                        organizationUrl = 'https://polygon.technology'
+                    }
+                    developer {
+                        name = 'Raùl Jareño'
+                        email = 'raulj@polygon.technology'
+                        organization = 'Polygon'
+                        organizationUrl = 'https://polygon.technology'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git@github.com:0xPolygonID/polygonid-android-sdk.git'
+                    developerConnection = 'scm:git@github.com:0xPolygonID/polygonid-android-sdk.git'
+                    url = 'https://github.com/0xPolygonID/polygonid-android-sdk'
+                }
+            }
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
 }
 
 dependencies {
     // PolygonID SDK
     // implementation project(':flutter')
-    //debugApi 'io.github.0xpolygonid.polygonid_flutter_wrapper:flutter_debug:1.0'
-    //profileApi 'io.github.0xpolygonid.polygonid_flutter_wrapper:flutter_profile:1.0'
-    api 'io.github.0xpolygonid.polygonid_flutter_wrapper:flutter_debug:1.0.1'
-    //api 'io.github.0xpolygonid.polygonid_flutter_sdk:polygonid_flutter_sdk_release:1.0'
+    api 'io.github.0xpolygonid.polygonid_flutter_wrapper:debug:1.0.2'
 
-    implementation 'androidx.core:core-ktx:1.10.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api 'com.google.protobuf:protobuf-java:3.22.3'
-    api 'com.google.protobuf:protobuf-java-util:3.17.2'
+    api 'com.google.protobuf:protobuf-java-util:3.22.3'
     implementation 'com.google.code.gson:gson:2.10.1'
 }
