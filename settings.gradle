@@ -11,13 +11,10 @@ dependencyResolutionManagement {
 
     repositories {
         google()
+        mavenCentral()
         maven {
             url 'm2'
         }
-//        maven {
-//            url '/Users/fluck/.m2/repository'
-//        }
-        mavenCentral()
         maven {
             url "$storageUrl/download.flutter.io"
         }

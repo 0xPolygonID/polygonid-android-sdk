@@ -44,11 +44,6 @@ android {
     }
 }
 
-task createLocalMavenZip(type: Zip) {
-    from 'm2'
-    archiveName = 'm2.zip'
-}
-
 publishing {
     publications {
         release(MavenPublication) {
@@ -99,8 +94,6 @@ publishing {
                     url = 'https://github.com/0xPolygonID/polygonid-android-sdk'
                 }
             }
-
-            artifact(createLocalMavenZip)
 
             afterEvaluate {
                 from components.release
