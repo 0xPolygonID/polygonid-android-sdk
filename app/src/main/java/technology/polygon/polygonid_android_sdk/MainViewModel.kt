@@ -3,16 +3,13 @@ package technology.polygon.polygonid_android_sdk
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.protobuf.Int64Value
 import com.google.protobuf.ListValue
 import com.google.protobuf.StringValue
 import com.google.protobuf.Value
-import com.google.protobuf.ValueOrBuilder
 import kotlinx.coroutines.launch
-import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.ClaimEntity
 import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
-import technology.polygon.polygonid_protobuf.FilterEntityOuterClass
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
-import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionBaseEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionState
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionType
@@ -587,12 +584,13 @@ class MainViewModel : ViewModel() {
                             message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity
                         val interaction = InteractionEntity.newBuilder()
                             .setId(iden3message.id)
+                            .setGenesisDid(did)
                             .setMessage(fetchMessage)
                             .setFrom(iden3message.from)
                             .setState("InteractionState.${InteractionState.received.name}")
                             .setType("InteractionType.${InteractionType.offer.name}")
                             .setTimestamp(1683286535)
-                            .setProfileNonce(0)
+                            .setProfileNonce(Int64Value.of(0L))
                             .build()
 
 
@@ -600,6 +598,7 @@ class MainViewModel : ViewModel() {
                             context = context,
                             genesisDid = did,
                             interaction = interaction,
+                            privateKey = privateKey,
                         ).thenApply {
                             println("AddInteractionSuccess: $it")
                         }.exceptionally {
