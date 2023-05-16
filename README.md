@@ -1,11 +1,11 @@
 # polygonid-android-sdk
 Polygon ID Android SDK + Demo app
 
-## What is it?
+# What is it?
 This native SDK enables developer to use the [PolygonID solution](https://polygon.technology/polygon-id).
 
-## How to use the SDK
-# Prerequisite
+# How to use the SDK
+## Prerequisite
 1. Download and unpack [those Maven local repository](https://repo1.maven.org/maven2/io/github/0xpolygonid/polygonid_flutter_wrapper/debug/1.0.2/debug-1.0.2.zip)
 2. Add this to your build.gradle or settings.gradle:
 ```
@@ -28,7 +28,7 @@ This native SDK enables developer to use the [PolygonID solution](https://polygo
 implementation 'io.github.0xpolygonid.polygonid_android_sdk:release:1.0.0'
 ```
 
-# Init
+## Init
 The SDK needs to be [initialized](https://github.com/0xPolygonID/polygonid-android-sdk/blob/cb2e83d526ef100ddc65008167a004cce64df793/sdk/src/main/java/technology/polygon/polygonid_android_sdk/PolygonIdSdk.kt#L60) before being used:
 ```
             PolygonIdSdk.init(
@@ -44,7 +44,13 @@ The `env` param is optional but you need to set it up at some point via [setEnv]
 
 Once initialized, you can use the SDK through his singleton `PolygonIdSdk.getInstance()`
 
-## Under the hood
+# Under the hood
+## Flutter
 This SDK is calling the [Flutter SDK](https://github.com/0xPolygonID/polygonid-flutter-sdk) through `MethodChannel`, that's why each method have a `Context` param to initialize the get `FlutterEngine`.
 
-Documentation and support could be found in the Flutter SDK project, please refer to it.
+You don't need to install or know anything about Flutter.
+
+More documentation and support could be found in the [Flutter SDK project](https://github.com/0xPolygonID/polygonid-flutter-sdk), please refer to it.
+
+## Example app
+You can find an executable [example app](https://github.com/0xPolygonID/polygonid-android-sdk/tree/main/app) in the source with several call to the SDK, which can guide you through your development.
