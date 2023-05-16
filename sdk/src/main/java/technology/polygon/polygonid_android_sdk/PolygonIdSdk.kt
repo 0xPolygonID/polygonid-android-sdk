@@ -16,6 +16,11 @@ import kotlinx.coroutines.launch
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.DidEntityOuterClass.DidEntity
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoType
 import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
 import technology.polygon.polygonid_protobuf.IdentityEntityOuterClass.*
@@ -68,7 +73,35 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
                         if (key != null) {
                             GlobalScope.launch {
-                                ref!!.getFlow(key).emit(call.argument<Any>("data"))
+                                val data: Any? = call.argument<Any>("data")
+                                if (key == "downloadCircuits" && data is String) {
+                                    val downloadInfo: Any =
+                                        Gson().fromJson(data, Map::class.java).let {
+                                            val builder: Message.Builder =
+                                                when (it["downloadInfoType"]) {
+                                                    DownloadInfoType.onDone.name -> {
+                                                        DownloadInfoOnDone.newBuilder()
+                                                    }
+
+                                                    DownloadInfoType.onProgress.name -> {
+                                                        DownloadInfoOnProgress.newBuilder()
+                                                    }
+
+                                                    DownloadInfoType.onError.name -> {
+                                                        DownloadInfoOnError.newBuilder()
+                                                    }
+
+                                                    else -> {
+                                                        throw IllegalArgumentException("Unknown downloadInfoType")
+                                                    }
+                                                }
+                                            JsonFormat.parser().merge(data, builder)
+                                            builder.build()
+                                        }
+                                    ref!!.getFlow(key).emit(downloadInfo)
+                                } else {
+                                    ref!!.getFlow(key).emit(data)
+                                }
                             }
                         }
                     }
@@ -1138,7 +1171,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      */
     fun startDownloadCircuits(
         context: Context
-    ): CompletableFuture<String> {
+    ): CompletableFuture<DownloadInfoEntity> {
         return call(
             context = context, method = "startDownloadCircuits"
         )

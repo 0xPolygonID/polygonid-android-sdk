@@ -7,7 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
+import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -24,8 +28,23 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_start_download).setOnClickListener {
             lifecycleScope.launch {
-                PolygonIdSdk.getInstance().getFlow("downloadCircuits").collect { info ->
-                    findViewById<TextView>(R.id.text_result).text = info.toString()
+                PolygonIdSdk.getInstance().getFlow("downloadCircuits").collectLatest { info ->
+
+
+                    var progress = ""
+
+                    if (info is DownloadInfoOnProgress) {
+                        progress = "Downloaded ${info.downloaded} of ${info.contentLength} bytes"
+                    }
+
+                    if (info is DownloadInfoOnDone) {
+                        progress = "Download completed"
+                    }
+
+                    if (info is DownloadInfoOnError) {
+                        progress = "Download failed"
+                    }
+                    findViewById<TextView>(R.id.text_result).text = progress
                 }
             }
 

@@ -27,6 +27,11 @@
                 android:layout_height="wrap_content"
                 android:text="Start circuits download" />
 
+            <TextView
+                android:id="@+id/text_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <Button
                 android:id="@+id/button_check_download_circuits"
                 android:layout_width="wrap_content"
@@ -219,12 +224,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-
-    <TextView
-        android:id="@+id/text_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
