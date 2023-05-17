@@ -4,6 +4,11 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+import com.google.gson.reflect.TypeToken
 import com.google.protobuf.Message
 import com.google.protobuf.util.JsonFormat
 import io.flutter.embedding.engine.FlutterEngine
@@ -15,6 +20,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
+import org.json.JSONTokener
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.DidEntityOuterClass.DidEntity
@@ -29,6 +37,7 @@ import technology.polygon.polygonid_protobuf.IdentityEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.ProofScopeRequestOuterClass.ProofScopeRequest
 import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass.*
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
@@ -489,7 +498,25 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         return call<String>(
             context = context, method = "getIden3Message", arguments = mapOf("message" to message)
         ).thenApply { result ->
-            Gson().fromJson(result, Map::class.java).let {
+            println("getIden3Message result: $result")
+            val parser = JsonParser()
+            val jsonElement: JsonElement = parser.parse(result)
+            val convertedJsonElement = convertNumbersToStrings(jsonElement)
+
+            println("convertedJsonElement: $convertedJsonElement")
+
+            //NOT WORKING, IT PARSES TO A MAP WITH WRONG TYPES
+            /*val gson = Gson()
+            val gsonResult: Map<String, Any> =
+                gson.fromJson(convertedJsonElement, object : TypeToken<Map<String, Any>>() {}.type)*/
+
+           val jsonObject = JSONObject(JSONTokener(result))
+           val map = jsonObject.toMap()
+            println("jsonObject: $jsonObject")
+            println("map: $map")
+
+            map.let {
+                println("gson result: $it")
                 val builder: Message.Builder = when (it["messageType"]) {
                     Iden3MessageType.auth.name -> {
                         AuthIden3MessageEntity.newBuilder()
@@ -513,9 +540,71 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 }
 
                 JsonFormat.parser().merge(result, builder)
+
+                //NOT WORKING
+               /* val fieldDescriptor = builder.descriptorForType.findFieldByName("\$lt")
+                if (builder.hasField(fieldDescriptor)) {
+                    val oldValue = builder.getField(fieldDescriptor)
+                    val newValue = 20000101  // converti il vecchio valore nel nuovo valore corretto
+                    builder.setField(fieldDescriptor, newValue)
+                }*/
+
                 builder.build()
+
+
+
             }
         }
+    }
+
+    // extension to convert JSONObject in Map
+    fun JSONObject.toMap(): Map<String, Any> {
+        val map = mutableMapOf<String, Any>()
+        for (key in keys()) {
+            when (val value = this[key]) {
+                is JSONObject -> map[key] = value.toMap()
+                is JSONArray -> map[key] = value.toList()
+                else -> map[key] = value
+            }
+        }
+        return map
+    }
+
+    // extension to convert JSONArray in List
+    fun JSONArray.toList(): List<Any> {
+        val list = mutableListOf<Any>()
+        for (i in 0 until length()) {
+            when (val value = this[i]) {
+                is JSONObject -> list.add(value.toMap())
+                is JSONArray -> list.add(value.toList())
+                else -> list.add(value)
+            }
+        }
+        return list
+    }
+
+
+    fun convertNumbersToStrings(element: JsonElement): JsonElement {
+        if (element.isJsonPrimitive) {
+            val jsonPrimitive = element.asJsonPrimitive
+            if (jsonPrimitive.isNumber) {
+                println("number: ${jsonPrimitive.asString}")
+                val numberValue = JsonPrimitive(BigDecimal(jsonPrimitive.asString))
+                println("numberValue: $numberValue")
+                return JsonPrimitive(BigDecimal(jsonPrimitive.asString))
+            }
+        } else if (element.isJsonObject) {
+            val jsonObject = element.asJsonObject
+            for (entry in jsonObject.entrySet()) {
+                jsonObject.add(entry.key, convertNumbersToStrings(entry.value))
+            }
+        } else if (element.isJsonArray) {
+            val jsonArray = element.asJsonArray
+            for (i in 0 until jsonArray.size()) {
+                jsonArray.set(i, convertNumbersToStrings(jsonArray[i]))
+            }
+        }
+        return element
     }
 
     /**
