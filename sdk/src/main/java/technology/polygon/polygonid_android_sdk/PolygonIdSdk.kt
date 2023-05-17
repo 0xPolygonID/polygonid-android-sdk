@@ -11,7 +11,9 @@ import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
@@ -73,35 +75,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
                         if (key != null) {
                             GlobalScope.launch {
-                                val data: Any? = call.argument<Any>("data")
-                                if (key == "downloadCircuits" && data is String) {
-                                    val downloadInfo: Any =
-                                        Gson().fromJson(data, Map::class.java).let {
-                                            val builder: Message.Builder =
-                                                when (it["downloadInfoType"]) {
-                                                    DownloadInfoType.onDone.name -> {
-                                                        DownloadInfoOnDone.newBuilder()
-                                                    }
-
-                                                    DownloadInfoType.onProgress.name -> {
-                                                        DownloadInfoOnProgress.newBuilder()
-                                                    }
-
-                                                    DownloadInfoType.onError.name -> {
-                                                        DownloadInfoOnError.newBuilder()
-                                                    }
-
-                                                    else -> {
-                                                        throw IllegalArgumentException("Unknown downloadInfoType")
-                                                    }
-                                                }
-                                            JsonFormat.parser().merge(data, builder)
-                                            builder.build()
-                                        }
-                                    ref!!.getFlow(key).emit(downloadInfo)
-                                } else {
-                                    ref!!.getFlow(key).emit(data)
-                                }
+                                ref!!.getFlow(key).emit(call.argument<Any>("data"))
                             }
                         }
                     }
@@ -135,6 +109,44 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         }
 
         return flows[key]!!
+    }
+
+    /** Get a [Flow] from [flows] of the downloadCircuits key.
+     *
+     * @return The [Flow].
+     */
+    fun getDownloadCircuitsFlow(): Flow<Any?> {
+        return getFlow("downloadCircuits").mapNotNull { data ->
+            if (data is String) {
+                processDownloadInfo(data)
+            } else {
+                null
+            }
+        }
+    }
+
+    private fun processDownloadInfo(data: String): Any {
+        return Gson().fromJson(data, Map::class.java).let {
+            val builder: Message.Builder = when (it["downloadInfoType"]) {
+                DownloadInfoType.onDone.name -> {
+                    DownloadInfoOnDone.newBuilder()
+                }
+
+                DownloadInfoType.onProgress.name -> {
+                    DownloadInfoOnProgress.newBuilder()
+                }
+
+                DownloadInfoType.onError.name -> {
+                    DownloadInfoOnError.newBuilder()
+                }
+
+                else -> {
+                    throw IllegalArgumentException("Unknown downloadInfoType")
+                }
+            }
+            JsonFormat.parser().merge(data, builder)
+            builder.build()
+        }
     }
 
     /** Close a flow and cleanup the Flutter SDK counterpart.
@@ -1171,7 +1183,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      */
     fun startDownloadCircuits(
         context: Context
-    ): CompletableFuture<DownloadInfoEntity> {
+    ): CompletableFuture<String> {
         return call(
             context = context, method = "startDownloadCircuits"
         )
