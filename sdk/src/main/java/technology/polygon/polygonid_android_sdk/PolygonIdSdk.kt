@@ -13,7 +13,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
@@ -115,13 +115,9 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      *
      * @return The [Flow].
      */
-    fun getDownloadCircuitsFlow(): Flow<Any?> {
-        return getFlow("downloadCircuits").mapNotNull { data ->
-            if (data is String) {
-                processDownloadInfo(data)
-            } else {
-                null
-            }
+    fun getDownloadCircuitsFlow(): Flow<Any> {
+        return getFlow("downloadCircuits").map { data ->
+            processDownloadInfo(data as String)
         }
     }
 
