@@ -28,9 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_start_download).setOnClickListener {
             lifecycleScope.launch {
-                PolygonIdSdk.getInstance().getFlow("downloadCircuits").collectLatest { info ->
-
-
+                PolygonIdSdk.getInstance().getDownloadCircuitsFlow().collectLatest { info ->
                     var progress = ""
 
                     if (info is DownloadInfoOnProgress) {
