@@ -49,7 +49,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'io.github.0xpolygonid.polygonid_android_sdk'
             artifactId = 'release'
-            version = '1.0.0'
+            version = '1.0.1'
 
             pom {
                 name = 'PolygonID Android SDK'
@@ -105,7 +105,7 @@ publishing {
 dependencies {
     // PolygonID SDK
     // implementation project(':flutter')
-    api 'io.github.0xpolygonid.polygonid_flutter_wrapper:debug:1.0.2'
+    api 'io.github.0xpolygonid.polygonid_flutter_wrapper:debug:2.2.5'
 
     implementation 'androidx.core:core-ktx:1.10.1'
     testImplementation 'junit:junit:4.13.2'
