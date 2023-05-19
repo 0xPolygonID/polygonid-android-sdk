@@ -335,7 +335,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun authenticate(context: Context) {
+    fun authenticate(context: Context, authMessage: String) {
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getIden3Message(
                 context, authMessage
@@ -356,16 +356,17 @@ class MainViewModel : ViewModel() {
                             privateKey = privateKey
                         ).thenAccept {
                             println("Authenticated")
+                        }.exceptionally {
+                            println("Authentication Error: $it")
+                            null
                         }
                     }
                 }
-            }.thenAccept {
-                println("Authenticated outer")
             }
         }
     }
 
-    fun fetch(context: Context) {
+    fun fetch(context: Context, fetchMessage: String) {
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getIden3Message(
                 context, fetchMessage
@@ -385,8 +386,11 @@ class MainViewModel : ViewModel() {
                             message = message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity,
                             genesisDid = did,
                             privateKey = privateKey
-                        ).thenAccept {
-                            println("Fetched: ${it.first().id}")
+                        ).thenAccept { claims ->
+                            println("Fetched: ${claims.first().id}")
+                        }.exceptionally {
+                            println("Error: $it")
+                            null
                         }
                     }
                 }
