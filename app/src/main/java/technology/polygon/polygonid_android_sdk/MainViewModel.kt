@@ -20,7 +20,7 @@ const val TAG = "PolygonIdSdk"
 const val secret = "some secret table yep fff so GJ"
 const val apiKey = "theApiKey"
 const val authMessage =
-    "{\"id\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=228509\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
+    "{\"id\":\"f6a69960-763f-48f5-a7e5-b3ea066cfbc7\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"f6a69960-763f-48f5-a7e5-b3ea066cfbc7\",\"body\":{\"callbackUrl\":\"https://self-hosted-demo-backend-platform.polygonid.me/api/callback?sessionId=98378\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qLhNLVmoQS7pQtpMeKHDqkTcENBZUj1nkZiRNPGgV\"}"
 const val fetchMessage =
     "{\"id\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/credentials/1.0/offer\",\"thid\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"body\":{\"url\":\"https://issuer-testing.polygonid.me/v1/agent\",\"credentials\":[{\"id\":\"2bcb98bc-e8db-11ed-938b-0242ac180006\",\"description\":\"KYCAgeCredential\"}]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\",\"to\":\"did:polygonid:polygon:mumbai:2qLmyLKBkCXDSHku8mgjU9XM7n6aH8Lwvp4XESPyJt\"}"
 const val credentialRequestMessage =
@@ -37,6 +37,13 @@ class MainViewModel : ViewModel() {
                     .setIdStateContract("0x134B1BE34911E39A8397ec6289782989729807a4")
                     .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
             )
+
+            PolygonIdSdk.getInstance().switchLog(context = context, enabled = true).thenAccept {
+                println("Log enabled")
+            }.exceptionally {
+                println("Log error")
+                null
+            }
         }
     }
 
@@ -722,11 +729,11 @@ class MainViewModel : ViewModel() {
     }
 
     fun getFiltersFromIden3Message(context: Context) {
-        println("jsonString -> $credentialRequestMessage")
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getIden3Message(context, credentialRequestMessage)
                 .thenApply { message ->
                     println("getFiltersFromIden3Message - MESSAGE: $message")
+
                     PolygonIdSdk.getInstance().getFilters(
                         context = context,
                         message = message,

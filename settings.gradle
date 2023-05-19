@@ -24,7 +24,6 @@ rootProject.name = "polygonid-android-sdk"
 include ':app'
 //setBinding(new Binding([gradle: this]))
 //evaluate(new File(
-//        settingsDir.parentFile,
-//        'polygonid-flutter-wrapper/.android/include_flutter.groovy'
+//        '/Users/fluck/Dev/Flutter/PolygonID/Iden3/polygonid-flutter-sdk/polygonid-flutter-wrapper/.android/include_flutter.groovy'
 //))
 include ':sdk'

@@ -4,11 +4,8 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
-import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
-import com.google.gson.reflect.TypeToken
 import com.google.protobuf.Message
 import com.google.protobuf.util.JsonFormat
 import io.flutter.embedding.engine.FlutterEngine
@@ -22,11 +19,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
-import org.json.JSONTokener
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.DidEntityOuterClass.DidEntity
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
@@ -307,6 +302,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     /**
+     * Switch SDK logging on or off.
+     *
+     * @param context is an Android context.
+     * @param enabled is a boolean indicating if logging should be enabled or not.
+     */
+    fun switchLog(context: Context, enabled: Boolean): CompletableFuture<Void> {
+        return call(
+            context = context, method = "switchLog", arguments = mapOf("enabled" to enabled)
+        )
+    }
+
+    /**
      * Sets the environment.
      * @param context is an Android context.
      * @param env The environment to set.
@@ -345,8 +352,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         context: Context,
         genesisDid: String,
         interaction: Message,
-        privateKey: String? = null,
-        profileNonce: BigInteger? = null
+        privateKey: String? = null
     ): CompletableFuture<Message> {
         interaction.isOf(listOf(InteractionEntity::class, InteractionBaseEntity::class))
 
@@ -355,7 +361,6 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "genesisDid" to genesisDid,
                 "interaction" to interaction,
                 "privateKey" to privateKey,
-                "profileNonce" to profileNonce?.toString()
             )
         ).thenApply {
             val builder: Message.Builder =
@@ -498,25 +503,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         return call<String>(
             context = context, method = "getIden3Message", arguments = mapOf("message" to message)
         ).thenApply { result ->
-            println("getIden3Message result: $result")
-            val parser = JsonParser()
-            val jsonElement: JsonElement = parser.parse(result)
-            val convertedJsonElement = convertNumbersToStrings(jsonElement)
-
-            println("convertedJsonElement: $convertedJsonElement")
-
-            //NOT WORKING, IT PARSES TO A MAP WITH WRONG TYPES
-            /*val gson = Gson()
-            val gsonResult: Map<String, Any> =
-                gson.fromJson(convertedJsonElement, object : TypeToken<Map<String, Any>>() {}.type)*/
-
-           val jsonObject = JSONObject(JSONTokener(result))
-           val map = jsonObject.toMap()
-            println("jsonObject: $jsonObject")
-            println("map: $map")
-
-            map.let {
-                println("gson result: $it")
+            Gson().fromJson(result, Map::class.java).let {
                 val builder: Message.Builder = when (it["messageType"]) {
                     Iden3MessageType.auth.name -> {
                         AuthIden3MessageEntity.newBuilder()
@@ -540,19 +527,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 }
 
                 JsonFormat.parser().merge(result, builder)
-
-                //NOT WORKING
-               /* val fieldDescriptor = builder.descriptorForType.findFieldByName("\$lt")
-                if (builder.hasField(fieldDescriptor)) {
-                    val oldValue = builder.getField(fieldDescriptor)
-                    val newValue = 20000101  // converti il vecchio valore nel nuovo valore corretto
-                    builder.setField(fieldDescriptor, newValue)
-                }*/
-
                 builder.build()
-
-
-
             }
         }
     }

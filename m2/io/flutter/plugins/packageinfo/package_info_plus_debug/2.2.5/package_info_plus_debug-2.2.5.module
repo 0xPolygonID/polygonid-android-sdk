@@ -1,9 +1,9 @@
 {
   "formatVersion": "1.1",
   "component": {
-    "group": "io.flutter.plugins.pathprovider",
-    "module": "path_provider_android_debug",
-    "version": "1.0.2",
+    "group": "io.flutter.plugins.packageinfo",
+    "module": "package_info_plus_debug",
+    "version": "2.2.5",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -33,13 +33,13 @@
       ],
       "files": [
         {
-          "name": "path_provider_android_debug-1.0.2.aar",
-          "url": "path_provider_android_debug-1.0.2.aar",
-          "size": 13033,
-          "sha512": "5371b1d84d77b521a966bc6394869daeaf3491d9cff2eec1d7bcadce1051438109a474e61b433f6eba55ed97fd5ff9be8e317e8d3771fcb4394cedb867dd1c45",
-          "sha256": "f1de80682a8a4581492c350f60526f0ba7b454ccef930416bf572e0e28711db1",
-          "sha1": "a299979d01043ab68cfe748ceba5aeacee6dceed",
-          "md5": "17c0481122db1ea04627ea3b2639422b"
+          "name": "package_info_plus_debug-2.2.5.aar",
+          "url": "package_info_plus_debug-2.2.5.aar",
+          "size": 7957,
+          "sha512": "e64c2e1e3f50c629d3b1556e6233173484cc15a2b654942c62c8198fa93b486704ad51c533d9d2b691ff090aa85e200fa90f7a219e02d5f34548458ee6398b99",
+          "sha256": "6d8d8ba4e357d5d1e9d80d957cd73eead33b9d5ae4cc870dcd1cea058d46c561",
+          "sha1": "a56048320d9e781043c1dd32237e05c9f246b925",
+          "md5": "8cf2bb8bd2aca1cd594355b0146a33c7"
         }
       ]
     },
@@ -60,22 +60,22 @@
           }
         },
         {
-          "group": "androidx.annotation",
-          "module": "annotation",
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
           "version": {
-            "requires": "1.5.0"
+            "requires": "1.7.22"
           }
         }
       ],
       "files": [
         {
-          "name": "path_provider_android_debug-1.0.2.aar",
-          "url": "path_provider_android_debug-1.0.2.aar",
-          "size": 13033,
-          "sha512": "5371b1d84d77b521a966bc6394869daeaf3491d9cff2eec1d7bcadce1051438109a474e61b433f6eba55ed97fd5ff9be8e317e8d3771fcb4394cedb867dd1c45",
-          "sha256": "f1de80682a8a4581492c350f60526f0ba7b454ccef930416bf572e0e28711db1",
-          "sha1": "a299979d01043ab68cfe748ceba5aeacee6dceed",
-          "md5": "17c0481122db1ea04627ea3b2639422b"
+          "name": "package_info_plus_debug-2.2.5.aar",
+          "url": "package_info_plus_debug-2.2.5.aar",
+          "size": 7957,
+          "sha512": "e64c2e1e3f50c629d3b1556e6233173484cc15a2b654942c62c8198fa93b486704ad51c533d9d2b691ff090aa85e200fa90f7a219e02d5f34548458ee6398b99",
+          "sha256": "6d8d8ba4e357d5d1e9d80d957cd73eead33b9d5ae4cc870dcd1cea058d46c561",
+          "sha1": "a56048320d9e781043c1dd32237e05c9f246b925",
+          "md5": "8cf2bb8bd2aca1cd594355b0146a33c7"
         }
       ]
     }
