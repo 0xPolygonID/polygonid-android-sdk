@@ -10,6 +10,8 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
 import com.google.gson.reflect.TypeToken
 import com.google.protobuf.Message
+import com.google.protobuf.Struct
+import com.google.protobuf.Value
 import com.google.protobuf.util.JsonFormat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -510,8 +512,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             val gsonResult: Map<String, Any> =
                 gson.fromJson(convertedJsonElement, object : TypeToken<Map<String, Any>>() {}.type)*/
 
-           val jsonObject = JSONObject(JSONTokener(result))
-           val map = jsonObject.toMap()
+            val jsonObject = JSONObject(JSONTokener(result))
+            val map = jsonObject.toMap()
             println("jsonObject: $jsonObject")
             println("map: $map")
 
@@ -540,17 +542,46 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 }
 
                 JsonFormat.parser().merge(result, builder)
-
-                //NOT WORKING
-               /* val fieldDescriptor = builder.descriptorForType.findFieldByName("\$lt")
-                if (builder.hasField(fieldDescriptor)) {
-                    val oldValue = builder.getField(fieldDescriptor)
-                    val newValue = 20000101  // converti il vecchio valore nel nuovo valore corretto
-                    builder.setField(fieldDescriptor, newValue)
-                }*/
-
                 builder.build()
 
+
+                /*val authBuilder = builder as AuthIden3MessageEntity.Builder
+                val scope = authBuilder.body.scopeList[0]
+                val query = scope.query
+                val credentialSubject = query.credentialSubject
+                val birthdayValue = credentialSubject["birthday"]
+                val struct = birthdayValue?.structValue
+                val ltValue = struct?.fieldsMap?.get("\$lt")
+
+                val newFieldsMap: MutableMap<String, Value> = struct?.fieldsMap?.toMutableMap()!!
+                newFieldsMap["\$lt"] = Value.newBuilder()
+                    .setNumberValue(20000101)
+                    .build()
+
+// Crea una nuova struttura con la mappa dei campi modificata
+                val newStruct = Struct.newBuilder()
+                    .putAllFields(newFieldsMap)
+                    .build()
+                println(credentialSubject)*/
+                /*
+                                val scope = authBuilder.body.scopeList[0]
+
+                                if (birthdayValue != null && birthdayValue.kindCase == Value.KindCase.STRUCT_VALUE) {
+                                    val struct = birthdayValue.structValue
+                                    val ltValue = struct.fieldsMap["\$lt"]
+                                    if (ltValue != null && ltValue.kindCase == Value.KindCase.NUMBER_VALUE) {
+                                        val number = ltValue.numberValue
+                                        println("Number value: $number")
+                                    }
+                                }*/
+
+                //NOT WORKING
+                /* val fieldDescriptor = builder.descriptorForType.findFieldByName("\$lt")
+                 if (builder.hasField(fieldDescriptor)) {
+                     val oldValue = builder.getField(fieldDescriptor)
+                     val newValue = 20000101  // converti il vecchio valore nel nuovo valore corretto
+                     builder.setField(fieldDescriptor, newValue)
+                 }*/
 
 
             }

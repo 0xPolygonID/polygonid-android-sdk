@@ -7,6 +7,9 @@ import com.google.protobuf.Int64Value
 import com.google.protobuf.ListValue
 import com.google.protobuf.StringValue
 import com.google.protobuf.Value
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
@@ -17,8 +20,8 @@ import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOut
 import java.math.BigInteger
 
 const val TAG = "PolygonIdSdk"
-const val secret = "some secret table yep fff so GJ"
-const val apiKey = "theApiKey"
+const val secret = "0x123456789012345678901234567890"
+
 const val authMessage =
     "{\"id\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"ea114e58-a141-4ac1-afe9-d45da8fc0569\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=228509\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
 const val fetchMessage =
@@ -26,19 +29,13 @@ const val fetchMessage =
 const val credentialRequestMessage =
     "{\"id\":\"b11bdbb1-5a6c-49ca-a180-6e5040a50f41\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"b11bdbb1-5a6c-49ca-a180-6e5040a50f41\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=174262\",\"reason\":\"test flow\",\"scope\":[{\"id\":1,\"circuitId\":\"credentialAtomicQuerySigV2\",\"query\":{\"allowedIssuers\":[\"*\"],\"context\":\"https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld\",\"credentialSubject\":{\"birthday\":{\"\$lt\":20000101}},\"skipClaimRevocationCheck\":true,\"type\":\"KYCAgeCredential\"}}]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
 
+data class MainState(
+    val did: String? = null,
+)
+
 class MainViewModel : ViewModel() {
-    fun init(context: Context) {
-        viewModelScope.launch {
-            PolygonIdSdk.init(
-                context = context,
-                env = EnvEntity.newBuilder().setBlockchain("polygon").setNetwork("mumbai")
-                    .setWeb3Url("https://polygon-mumbai.infura.io/v3/")
-                    .setWeb3RdpUrl("wss://polygon-mumbai.infura.io/v3/").setWeb3ApiKey(apiKey)
-                    .setIdStateContract("0x134B1BE34911E39A8397ec6289782989729807a4")
-                    .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
-            )
-        }
-    }
+    private val _uiState = MutableStateFlow(MainState())
+    val uiState: StateFlow<MainState> = _uiState
 
     fun getEnv(context: Context) {
         viewModelScope.launch {
@@ -221,6 +218,9 @@ class MainViewModel : ViewModel() {
                         network = env.network,
                     ).thenApply { didIdentifier ->
                         println("DidIdentifier: $didIdentifier")
+                        _uiState.update {
+                            it.copy(did = didIdentifier)
+                        }
                     }.exceptionally { throwable ->
                         println("Error: $throwable")
                     }
@@ -272,7 +272,12 @@ class MainViewModel : ViewModel() {
                                 privateKey = privateKey,
                                 genesisDid = didIdentifier
                             ).thenApply { identity ->
+                                _uiState.update {
+                                    it.copy(did = null)
+                                }
                                 println("removeIdentity: $identity")
+                            }.exceptionally {
+                                println("Error: $it")
                             }
                         }
                     }
@@ -323,49 +328,6 @@ class MainViewModel : ViewModel() {
     }
 
 
-    fun startDownload(context: Context) {
-        PolygonIdSdk.getInstance().startDownloadCircuits(context = context).thenAccept {
-            println("Stream started")
-        }
-    }
-
-    fun stopStream(context: Context) {
-        PolygonIdSdk.getInstance().cancelDownloadCircuits(context = context).thenAccept {
-            println("Stream stopped")
-        }
-    }
-
-    fun authenticate(context: Context, authMessage: String) {
-        viewModelScope.launch {
-            PolygonIdSdk.getInstance().getIden3Message(
-                context, authMessage
-            ).thenApply { message ->
-                PolygonIdSdk.getInstance().getPrivateKey(
-                    context = context, secret = secret
-                ).thenApply { privateKey ->
-                    PolygonIdSdk.getInstance().getDidIdentifier(
-                        context = context,
-                        privateKey = privateKey,
-                        blockchain = "polygon",
-                        network = "mumbai",
-                    ).thenApply { did ->
-                        PolygonIdSdk.getInstance().authenticate(
-                            context = context,
-                            message = message as Iden3MessageEntityOuterClass.AuthIden3MessageEntity,
-                            genesisDid = did,
-                            privateKey = privateKey
-                        ).thenAccept {
-                            println("Authenticated")
-                        }.exceptionally {
-                            println("Authentication Error: $it")
-                            null
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     fun fetch(context: Context, fetchMessage: String) {
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getIden3Message(
@@ -386,11 +348,8 @@ class MainViewModel : ViewModel() {
                             message = message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity,
                             genesisDid = did,
                             privateKey = privateKey
-                        ).thenAccept { claims ->
-                            println("Fetched: ${claims.first().id}")
-                        }.exceptionally {
-                            println("Error: $it")
-                            null
+                        ).thenAccept {
+                            println("Fetched: ${it.first().id}")
                         }
                     }
                 }
@@ -552,22 +511,6 @@ class MainViewModel : ViewModel() {
                     }
 
                 }
-            }
-        }
-    }
-
-    fun checkDownloadCircuits(context: Context) {
-        viewModelScope.launch {
-            PolygonIdSdk.getInstance().isAlreadyDownloadedCircuitsFromServer(context).thenApply {
-                println("isAlreadyDownloadedCircuitsFromServer: $it")
-            }
-        }
-    }
-
-    fun cancelDownloadCircuits(context: Context) {
-        viewModelScope.launch {
-            PolygonIdSdk.getInstance().cancelDownloadCircuits(context).thenApply {
-                println("cancelDownloadCircuits: $it")
             }
         }
     }

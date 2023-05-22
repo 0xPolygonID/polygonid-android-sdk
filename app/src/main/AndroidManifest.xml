@@ -13,8 +13,9 @@
         android:theme="@style/Theme.Polygonidandroidsdk"
         tools:targetApi="33">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".splash.SplashActivity"
+            android:exported="true"
+            android:label="PolygonID SDK Example">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".qr_code_scanner.QRCodeScannerActivity"/>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".qr_code_scanner.QRCodeScannerActivity" />
+        <activity android:name=".authentication.AuthenticationActivity" />
 
     </application>
 

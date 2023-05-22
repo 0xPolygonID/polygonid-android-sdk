@@ -15,34 +15,58 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button_init"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Init SDK" />
-
-            <Button
-                android:id="@+id/button_start_download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start circuits download" />
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginVertical="32dp"
+                android:text="Generate a new identity or if saved retrieved via PolygonID SDK"
+                android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/text_result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/button_check_download_circuits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Check download circuits" />
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="32dp"
+                android:text="getDidIdentifier()\nIdentifier:"
+                android:textAlignment="center" />
 
-            <Button
-                android:id="@+id/button_cancel_download_circuits"
+            <TextView
+                android:id="@+id/identifierTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel download circuits" />
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
+                android:text=""
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                >
+                <Button
+                    android:id="@+id/button_add_identity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:text="Add identity" />
+
+                <Button
+                    android:id="@+id/button_remove_identity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:text="Remove identity" />
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/button_get_env"
@@ -55,12 +79,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Set env" />
-
-            <Button
-                android:id="@+id/button_add_identity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add identity" />
 
             <Button
                 android:id="@+id/button_get_identities"
@@ -121,12 +139,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Get State" />
-
-            <Button
-                android:id="@+id/button_remove_identity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove identity" />
 
             <Button
                 android:id="@+id/button_remove_profile"
@@ -217,8 +229,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Get proofs from iden3message" />
-
-
 
 
         </LinearLayout>

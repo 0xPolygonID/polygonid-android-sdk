@@ -23,34 +23,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        findViewById<Button>(R.id.button_init).setOnClickListener {
-            viewModel.init(applicationContext)
-        }
+        lifecycleScope.launch {
+            viewModel.uiState.collectLatest { mainState ->
+                if (mainState.did == null) {
+                    findViewById<TextView>(R.id.identifierTextView).text = "Not yet created"
+                    return@collectLatest
+                }
 
-        findViewById<Button>(R.id.button_start_download).setOnClickListener {
-            lifecycleScope.launch {
-                PolygonIdSdk.getInstance().getDownloadCircuitsFlow().collectLatest { info ->
-                    var progress = ""
-
-                    if (info is DownloadInfoOnProgress) {
-                        progress = "Downloaded ${info.downloaded} of ${info.contentLength} bytes"
-                    }
-
-                    if (info is DownloadInfoOnDone) {
-                        progress = "Download completed"
-                    }
-
-                    if (info is DownloadInfoOnError) {
-                        progress = "Download failed"
-                    }
-                    findViewById<TextView>(R.id.text_result).text = progress
+                if (mainState.did.isNotEmpty()) {
+                    findViewById<TextView>(R.id.identifierTextView).text = mainState.did
                 }
             }
-
-            viewModel.startDownload(applicationContext)
         }
+
+        viewModel.getDidIdentifier(applicationContext)
 
         findViewById<Button>(R.id.button_get_env).setOnClickListener {
             viewModel.getEnv(applicationContext)
@@ -73,15 +62,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.getClaims(applicationContext)
         }
 
-        findViewById<Button>(R.id.button_authenticate).setOnClickListener {
-            val intent = Intent(this, QRCodeScannerActivity::class.java)
-            startActivityForResult(intent, AUTHENTICATE_REQUEST_CODE)
-        }
 
-        findViewById<Button>(R.id.button_fetch).setOnClickListener {
+        /*findViewById<Button>(R.id.button_fetch).setOnClickListener {
             val intent = Intent(this, QRCodeScannerActivity::class.java)
             startActivityForResult(intent, FETCH_CREDENTIAL_REQUEST_CODE)
-        }
+        }*/
 
         findViewById<Button>(R.id.button_get_identity).setOnClickListener {
             viewModel.getIdentity(applicationContext)
@@ -135,14 +120,6 @@ class MainActivity : AppCompatActivity() {
             viewModel.saveClaims(applicationContext)
         }
 
-        findViewById<Button>(R.id.button_check_download_circuits).setOnClickListener {
-            viewModel.checkDownloadCircuits(applicationContext)
-        }
-
-        findViewById<Button>(R.id.button_cancel_download_circuits).setOnClickListener {
-            viewModel.cancelDownloadCircuits(applicationContext)
-        }
-
         findViewById<Button>(R.id.button_add_interaction).setOnClickListener {
             viewModel.addInteraction(applicationContext)
         }
@@ -180,30 +157,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTHENTICATE_REQUEST_CODE || requestCode == FETCH_CREDENTIAL_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val scanResult = data?.getStringExtra("SCAN_RESULT")
-                when (requestCode) {
-                    AUTHENTICATE_REQUEST_CODE -> {
-                        viewModel.authenticate(applicationContext, scanResult ?: "")
-                    }
 
-                    FETCH_CREDENTIAL_REQUEST_CODE -> {
-                        viewModel.fetch(applicationContext, scanResult ?: "")
-                    }
-                }
-                viewModel.authenticate(applicationContext, scanResult ?: "")
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // Lo scan è stato annullato...
-            }
-        }
-    }
-
-    companion object {
-        const val AUTHENTICATE_REQUEST_CODE = 0
-        const val FETCH_CREDENTIAL_REQUEST_CODE = 1
-    }
 }
 
