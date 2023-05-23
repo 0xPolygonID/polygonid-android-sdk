@@ -17,18 +17,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.json.JSONArray
 import org.json.JSONObject
+import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimEntity
+import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimState
+import technology.polygon.polygonid_android_sdk.identity.domain.entities.DidEntity
+import technology.polygon.polygonid_android_sdk.identity.domain.entities.IdentityEntity
+import technology.polygon.polygonid_android_sdk.identity.domain.entities.PrivateIdentityEntity
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
-import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
-import technology.polygon.polygonid_protobuf.DidEntityOuterClass.DidEntity
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
 import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoType
 import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
-import technology.polygon.polygonid_protobuf.IdentityEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.ProofScopeRequestOuterClass.ProofScopeRequest
 import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass.*
@@ -197,6 +200,62 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         return callFlutterMethod<String>(context, method, arguments, isListResult)
     }
 
+    private inline fun <reified T> callFlutterMethodWithAndroid(
+        context: Context,
+        method: String,
+        arguments: Map<String, Any?>? = null,
+        isListResult: Boolean = false
+    ): CompletableFuture<Any> {
+        val completable = CompletableFuture<Any>()
+        val channel = getChannel(context)
+
+        try {
+            val args = arguments?.mapValues { prepareArg(it.value) }
+
+            Handler(Looper.getMainLooper()).post {
+                channel.invokeMethod(
+                    method, args, MainThreadResultHandler(result = object : MethodChannel.Result {
+                        override fun success(result: Any?) {
+                            val resultString = result as? String
+
+                            if (isListResult) {
+                                val resultList = mutableListOf<T>()
+
+                                for (element: String in (result as List<String>)) {
+                                    val item = Json.decodeFromString<T>(element)
+                                    resultList.add(item)
+                                }
+
+                                completable.complete(resultList)
+                            } else {
+                                val obj = if (T::class == String::class) {
+                                    resultString as T
+                                } else {
+                                    Json.decodeFromString(resultString!!)
+                                }
+                                completable.complete(obj)
+                            }
+                        }
+
+                        override fun error(
+                            errorCode: String, errorMessage: String?, errorDetails: Any?
+                        ) {
+                            completable.completeExceptionally(Throwable(errorMessage))
+                        }
+
+                        override fun notImplemented() {
+                            completable.completeExceptionally(Throwable("notImplemented"))
+                        }
+                    })
+                )
+            }
+        } catch (e: Exception) {
+            completable.completeExceptionally(e)
+        }
+
+        return completable
+    }
+
     private inline fun <reified T> callFlutterMethod(
         context: Context,
         method: String,
@@ -213,7 +272,9 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 channel.invokeMethod(
                     method, args, MainThreadResultHandler(result = object : MethodChannel.Result {
                         override fun success(result: Any?) {
+                            println(result.toString())
                             when {
+
                                 Message::class.java.isAssignableFrom(T::class.java) -> {
                                     val clazz = T::class.java
                                     val builderMethod = clazz.getMethod("newBuilder")
@@ -273,10 +334,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         ) as CompletableFuture<T>
     }
 
+    private inline fun <reified T> callAndroid(
+        context: Context, method: String, arguments: Map<String, Any?>? = null
+    ): CompletableFuture<T> {
+        return callFlutterMethodWithAndroid<T>(
+            context = context, method = method, arguments = arguments
+        ) as CompletableFuture<T>
+    }
+
     private inline fun <reified T> callAsList(
         context: Context, method: String, arguments: Map<String, Any?>? = null
     ): CompletableFuture<List<T>> {
-        return callFlutterMethod<T>(
+        return callFlutterMethodWithAndroid<T>(
             context = context, method = method, arguments = arguments, isListResult = true
         ) as CompletableFuture<List<T>>
     }
@@ -790,7 +859,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun addIdentity(
         context: Context, secret: String
     ): CompletableFuture<PrivateIdentityEntity> {
-        return call(
+        return callAndroid(
             context = context, method = "addIdentity", arguments = mapOf("secret" to secret)
         )
     }
@@ -871,7 +940,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun getDidEntity(
         context: Context, did: String
     ): CompletableFuture<DidEntity> {
-        return call(
+        return callAndroid(
             context = context, method = "getDidEntity", arguments = mapOf("did" to did)
         )
     }
@@ -932,23 +1001,23 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun getIdentity(
         context: Context, privateKey: String? = null, genesisDid: String? = null
-    ): CompletableFuture<Message> {
-        return call<String>(
+    ): CompletableFuture<IdentityEntity> {
+        return callAndroid<String>(
             context = context,
             method = "getIdentity",
             arguments = mapOf("privateKey" to privateKey, "genesisDid" to genesisDid)
         ).thenApply {
             when {
                 privateKey != null -> {
-                    val builder: Message.Builder = PrivateIdentityEntity.newBuilder()
-                    JsonFormat.parser().merge(it, builder)
-                    builder.build()
+                    Json.decodeFromString<PrivateIdentityEntity>(
+                        it
+                    )
                 }
 
                 else -> {
-                    val builder: Message.Builder = IdentityEntity.newBuilder()
-                    JsonFormat.parser().merge(it, builder)
-                    builder.build()
+                    Json.decodeFromString<IdentityEntity>(
+                        it
+                    )
                 }
             }
         }

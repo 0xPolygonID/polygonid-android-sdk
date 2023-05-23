@@ -37,12 +37,13 @@ class MainViewModel : ViewModel() {
                     .setIdStateContract("0x134B1BE34911E39A8397ec6289782989729807a4")
                     .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
             )
+        }
+    }
 
-            PolygonIdSdk.getInstance().switchLog(context = context, enabled = true).thenAccept {
-                println("Log enabled")
-            }.exceptionally {
-                println("Log error")
-                null
+    fun switchOnLog(context: Context) {
+        viewModelScope.launch {
+            PolygonIdSdk.getInstance().switchLog(context = context, true).thenAccept {
+                println("SwitchOnLog Done")
             }
         }
     }
@@ -85,7 +86,7 @@ class MainViewModel : ViewModel() {
                     context = context,
                     genesisDid = identity.did,
                     privateKey = identity.privateKey,
-                    profileNonce = BigInteger("1000")
+                    profileNonce = BigInteger("3000")
                 ).thenApply {
                     println("Profile added")
                 }
@@ -194,8 +195,10 @@ class MainViewModel : ViewModel() {
                         ).thenApply { didIdentifier ->
                             PolygonIdSdk.getInstance()
                                 .getDidEntity(context = context, did = didIdentifier)
-                                .thenApply { backup ->
-                                    println("Backup: $backup")
+                                .thenApply {
+                                    println("DidEntity: ${it.did}")
+                                }.exceptionally {
+                                    println("Error: $it")
                                 }
                         }
                     }
@@ -254,7 +257,7 @@ class MainViewModel : ViewModel() {
                                 privateKey = privateKey,
                                 genesisDid = didIdentifier
                             ).thenApply { identity ->
-                                println("Identity: $identity")
+                                println("Identity: ${identity.did}")
                             }
                         }
                     }
@@ -416,7 +419,7 @@ class MainViewModel : ViewModel() {
                     blockchain = "polygon",
                     network = "mumbai",
                 ).thenApply { did ->
-                    val id =
+                    /*val id =
                         "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
                     val listValueBuilder = ListValue.newBuilder()
                     listValueBuilder.addValues(
@@ -425,12 +428,12 @@ class MainViewModel : ViewModel() {
                     val value = Value.newBuilder().setListValue(listValueBuilder).build()
                     val filter =
                         FilterEntity.newBuilder().setOperator("nonEqual").setName("id")
-                            .setValue(value).build()
+                            .setValue(value).build()*/
                     PolygonIdSdk.getInstance().getClaims(
                         context = context,
                         genesisDid = did,
                         privateKey = privateKey,
-                        filters = listOf(filter)
+                        //filters = listOf(filter)
                     ).thenApply { claims ->
                         println("ClaimsFiltered: $claims")
                     }
