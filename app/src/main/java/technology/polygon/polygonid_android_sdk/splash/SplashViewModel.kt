@@ -34,7 +34,7 @@ class SplashViewModel : ViewModel() {
                     .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
             )
 
-            PolygonIdSdk.getInstance().
+            PolygonIdSdk.getInstance().switchLog(context, true)
         }
     }
 

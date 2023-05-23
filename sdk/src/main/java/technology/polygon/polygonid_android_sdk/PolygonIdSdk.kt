@@ -309,6 +309,18 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     /**
+     * Switch SDK logging on or off.
+     *
+     * @param context is an Android context.
+     * @param enabled is a boolean indicating if logging should be enabled or not.
+     */
+    fun switchLog(context: Context, enabled: Boolean): CompletableFuture<Void> {
+        return call(
+            context = context, method = "switchLog", arguments = mapOf("enabled" to enabled)
+        )
+    }
+
+    /**
      * Sets the environment.
      * @param context is an Android context.
      * @param env The environment to set.
