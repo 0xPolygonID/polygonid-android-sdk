@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.json.JSONArray
 import org.json.JSONObject
 import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimEntity
@@ -25,11 +27,8 @@ import technology.polygon.polygonid_android_sdk.credential.domain.entities.Claim
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.DidEntity
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.IdentityEntity
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.PrivateIdentityEntity
+import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoType
 import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.*
@@ -129,27 +128,27 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     private fun processDownloadInfo(data: String): Any {
-        return Gson().fromJson(data, Map::class.java).let {
-            val builder: Message.Builder = when (it["downloadInfoType"]) {
-                DownloadInfoType.onDone.name -> {
-                    DownloadInfoOnDone.newBuilder()
-                }
-
-                DownloadInfoType.onProgress.name -> {
-                    DownloadInfoOnProgress.newBuilder()
-                }
-
-                DownloadInfoType.onError.name -> {
-                    DownloadInfoOnError.newBuilder()
-                }
-
-                else -> {
-                    throw IllegalArgumentException("Unknown downloadInfoType")
+        val jsonFormat = Json {
+            serializersModule = SerializersModule {
+                polymorphic(DownloadInfoEntity::class) {
+                    subclass(
+                        DownloadInfoEntity.DownloadInfoOnDone::class,
+                        DownloadInfoEntity.DownloadInfoOnDone.serializer()
+                    )
+                    subclass(
+                        DownloadInfoEntity.DownloadInfoOnProgress::class,
+                        DownloadInfoEntity.DownloadInfoOnProgress.serializer()
+                    )
+                    subclass(
+                        DownloadInfoEntity.DownloadInfoOnError::class,
+                        DownloadInfoEntity.DownloadInfoOnError.serializer()
+                    )
                 }
             }
-            JsonFormat.parser().merge(data, builder)
-            builder.build()
+            encodeDefaults = true
         }
+
+        return jsonFormat.decodeFromString<DownloadInfoEntity>(data)
     }
 
     /** Close a flow and cleanup the Flutter SDK counterpart.

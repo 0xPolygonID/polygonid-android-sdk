@@ -11,10 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
 import technology.polygon.polygonid_android_sdk.qr_code_scanner.QRCodeScannerActivity
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -34,15 +32,15 @@ class MainActivity : AppCompatActivity() {
                 PolygonIdSdk.getInstance().getDownloadCircuitsFlow().collectLatest { info ->
                     var progress = ""
 
-                    if (info is DownloadInfoOnProgress) {
+                    if (info is DownloadInfoEntity.DownloadInfoOnProgress) {
                         progress = "Downloaded ${info.downloaded} of ${info.contentLength} bytes"
                     }
 
-                    if (info is DownloadInfoOnDone) {
+                    if (info is DownloadInfoEntity.DownloadInfoOnDone) {
                         progress = "Download completed"
                     }
 
-                    if (info is DownloadInfoOnError) {
+                    if (info is DownloadInfoEntity.DownloadInfoOnError) {
                         progress = "Download failed"
                     }
                     findViewById<TextView>(R.id.text_result).text = progress
@@ -51,6 +49,11 @@ class MainActivity : AppCompatActivity() {
 
             viewModel.startDownload(applicationContext)
         }
+
+        findViewById<Button>(R.id.button_switch_on_log).setOnClickListener {
+            viewModel.switchOnLog(applicationContext)
+        }
+
 
         findViewById<Button>(R.id.button_get_env).setOnClickListener {
             viewModel.getEnv(applicationContext)

@@ -22,6 +22,12 @@
                 android:text="Init SDK" />
 
             <Button
+                android:id="@+id/button_switch_on_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Switch on log" />
+
+            <Button
                 android:id="@+id/button_start_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

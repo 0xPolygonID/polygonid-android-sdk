@@ -4,12 +4,9 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.protobuf.Int64Value
-import com.google.protobuf.ListValue
 import com.google.protobuf.StringValue
-import com.google.protobuf.Value
 import kotlinx.coroutines.launch
 import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
-import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionState
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionType
