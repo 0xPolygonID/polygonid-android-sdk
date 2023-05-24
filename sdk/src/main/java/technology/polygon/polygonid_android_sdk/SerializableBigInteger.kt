@@ -8,10 +8,11 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
 
-@Serializable(with = BigIntegerSerializer::class)
+@Serializable(with = SerializableBigInteger.BigIntegerSerializer::class)
 data class SerializableBigInteger(val value: BigInteger) {
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = SerializableBigInteger::class)
-    companion object BigIntegerSerializer : KSerializer<SerializableBigInteger> {
+    object BigIntegerSerializer : KSerializer<SerializableBigInteger> {
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor("BigInteger", PrimitiveKind.STRING)
 

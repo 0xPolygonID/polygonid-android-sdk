@@ -2,12 +2,11 @@ package technology.polygon.polygonid_android_sdk.iden3comm.domain.entities
 
 import kotlinx.serialization.Serializable
 import technology.polygon.polygonid_android_sdk.SerializableBigInteger
-import java.math.BigInteger
 
 @Serializable
 class InteractionEntity : InteractionBaseEntity {
-    var genesisDid: String = ""
-    var profileNonce: SerializableBigInteger = SerializableBigInteger(BigInteger("0"))
+    var genesisDid: String
+    var profileNonce: SerializableBigInteger
 
     constructor(
         id: String,

@@ -25,13 +25,16 @@ import org.json.JSONObject
 import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
 import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimEntity
 import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimState
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionBaseEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionState
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionType
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.DidEntity
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.IdentityEntity
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.PrivateIdentityEntity
 import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
-import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.ProofScopeRequestOuterClass.ProofScopeRequest
 import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass.*
 import java.math.BigDecimal
@@ -422,26 +425,24 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun addInteraction(
         context: Context,
         genesisDid: String,
-        interaction: Message,
+        interaction: InteractionEntity,
         privateKey: String? = null
-    ): CompletableFuture<Message> {
-        interaction.isOf(listOf(InteractionEntity::class, InteractionBaseEntity::class))
-
-        return call<String>(
+    ): CompletableFuture<Any> {
+        return callAndroid<String>(
             context = context, method = "addInteraction", arguments = mapOf(
                 "genesisDid" to genesisDid,
-                "interaction" to interaction,
+                "interaction" to Json.encodeToString(
+                    InteractionEntity.serializer(),
+                    interaction
+                ),
                 "privateKey" to privateKey,
             )
         ).thenApply {
-            val builder: Message.Builder =
-                when (Gson().fromJson(it, Map::class.java)["genesisDid"] != null) {
-                    true -> InteractionEntity.newBuilder()
-                    else -> InteractionBaseEntity.newBuilder()
-                }
-
-            JsonFormat.parser().merge(it, builder)
-            builder.build()
+            try {
+                Json.decodeFromString<InteractionEntity>(it)
+            } catch (e: Exception) {
+                Json.decodeFromString<InteractionBaseEntity>(it)
+            }
         }
     }
 
@@ -717,8 +718,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         type: List<InteractionType>? = null,
         states: List<InteractionState>? = null,
         filters: List<FilterEntity>? = null
-    ): CompletableFuture<List<Any>> {
-        return callAsList<String>(
+    ): CompletableFuture<List<InteractionEntity>> {
+        return callAsList<InteractionEntity>(
             context = context, method = "getInteractions", arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
@@ -728,16 +729,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "filters" to filters
             )
         ).thenApply { result ->
-            result.map { interaction ->
-                val builder: Message.Builder =
-                    when (Gson().fromJson(interaction, Map::class.java)["genesisDid"] != null) {
-                        true -> InteractionEntity.newBuilder()
-                        else -> InteractionBaseEntity.newBuilder()
-                    }
-
-                JsonFormat.parser().merge(interaction, builder)
-                builder.build()
-            }
+            result
         }
     }
 
@@ -797,7 +789,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun removeInteractions(
         context: Context, genesisDid: String? = null, privateKey: String? = null, ids: List<String>
     ): CompletableFuture<Void> {
-        return call(
+        return callAndroid(
             context = context, method = "removeInteractions", arguments = mapOf(
                 "genesisDid" to genesisDid, "privateKey" to privateKey, "ids" to ids
             )
@@ -819,24 +811,21 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         id: String,
         genesisDid: String? = null,
         privateKey: String? = null,
-        state: InteractionState? = null
+        state: InteractionState
     ): CompletableFuture<Any> {
-        return call<String>(
+        return callAndroid<String>(
             context = context, method = "updateInteraction", arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "privateKey" to privateKey,
-                "state" to state?.name,
-                "id" to id
+                "state" to state.name,
+                "id" to id,
             )
         ).thenApply {
-            val builder: Message.Builder =
-                when (Gson().fromJson(it, Map::class.java)["genesisDid"] != null) {
-                    true -> InteractionEntity.newBuilder()
-                    else -> InteractionBaseEntity.newBuilder()
-                }
-
-            JsonFormat.parser().merge(it, builder)
-            builder.build()
+            try {
+                Json.decodeFromString<InteractionEntity>(it)
+            } catch (e: Exception) {
+                Json.decodeFromString<InteractionBaseEntity>(it)
+            }
         }
     }
 
