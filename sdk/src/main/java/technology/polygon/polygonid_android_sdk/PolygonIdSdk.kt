@@ -22,6 +22,7 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.json.JSONArray
 import org.json.JSONObject
+import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
 import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimEntity
 import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimState
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.DidEntity
@@ -29,7 +30,6 @@ import technology.polygon.polygonid_android_sdk.identity.domain.entities.Identit
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.PrivateIdentityEntity
 import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
 import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
-import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
 import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.*
 import technology.polygon.polygonid_protobuf.ProofScopeRequestOuterClass.ProofScopeRequest
@@ -91,7 +91,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             Handler(Looper.getMainLooper()).post {
                 ref!!.getEngine(context).dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint(
                     "main.dart", "init"
-                ), env?.let { listOf(JsonFormat.printer().print(env)) })
+                ), env?.let { listOf(Json.encodeToString(EnvEntity.serializer(), it)) })
             }
         }
     }
@@ -230,7 +230,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                                 val obj = if (T::class == String::class) {
                                     resultString as T
                                 } else {
-                                    Json.decodeFromString(resultString!!)
+                                    resultString?.let { Json.decodeFromString<T>(it) }
+                                        ?: resultString
                                 }
                                 completable.complete(obj)
                             }
@@ -387,8 +388,10 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      * @param env The environment to set.
      */
     fun setEnv(context: Context, env: EnvEntity): CompletableFuture<Void> {
-        return call(
-            context = context, method = "setEnv", arguments = mapOf("env" to env)
+        return callAndroid(
+            context = context,
+            method = "setEnv",
+            arguments = mapOf("env" to Json.encodeToString(EnvEntity.serializer(), env))
         )
     }
 
@@ -401,7 +404,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun getEnv(
         context: Context
     ): CompletableFuture<EnvEntity> {
-        return call(
+        return callAndroid(
             context = context, method = "getEnv"
         )
     }

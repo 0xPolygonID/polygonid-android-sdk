@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.protobuf.Int64Value
 import com.google.protobuf.StringValue
 import kotlinx.coroutines.launch
-import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
+import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionEntity
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionState
 import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionType
@@ -25,14 +25,19 @@ const val credentialRequestMessage =
 
 class MainViewModel : ViewModel() {
     fun init(context: Context) {
+        val mumbai = EnvEntity(
+            blockchain = "polygon",
+            network = "mumbai",
+            web3Url = "https://polygon-mumbai.infura.io/v3/",
+            web3RdpUrl = "wss://polygon-mumbai.infura.io/v3/",
+            web3ApiKey = apiKey,
+            idStateContract = "0x134B1BE34911E39A8397ec6289782989729807a4",
+            pushUrl = "https://push-staging.polygonid.com/api/v1"
+        )
         viewModelScope.launch {
             PolygonIdSdk.init(
                 context = context,
-                env = EnvEntity.newBuilder().setBlockchain("polygon").setNetwork("mumbai")
-                    .setWeb3Url("https://polygon-mumbai.infura.io/v3/")
-                    .setWeb3RdpUrl("wss://polygon-mumbai.infura.io/v3/").setWeb3ApiKey(apiKey)
-                    .setIdStateContract("0x134B1BE34911E39A8397ec6289782989729807a4")
-                    .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
+                env = mumbai,
             )
         }
     }
@@ -48,26 +53,25 @@ class MainViewModel : ViewModel() {
     fun getEnv(context: Context) {
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getEnv(context = context).thenApply { env ->
-                println("Blockchain: $env")
+                println("Blockchain: ${env.blockchain}")
             }
         }
     }
 
     fun setEnv(context: Context) {
         viewModelScope.launch {
-            PolygonIdSdk.getInstance().callRaw(context = context, method = "setEnv").thenAccept {
+            val mumbai = EnvEntity(
+                blockchain = "polygon",
+                network = "mumbai",
+                web3Url = "https://polygon-mumbai.infura.io/v3/",
+                web3RdpUrl = "wss://polygon-mumbai.infura.io/v3/",
+                web3ApiKey = apiKey,
+                idStateContract = "0x134B1BE34911E39A8397ec6289782989729807a4",
+                pushUrl = "https://push-staging.polygonid.com/api/v1"
+            )
+            PolygonIdSdk.getInstance().setEnv(context = context, env = mumbai).thenAccept {
                 println("SetEnv Done")
             }
-//            PolygonIdSdk.getInstance()
-//                .setEnv(
-//                    context = context, env = EnvEntity.newBuilder().setBlockchain("polygon")
-//                        .setNetwork("mumbai")
-//                        .setWeb3Url("www").setWeb3ApiKey("3RB23F").setWeb3RdpUrl("rdp")
-//                        .setIdStateContract("98YIFJB").setPushUrl("www").build()
-//                )
-//                .thenAccept {
-//                    println("SetEnv Done")
-//                }
         }
     }
 
