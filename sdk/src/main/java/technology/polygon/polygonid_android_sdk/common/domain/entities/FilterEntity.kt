@@ -1,6 +1,7 @@
 package technology.polygon.polygonid_android_sdk.common.domain.entities
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 enum class FilterOperator {
@@ -14,10 +15,9 @@ enum class FilterOperator {
     or,
     nonEqual
 }
-
-//TODO handle Any?
+@Serializable
 data class FilterEntity(
     val operator: FilterOperator,
     val name: String,
-    val value: Any,
+    val value: JsonElement,
 )

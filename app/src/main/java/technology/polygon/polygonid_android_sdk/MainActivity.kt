@@ -155,7 +155,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button_get_claims_from_iden3message).setOnClickListener {
-            viewModel.getClaimsFromIden3Message(applicationContext)
+            val intent = Intent(this, QRCodeScannerActivity::class.java)
+            startActivityForResult(intent, OFFER_MESSAGE_REQUEST_CODE)
         }
 
         findViewById<Button>(R.id.button_get_filters_from_iden3message).setOnClickListener {
@@ -164,10 +165,6 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_get_schemas_from_iden3message).setOnClickListener {
             viewModel.getSchemasFromIden3Message(applicationContext)
-        }
-
-        findViewById<Button>(R.id.button_get_vocabs_from_iden3message).setOnClickListener {
-            viewModel.getVocabsFromIden3Message(applicationContext)
         }
 
         findViewById<Button>(R.id.button_get_proofs_from_iden3message).setOnClickListener {
@@ -185,7 +182,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTHENTICATE_REQUEST_CODE || requestCode == FETCH_CREDENTIAL_REQUEST_CODE) {
+        if (requestCode == AUTHENTICATE_REQUEST_CODE
+            || requestCode == FETCH_CREDENTIAL_REQUEST_CODE
+            || requestCode == OFFER_MESSAGE_REQUEST_CODE
+        ) {
             if (resultCode == Activity.RESULT_OK) {
                 val scanResult = data?.getStringExtra("SCAN_RESULT")
                 when (requestCode) {
@@ -196,6 +196,11 @@ class MainActivity : AppCompatActivity() {
                     FETCH_CREDENTIAL_REQUEST_CODE -> {
                         viewModel.fetch(applicationContext, scanResult ?: "")
                     }
+
+                    OFFER_MESSAGE_REQUEST_CODE -> {
+                        viewModel.getClaimsFromIden3Message(applicationContext, scanResult ?: "")
+                    }
+
                 }
                 viewModel.authenticate(applicationContext, scanResult ?: "")
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -207,6 +212,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val AUTHENTICATE_REQUEST_CODE = 0
         const val FETCH_CREDENTIAL_REQUEST_CODE = 1
+        const val OFFER_MESSAGE_REQUEST_CODE = 2
     }
 }
 

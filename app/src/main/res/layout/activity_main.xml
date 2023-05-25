@@ -213,12 +213,6 @@
                 android:text="Get schemas from iden3message" />
 
             <Button
-                android:id="@+id/button_get_vocabs_from_iden3message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Get vocabs from iden3message" />
-
-            <Button
                 android:id="@+id/button_get_proofs_from_iden3message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

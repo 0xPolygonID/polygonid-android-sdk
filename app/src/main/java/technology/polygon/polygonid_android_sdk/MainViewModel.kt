@@ -3,13 +3,12 @@ package technology.polygon.polygonid_android_sdk
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.protobuf.StringValue
 import kotlinx.coroutines.launch
 import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.Iden3MessageEntity
 import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionEntity
 import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionState
 import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionType
-import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass
 import java.math.BigInteger
 
 const val TAG = "PolygonIdSdk"
@@ -361,7 +360,7 @@ class MainViewModel : ViewModel() {
                     ).thenApply { did ->
                         PolygonIdSdk.getInstance().authenticate(
                             context = context,
-                            message = message as Iden3MessageEntityOuterClass.AuthIden3MessageEntity,
+                            message = message as Iden3MessageEntity.AuthIden3MessageEntity,
                             genesisDid = did,
                             privateKey = privateKey
                         ).thenAccept {
@@ -393,7 +392,7 @@ class MainViewModel : ViewModel() {
                     ).thenApply { did ->
                         PolygonIdSdk.getInstance().fetchAndSaveClaims(
                             context = context,
-                            message = message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity,
+                            message = message as Iden3MessageEntity.OfferIden3MessageEntity,
                             genesisDid = did,
                             privateKey = privateKey
                         ).thenAccept { claims ->
@@ -455,7 +454,7 @@ class MainViewModel : ViewModel() {
                     network = "mumbai",
                 ).thenApply { did ->
                     val id =
-                        "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
+                        "https://issuer-testing-testnet.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/d9dc64a8-fae4-11ed-b446-0242ac180006"
                     PolygonIdSdk.getInstance().getClaimsByIds(
                         context = context,
                         genesisDid = did,
@@ -473,7 +472,7 @@ class MainViewModel : ViewModel() {
 
     fun removeClaim(context: Context) {
         val id =
-            "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
+            "https://issuer-testing-testnet.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/d9dc64a8-fae4-11ed-b446-0242ac180006"
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getPrivateKey(
                 context = context, secret = secret
@@ -496,7 +495,7 @@ class MainViewModel : ViewModel() {
 
     fun removeClaims(context: Context) {
         val id =
-            "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
+            "https://issuer-testing-testnet.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/d9dc64a8-fae4-11ed-b446-0242ac180006"
         val ids = listOf(id)
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getPrivateKey(
@@ -534,21 +533,8 @@ class MainViewModel : ViewModel() {
                         genesisDid = did,
                         privateKey = privateKey,
                     ).thenApply { claims ->
-                        val expirationValue =
-                            StringValue.newBuilder().setValue("2030-01-01T00:00:00Z").build()
                         println("ClaimsFiltered: $claims")
-                        var claimEntity = claims.first()
-                        //we set customId with timestamp
-                        //val customId = "customId" + System.currentTimeMillis().toString()
-                        //val claimBuilder = claimEntity.newBuilderForType().setId(customId).build()
-                        /*ClaimEntity.newBuilder()
-                            .setId(customId)
-                            .setIssuer(claimEntity.issuer)
-                            .setDid(claimEntity.did)
-                            .setState(claimEntity.state)
-                            .setType(claimEntity.type)
-                            .setExpiration(expirationValue)
-                            .build()*/
+                        val claimEntity = claims.first()
                         PolygonIdSdk.getInstance().saveClaims(
                             context = context,
                             genesisDid = did,
@@ -595,7 +581,7 @@ class MainViewModel : ViewModel() {
                         network = "mumbai",
                     ).thenApply { did ->
                         val iden3message =
-                            message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity
+                            message as Iden3MessageEntity.OfferIden3MessageEntity
 
                         val interaction = InteractionEntity(
                             id = iden3message.id,
@@ -684,7 +670,7 @@ class MainViewModel : ViewModel() {
                         network = "mumbai",
                     ).thenApply { did ->
                         val iden3message =
-                            message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity
+                            message as Iden3MessageEntity.OfferIden3MessageEntity
 
                         PolygonIdSdk.getInstance().updateInteraction(
                             context = context,
@@ -703,9 +689,9 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getClaimsFromIden3Message(context: Context) {
+    fun getClaimsFromIden3Message(context: Context, fetchMessage: String) {
         viewModelScope.launch {
-            PolygonIdSdk.getInstance().getIden3Message(context, credentialRequestMessage)
+            PolygonIdSdk.getInstance().getIden3Message(context, fetchMessage)
                 .thenApply { message ->
                     println("getClaimsFromIden3Message - MESSAGE: $message")
                     PolygonIdSdk.getInstance().getPrivateKey(
@@ -745,7 +731,7 @@ class MainViewModel : ViewModel() {
                         context = context,
                         message = message,
                     ).thenApply { filters ->
-                        println("getFiltersFromIden3Message - FILTERS: ${filters.size}")
+                        println("getFiltersFromIden3Message - FILTERS: $filters")
                     }.exceptionally {
                         println("getFiltersFromIden3MessageError: $it")
                     }
@@ -765,23 +751,6 @@ class MainViewModel : ViewModel() {
                         println("getSchemasFromIden3Message - SCHEMAS: $schemas")
                     }.exceptionally {
                         println("getSchemasFromIden3MessageError: $it")
-                    }
-                }
-        }
-    }
-
-    fun getVocabsFromIden3Message(context: Context) {
-        viewModelScope.launch {
-            PolygonIdSdk.getInstance().getIden3Message(context, credentialRequestMessage)
-                .thenApply { message ->
-                    println("getVocabsFromIden3Message - MESSAGE: $message")
-                    PolygonIdSdk.getInstance().getVocabs(
-                        context = context,
-                        message = message,
-                    ).thenApply { vocabs ->
-                        println("getVocabsFromIden3Message - VOCABS: $vocabs")
-                    }.exceptionally {
-                        println("getVocabsFromIden3MessageError: $it")
                     }
                 }
         }
