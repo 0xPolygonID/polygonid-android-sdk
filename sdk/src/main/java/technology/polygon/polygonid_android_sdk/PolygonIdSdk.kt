@@ -3,8 +3,10 @@ package technology.polygon.polygonid_android_sdk
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
+import com.google.gson.reflect.TypeToken
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -34,7 +36,6 @@ import technology.polygon.polygonid_android_sdk.identity.domain.entities.Identit
 import technology.polygon.polygonid_android_sdk.identity.domain.entities.PrivateIdentityEntity
 import technology.polygon.polygonid_android_sdk.proof.domain.entities.CircuitDataEntity
 import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
-import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
@@ -475,7 +476,9 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         val encodedIden3Message = encodeIden3MessageToJson(message)
 
         return callAsList(
-            context = context, method = "getFilters", arguments = mapOf("message" to encodedIden3Message)
+            context = context,
+            method = "getFilters",
+            arguments = mapOf("message" to encodedIden3Message)
         )
     }
 
@@ -548,11 +551,20 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
         val encodedMessage = encodeIden3MessageToJson(message)
 
-        return callAsList(
+        return call<String>(
             context = context,
             method = "getSchemas",
             arguments = mapOf("message" to encodedMessage),
-        )
+        ).thenApply { result ->
+            try {
+                Gson().fromJson(
+                    result,
+                    object : TypeToken<List<Map<String, Any?>>>() {}.type
+                )
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
     }
 
     /** Gets a list of interaction associated to the identity previously stored
@@ -1269,21 +1281,25 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                     Iden3MessageEntity.AuthIden3MessageEntity.serializer(),
                     iden3message
                 )
+
             is Iden3MessageEntity.ContractFunctionCallIden3MessageEntity ->
                 Json.encodeToString(
                     Iden3MessageEntity.ContractFunctionCallIden3MessageEntity.serializer(),
                     iden3message
                 )
+
             is Iden3MessageEntity.OfferIden3MessageEntity ->
                 Json.encodeToString(
                     Iden3MessageEntity.OfferIden3MessageEntity.serializer(),
                     iden3message
                 )
+
             is Iden3MessageEntity.FetchIden3MessageEntity ->
                 Json.encodeToString(
                     Iden3MessageEntity.FetchIden3MessageEntity.serializer(),
                     iden3message
                 )
+
             else -> ""
         }
     }
