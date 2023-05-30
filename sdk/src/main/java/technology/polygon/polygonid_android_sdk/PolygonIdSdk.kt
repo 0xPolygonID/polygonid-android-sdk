@@ -473,9 +473,11 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun getIden3Message(
         context: Context, message: String
-    ): CompletableFuture<Any> {
+    ): CompletableFuture<Iden3MessageEntity> {
         return call<String>(
-            context = context, method = "getIden3Message", arguments = mapOf("message" to message)
+            context = context,
+            method = "getIden3Message",
+            arguments = mapOf("message" to message)
         ).thenApply { result ->
             try {
                 val jsonFormat = Json {
@@ -486,7 +488,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             } catch (e: Exception) {
                 println(e.message)
             }
-        }
+        } as CompletableFuture<Iden3MessageEntity>
     }
 
     /**
