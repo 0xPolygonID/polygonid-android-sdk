@@ -446,19 +446,14 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         profileNonce: BigInteger? = null,
         privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
-        if (message !is Iden3MessageEntity.OfferIden3MessageEntity) {
-            throw IllegalArgumentException("Message must be of type OfferIden3MessageEntity")
-        }
+        val encodedIden3Message = encodeIden3MessageToJson(message)
 
         return callAsList(
             context = context, method = "getClaimsFromIden3Message", arguments = mapOf(
-                "message" to Json.encodeToString(
-                    Iden3MessageEntity.OfferIden3MessageEntity.serializer(),
-                    message
-                ),
+                "message" to encodedIden3Message,
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
-                "privateKey" to privateKey
+                "privateKey" to privateKey,
             )
         )
     }
