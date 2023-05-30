@@ -5,10 +5,10 @@ import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.ProofS
 
 @Serializable
 data class AuthBodyRequest(
-    val callbackUrl: String?,
-    val reason: String?,
-    val message: String?,
-    val scope: List<ProofScopeRequestEntity>?,
-    val url: String?,
-    val credentials: List<AuthBodyCredentialsRequest>?,
+    val callbackUrl: String? = null,
+    val reason: String? = null,
+    val message: String? = null,
+    val scope: List<ProofScopeRequestEntity>? = null,
+    val url: String? = null,
+    val credentials: List<AuthBodyCredentialsRequest>? = null,
 )
