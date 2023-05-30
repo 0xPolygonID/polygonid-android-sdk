@@ -11,10 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
 import technology.polygon.polygonid_android_sdk.qr_code_scanner.QRCodeScannerActivity
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -34,15 +32,15 @@ class MainActivity : AppCompatActivity() {
                 PolygonIdSdk.getInstance().getDownloadCircuitsFlow().collectLatest { info ->
                     var progress = ""
 
-                    if (info is DownloadInfoOnProgress) {
+                    if (info is DownloadInfoEntity.DownloadInfoOnProgress) {
                         progress = "Downloaded ${info.downloaded} of ${info.contentLength} bytes"
                     }
 
-                    if (info is DownloadInfoOnDone) {
+                    if (info is DownloadInfoEntity.DownloadInfoOnDone) {
                         progress = "Download completed"
                     }
 
-                    if (info is DownloadInfoOnError) {
+                    if (info is DownloadInfoEntity.DownloadInfoOnError) {
                         progress = "Download failed"
                     }
                     findViewById<TextView>(R.id.text_result).text = progress
@@ -51,6 +49,11 @@ class MainActivity : AppCompatActivity() {
 
             viewModel.startDownload(applicationContext)
         }
+
+        findViewById<Button>(R.id.button_switch_on_log).setOnClickListener {
+            viewModel.switchOnLog(applicationContext)
+        }
+
 
         findViewById<Button>(R.id.button_get_env).setOnClickListener {
             viewModel.getEnv(applicationContext)
@@ -152,7 +155,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button_get_claims_from_iden3message).setOnClickListener {
-            viewModel.getClaimsFromIden3Message(applicationContext)
+            val intent = Intent(this, QRCodeScannerActivity::class.java)
+            startActivityForResult(intent, OFFER_MESSAGE_REQUEST_CODE)
         }
 
         findViewById<Button>(R.id.button_get_filters_from_iden3message).setOnClickListener {
@@ -161,10 +165,6 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_get_schemas_from_iden3message).setOnClickListener {
             viewModel.getSchemasFromIden3Message(applicationContext)
-        }
-
-        findViewById<Button>(R.id.button_get_vocabs_from_iden3message).setOnClickListener {
-            viewModel.getVocabsFromIden3Message(applicationContext)
         }
 
         findViewById<Button>(R.id.button_get_proofs_from_iden3message).setOnClickListener {
@@ -182,7 +182,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTHENTICATE_REQUEST_CODE || requestCode == FETCH_CREDENTIAL_REQUEST_CODE) {
+        if (requestCode == AUTHENTICATE_REQUEST_CODE
+            || requestCode == FETCH_CREDENTIAL_REQUEST_CODE
+            || requestCode == OFFER_MESSAGE_REQUEST_CODE
+        ) {
             if (resultCode == Activity.RESULT_OK) {
                 val scanResult = data?.getStringExtra("SCAN_RESULT")
                 when (requestCode) {
@@ -193,6 +196,11 @@ class MainActivity : AppCompatActivity() {
                     FETCH_CREDENTIAL_REQUEST_CODE -> {
                         viewModel.fetch(applicationContext, scanResult ?: "")
                     }
+
+                    OFFER_MESSAGE_REQUEST_CODE -> {
+                        viewModel.getClaimsFromIden3Message(applicationContext, scanResult ?: "")
+                    }
+
                 }
                 viewModel.authenticate(applicationContext, scanResult ?: "")
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -204,6 +212,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val AUTHENTICATE_REQUEST_CODE = 0
         const val FETCH_CREDENTIAL_REQUEST_CODE = 1
+        const val OFFER_MESSAGE_REQUEST_CODE = 2
     }
 }
 

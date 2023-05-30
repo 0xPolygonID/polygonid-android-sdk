@@ -6,8 +6,7 @@ import android.os.Looper
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import com.google.protobuf.Message
-import com.google.protobuf.util.JsonFormat
+import com.google.gson.reflect.TypeToken
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -17,22 +16,26 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.json.JSONArray
 import org.json.JSONObject
-import technology.polygon.polygonid_protobuf.CircuitDataEntityOuterClass.CircuitDataEntity
-import technology.polygon.polygonid_protobuf.ClaimEntityOuterClass.*
-import technology.polygon.polygonid_protobuf.DidEntityOuterClass.DidEntity
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnDone
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnError
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoOnProgress
-import technology.polygon.polygonid_protobuf.DownloadInfoEntity.DownloadInfoType
-import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
-import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
-import technology.polygon.polygonid_protobuf.IdentityEntityOuterClass.*
-import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.*
-import technology.polygon.polygonid_protobuf.ProofScopeRequestOuterClass.ProofScopeRequest
-import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass.*
-import java.math.BigDecimal
+import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
+import technology.polygon.polygonid_android_sdk.common.domain.entities.FilterEntity
+import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimEntity
+import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimState
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.Iden3MessageEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionBaseEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionState
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionType
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.ProofScopeRequestEntity
+import technology.polygon.polygonid_android_sdk.identity.domain.entities.DidEntity
+import technology.polygon.polygonid_android_sdk.identity.domain.entities.IdentityEntity
+import technology.polygon.polygonid_android_sdk.identity.domain.entities.PrivateIdentityEntity
+import technology.polygon.polygonid_android_sdk.proof.domain.entities.CircuitDataEntity
+import technology.polygon.polygonid_android_sdk.proof.domain.entities.DownloadInfoEntity
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
@@ -89,7 +92,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             Handler(Looper.getMainLooper()).post {
                 ref!!.getEngine(context).dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint(
                     "main.dart", "init"
-                ), env?.let { listOf(JsonFormat.printer().print(env)) })
+                ), env?.let { listOf(Json.encodeToString(EnvEntity.serializer(), it)) })
             }
         }
     }
@@ -126,27 +129,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     private fun processDownloadInfo(data: String): Any {
-        return Gson().fromJson(data, Map::class.java).let {
-            val builder: Message.Builder = when (it["downloadInfoType"]) {
-                DownloadInfoType.onDone.name -> {
-                    DownloadInfoOnDone.newBuilder()
-                }
-
-                DownloadInfoType.onProgress.name -> {
-                    DownloadInfoOnProgress.newBuilder()
-                }
-
-                DownloadInfoType.onError.name -> {
-                    DownloadInfoOnError.newBuilder()
-                }
-
-                else -> {
-                    throw IllegalArgumentException("Unknown downloadInfoType")
-                }
-            }
-            JsonFormat.parser().merge(data, builder)
-            builder.build()
-        }
+        val jsonFormat = Json { encodeDefaults = true }
+        return jsonFormat.decodeFromString<DownloadInfoEntity>(data)
     }
 
     /** Close a flow and cleanup the Flutter SDK counterpart.
@@ -213,36 +197,25 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 channel.invokeMethod(
                     method, args, MainThreadResultHandler(result = object : MethodChannel.Result {
                         override fun success(result: Any?) {
-                            when {
-                                Message::class.java.isAssignableFrom(T::class.java) -> {
-                                    val clazz = T::class.java
-                                    val builderMethod = clazz.getMethod("newBuilder")
+                            val resultString = result as? String
 
-                                    if (isListResult) {
-                                        val resultList = mutableListOf<T>()
+                            if (isListResult) {
+                                val resultList = mutableListOf<T>()
 
-                                        for (element: String in (result as List<String>)) {
-                                            val builder =
-                                                builderMethod.invoke(null) as Message.Builder
-                                            JsonFormat.parser().merge(element, builder)
-                                            resultList.add(builder.build() as T)
-                                        }
-
-                                        completable.complete(resultList)
-                                    } else {
-                                        val builder = builderMethod.invoke(null) as Message.Builder
-                                        JsonFormat.parser().merge(result as String, builder)
-                                        completable.complete(builder.build() as T)
-                                    }
+                                for (element: String in (result as List<String>)) {
+                                    val item = Json.decodeFromString<T>(element)
+                                    resultList.add(item)
                                 }
 
-                                else -> {
-                                    if (isListResult) {
-                                        completable.complete(result as? List<T>)
-                                    } else {
-                                        completable.complete(result as? T)
-                                    }
+                                completable.complete(resultList)
+                            } else {
+                                val obj = if (T::class == String::class) {
+                                    resultString as T
+                                } else {
+                                    resultString?.let { Json.decodeFromString<T>(it) }
+                                        ?: resultString
                                 }
+                                completable.complete(obj)
                             }
                         }
 
@@ -283,7 +256,6 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
     private fun prepareArg(arg: Any?): Any? {
         return when (arg) {
-            is Message -> arg.validate().let { JsonFormat.printer().print(it) }
             is List<*> -> arg.map { prepareArg(it) }
             else -> arg
         }
@@ -320,7 +292,9 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      */
     fun setEnv(context: Context, env: EnvEntity): CompletableFuture<Void> {
         return call(
-            context = context, method = "setEnv", arguments = mapOf("env" to env)
+            context = context,
+            method = "setEnv",
+            arguments = mapOf("env" to Json.encodeToString(EnvEntity.serializer(), env))
         )
     }
 
@@ -351,30 +325,29 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     fun addInteraction(
         context: Context,
         genesisDid: String,
-        interaction: Message,
+        interaction: InteractionEntity,
         privateKey: String? = null
-    ): CompletableFuture<Message> {
-        interaction.isOf(listOf(InteractionEntity::class, InteractionBaseEntity::class))
-
+    ): CompletableFuture<Any> {
         return call<String>(
             context = context, method = "addInteraction", arguments = mapOf(
                 "genesisDid" to genesisDid,
-                "interaction" to interaction,
+                "interaction" to Json.encodeToString(
+                    InteractionEntity.serializer(),
+                    interaction
+                ),
                 "privateKey" to privateKey,
             )
         ).thenApply {
-            val builder: Message.Builder =
-                when (Gson().fromJson(it, Map::class.java)["genesisDid"] != null) {
-                    true -> InteractionEntity.newBuilder()
-                    else -> InteractionBaseEntity.newBuilder()
-                }
-
-            JsonFormat.parser().merge(it, builder)
-            builder.build()
+            try {
+                Json.decodeFromString<InteractionEntity>(it)
+            } catch (e: Exception) {
+                Json.decodeFromString<InteractionBaseEntity>(it)
+            }
         }
     }
 
-    /** Authenticate response from [AuthIden3MessageEntity] sharing the needed (if any) proofs requested by it
+    /** Authenticate response from [Iden3MessageEntity.AuthIden3MessageEntity] sharing the needed
+     * (if any) proofs requested by it
      *
      * @param message is the iden3comm message entity
      * @param genesisDid is the unique id of the identity
@@ -387,7 +360,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun authenticate(
         context: Context,
-        message: AuthIden3MessageEntity,
+        message: Iden3MessageEntity.AuthIden3MessageEntity,
         genesisDid: String,
         profileNonce: BigInteger? = null,
         privateKey: String,
@@ -395,7 +368,10 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     ): CompletableFuture<Void> {
         return call(
             context = context, method = "authenticate", arguments = mapOf(
-                "message" to message,
+                "message" to Json.encodeToString(
+                    Iden3MessageEntity.AuthIden3MessageEntity.serializer(),
+                    message
+                ),
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
                 "privateKey" to privateKey,
@@ -406,7 +382,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 
     /** Fetch a list of [ClaimEntity] from issuer using iden3comm message and stores them in Polygon Id Sdk.
      *
-     * @param message is the iden3comm message entity of type [OfferIden3MessageEntity]
+     * @param message is the iden3comm message entity of type [Iden3MessageEntity.OfferIden3MessageEntity]
      * @param genesisDid is the unique id of the identity
      * @param profileNonce is the nonce of the profile used from identity to obtain the did identifier
      * @param privateKey is the key used to access all the sensitive info from the identity
@@ -416,16 +392,17 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun fetchAndSaveClaims(
         context: Context,
-        message: Message,
+        message: Iden3MessageEntity.OfferIden3MessageEntity,
         genesisDid: String,
         profileNonce: BigInteger? = null,
         privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
-        message.isOf(listOf(OfferIden3MessageEntity::class))
-
         return callAsList(
             context = context, method = "fetchAndSaveClaims", arguments = mapOf(
-                "message" to message,
+                "message" to Json.encodeToString(
+                    Iden3MessageEntity.OfferIden3MessageEntity.serializer(),
+                    message
+                ),
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
                 "privateKey" to privateKey
@@ -445,44 +422,39 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun getClaimsFromIden3Message(
         context: Context,
-        message: Message,
+        message: Iden3MessageEntity,
         genesisDid: String,
         profileNonce: BigInteger? = null,
         privateKey: String
     ): CompletableFuture<List<ClaimEntity>> {
-        message.isOf(
-            listOf(
-                AuthIden3MessageEntity::class, OnchainIden3MessageEntity::class,
-            )
-        )
+        val encodedIden3Message = encodeIden3MessageToJson(message)
 
         return callAsList(
             context = context, method = "getClaimsFromIden3Message", arguments = mapOf(
-                "message" to message,
+                "message" to encodedIden3Message,
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
-                "privateKey" to privateKey
+                "privateKey" to privateKey,
             )
         )
     }
 
     /** Get a list of [FilterEntity] from an iden3comm message to apply to [getClaims]
      *
-     * @param message is the iden3comm message entity of type [AuthIden3MessageEntity] or [OnchainIden3MessageEntity]
+     * @param message is the iden3comm message entity of type [Iden3MessageEntity.AuthIden3MessageEntity]
+     * or [Iden3MessageEntity.ContractFunctionCallIden3MessageEntity]
      *
      * @return A [CompletableFuture] that completes with the list of [FilterEntity].
      **/
     fun getFilters(
-        context: Context, message: Message
+        context: Context, message: Iden3MessageEntity
     ): CompletableFuture<List<FilterEntity>> {
-        message.isOf(
-            listOf(
-                AuthIden3MessageEntity::class, OnchainIden3MessageEntity::class
-            )
-        )
+        val encodedIden3Message = encodeIden3MessageToJson(message)
 
         return callAsList(
-            context = context, method = "getFilters", arguments = mapOf("message" to message)
+            context = context,
+            method = "getFilters",
+            arguments = mapOf("message" to encodedIden3Message)
         )
     }
 
@@ -495,91 +467,28 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      * iden3Message by the PolygonId Sdk using this method.
      *
      * @return A [CompletableFuture] that completes with the iden3Message that could be
-     * [AuthIden3MessageEntity], [FetchIden3MessageEntity], [OfferIden3MessageEntity] or [OnchainIden3MessageEntity]
+     * [Iden3MessageEntity.AuthIden3MessageEntity], [Iden3MessageEntity.FetchIden3MessageEntity],
+     * [Iden3MessageEntity.OfferIden3MessageEntity]
+     * or [Iden3MessageEntity.ContractFunctionCallIden3MessageEntity]
      **/
     fun getIden3Message(
         context: Context, message: String
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<Iden3MessageEntity> {
         return call<String>(
-            context = context, method = "getIden3Message", arguments = mapOf("message" to message)
+            context = context,
+            method = "getIden3Message",
+            arguments = mapOf("message" to message)
         ).thenApply { result ->
-            Gson().fromJson(result, Map::class.java).let {
-                val builder: Message.Builder = when (it["messageType"]) {
-                    Iden3MessageType.auth.name -> {
-                        AuthIden3MessageEntity.newBuilder()
-                    }
-
-                    Iden3MessageType.issuance.name -> {
-                        FetchIden3MessageEntity.newBuilder()
-                    }
-
-                    Iden3MessageType.offer.name -> {
-                        OfferIden3MessageEntity.newBuilder()
-                    }
-
-                    Iden3MessageType.contractFunctionCall.name -> {
-                        OnchainIden3MessageEntity.newBuilder()
-                    }
-
-                    else -> {
-                        throw IllegalStateException("Unsupported type")
-                    }
+            try {
+                val jsonFormat = Json {
+                    classDiscriminator = "customTypeDiscriminator"
+                    encodeDefaults = true
                 }
-
-                JsonFormat.parser().merge(result, builder)
-                builder.build()
+                jsonFormat.decodeFromString<Iden3MessageEntity>(result)
+            } catch (e: Exception) {
+                println(e.message)
             }
-        }
-    }
-
-    // extension to convert JSONObject in Map
-    fun JSONObject.toMap(): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        for (key in keys()) {
-            when (val value = this[key]) {
-                is JSONObject -> map[key] = value.toMap()
-                is JSONArray -> map[key] = value.toList()
-                else -> map[key] = value
-            }
-        }
-        return map
-    }
-
-    // extension to convert JSONArray in List
-    fun JSONArray.toList(): List<Any> {
-        val list = mutableListOf<Any>()
-        for (i in 0 until length()) {
-            when (val value = this[i]) {
-                is JSONObject -> list.add(value.toMap())
-                is JSONArray -> list.add(value.toList())
-                else -> list.add(value)
-            }
-        }
-        return list
-    }
-
-
-    fun convertNumbersToStrings(element: JsonElement): JsonElement {
-        if (element.isJsonPrimitive) {
-            val jsonPrimitive = element.asJsonPrimitive
-            if (jsonPrimitive.isNumber) {
-                println("number: ${jsonPrimitive.asString}")
-                val numberValue = JsonPrimitive(BigDecimal(jsonPrimitive.asString))
-                println("numberValue: $numberValue")
-                return JsonPrimitive(BigDecimal(jsonPrimitive.asString))
-            }
-        } else if (element.isJsonObject) {
-            val jsonObject = element.asJsonObject
-            for (entry in jsonObject.entrySet()) {
-                jsonObject.add(entry.key, convertNumbersToStrings(entry.value))
-            }
-        } else if (element.isJsonArray) {
-            val jsonArray = element.asJsonArray
-            for (i in 0 until jsonArray.size()) {
-                jsonArray.set(i, convertNumbersToStrings(jsonArray[i]))
-            }
-        }
-        return element
+        } as CompletableFuture<Iden3MessageEntity>
     }
 
     /**
@@ -589,41 +498,24 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      * @return A [CompletableFuture] that completes with the schemas.
      */
     fun getSchemas(
-        context: Context, message: Message
+        context: Context, message: Iden3MessageEntity
     ): CompletableFuture<List<Map<String, Any?>>> {
-        message.isOf(
-            listOf(
-                AuthIden3MessageEntity::class, OnchainIden3MessageEntity::class
-            )
-        )
+        val encodedMessage = encodeIden3MessageToJson(message)
 
-        return callAsList(
+        return call<String>(
             context = context,
             method = "getSchemas",
-            arguments = mapOf("message" to message),
-        )
-    }
-
-    /**
-     * Get the vocabs from an iden3comm message.
-     * @param message is the iden3comm message
-     *
-     * @return A [CompletableFuture] that completes with the vocabs.
-     */
-    fun getVocabs(
-        context: Context, message: Message
-    ): CompletableFuture<List<Map<String, Any?>>> {
-        message.isOf(
-            listOf(
-                AuthIden3MessageEntity::class, OnchainIden3MessageEntity::class
-            )
-        )
-
-        return callAsList(
-            context = context,
-            method = "getVocabs",
-            arguments = mapOf("message" to message),
-        )
+            arguments = mapOf("message" to encodedMessage),
+        ).thenApply { result ->
+            try {
+                Gson().fromJson(
+                    result,
+                    object : TypeToken<List<Map<String, Any?>>>() {}.type
+                )
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
     }
 
     /** Gets a list of interaction associated to the identity previously stored
@@ -646,8 +538,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         type: List<InteractionType>? = null,
         states: List<InteractionState>? = null,
         filters: List<FilterEntity>? = null
-    ): CompletableFuture<List<Any>> {
-        return callAsList<String>(
+    ): CompletableFuture<List<InteractionEntity>> {
+        return callAsList<InteractionEntity>(
             context = context, method = "getInteractions", arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "profileNonce" to profileNonce?.toString(),
@@ -657,16 +549,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "filters" to filters
             )
         ).thenApply { result ->
-            result.map { interaction ->
-                val builder: Message.Builder =
-                    when (Gson().fromJson(interaction, Map::class.java)["genesisDid"] != null) {
-                        true -> InteractionEntity.newBuilder()
-                        else -> InteractionBaseEntity.newBuilder()
-                    }
-
-                JsonFormat.parser().merge(interaction, builder)
-                builder.build()
-            }
+            result
         }
     }
 
@@ -685,7 +568,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun getProofs(
         context: Context,
-        message: Message,
+        message: Any,
         genesisDid: String,
         profileNonce: BigInteger? = null,
         privateKey: String,
@@ -748,24 +631,22 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         id: String,
         genesisDid: String? = null,
         privateKey: String? = null,
-        state: InteractionState? = null
+        state: InteractionState
     ): CompletableFuture<Any> {
         return call<String>(
             context = context, method = "updateInteraction", arguments = mapOf(
                 "genesisDid" to genesisDid,
                 "privateKey" to privateKey,
-                "state" to state?.name,
-                "id" to id
+                "state" to state.name,
+                "id" to id,
             )
         ).thenApply {
-            val builder: Message.Builder =
-                when (Gson().fromJson(it, Map::class.java)["genesisDid"] != null) {
-                    true -> InteractionEntity.newBuilder()
-                    else -> InteractionBaseEntity.newBuilder()
-                }
 
-            JsonFormat.parser().merge(it, builder)
-            builder.build()
+            try {
+                Json.decodeFromString<InteractionEntity>(it)
+            } catch (e: Exception) {
+                Json.decodeFromString<InteractionBaseEntity>(it)
+            }
         }
     }
 
@@ -932,7 +813,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun getIdentity(
         context: Context, privateKey: String? = null, genesisDid: String? = null
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<IdentityEntity> {
         return call<String>(
             context = context,
             method = "getIdentity",
@@ -940,15 +821,15 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         ).thenApply {
             when {
                 privateKey != null -> {
-                    val builder: Message.Builder = PrivateIdentityEntity.newBuilder()
-                    JsonFormat.parser().merge(it, builder)
-                    builder.build()
+                    Json.decodeFromString<PrivateIdentityEntity>(
+                        it
+                    )
                 }
 
                 else -> {
-                    val builder: Message.Builder = IdentityEntity.newBuilder()
-                    JsonFormat.parser().merge(it, builder)
-                    builder.build()
+                    Json.decodeFromString<IdentityEntity>(
+                        it
+                    )
                 }
             }
         }
@@ -1243,7 +1124,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      */
     fun startDownloadCircuits(
         context: Context
-    ): CompletableFuture<String> {
+    ): CompletableFuture<String?> {
         return call(
             context = context, method = "startDownloadCircuits"
         )
@@ -1313,7 +1194,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
         claimSubjectProfileNonce: BigInteger,
         claim: ClaimEntity,
         circuitData: CircuitDataEntity,
-        request: ProofScopeRequest,
+        request: ProofScopeRequestEntity,
         privateKey: String? = null,
         challenge: String? = null
     ): CompletableFuture<String> {
@@ -1323,8 +1204,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "profileNonce" to profileNonce.toString(),
                 "claimSubjectProfileNonce" to claimSubjectProfileNonce.toString(),
                 "claim" to claim,
-                "circuitData" to circuitData,
-                "request" to request,
+                "circuitData" to Json.encodeToString(CircuitDataEntity.serializer(), circuitData),
+                "request" to Json.encodeToString(ProofScopeRequestEntity.serializer(), request),
                 "privateKey" to privateKey,
                 "challenge" to challenge
             )
@@ -1343,5 +1224,35 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 //                entity
 //            }
 //        }
+    }
+
+    private fun encodeIden3MessageToJson(iden3message: Iden3MessageEntity): String {
+        return when (iden3message) {
+            is Iden3MessageEntity.AuthIden3MessageEntity ->
+                Json.encodeToString(
+                    Iden3MessageEntity.AuthIden3MessageEntity.serializer(),
+                    iden3message
+                )
+
+            is Iden3MessageEntity.ContractFunctionCallIden3MessageEntity ->
+                Json.encodeToString(
+                    Iden3MessageEntity.ContractFunctionCallIden3MessageEntity.serializer(),
+                    iden3message
+                )
+
+            is Iden3MessageEntity.OfferIden3MessageEntity ->
+                Json.encodeToString(
+                    Iden3MessageEntity.OfferIden3MessageEntity.serializer(),
+                    iden3message
+                )
+
+            is Iden3MessageEntity.FetchIden3MessageEntity ->
+                Json.encodeToString(
+                    Iden3MessageEntity.FetchIden3MessageEntity.serializer(),
+                    iden3message
+                )
+
+            else -> ""
+        }
     }
 }

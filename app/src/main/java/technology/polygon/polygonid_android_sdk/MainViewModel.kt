@@ -3,17 +3,12 @@ package technology.polygon.polygonid_android_sdk
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.protobuf.Int64Value
-import com.google.protobuf.ListValue
-import com.google.protobuf.StringValue
-import com.google.protobuf.Value
 import kotlinx.coroutines.launch
-import technology.polygon.polygonid_protobuf.EnvEntityOuterClass.EnvEntity
-import technology.polygon.polygonid_protobuf.FilterEntityOuterClass.FilterEntity
-import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionEntity
-import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionState
-import technology.polygon.polygonid_protobuf.InteractionEntityOuterClass.InteractionType
-import technology.polygon.polygonid_protobuf.iden3_message.Iden3MessageEntityOuterClass
+import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.Iden3MessageEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionEntity
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionState
+import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.InteractionType
 import java.math.BigInteger
 
 const val TAG = "PolygonIdSdk"
@@ -22,27 +17,33 @@ const val apiKey = "theApiKey"
 const val authMessage =
     "{\"id\":\"f6a69960-763f-48f5-a7e5-b3ea066cfbc7\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"f6a69960-763f-48f5-a7e5-b3ea066cfbc7\",\"body\":{\"callbackUrl\":\"https://self-hosted-demo-backend-platform.polygonid.me/api/callback?sessionId=98378\",\"reason\":\"test flow\",\"scope\":[]},\"from\":\"did:polygonid:polygon:mumbai:2qLhNLVmoQS7pQtpMeKHDqkTcENBZUj1nkZiRNPGgV\"}"
 const val fetchMessage =
-    "{\"id\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/credentials/1.0/offer\",\"thid\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"body\":{\"url\":\"https://issuer-testing.polygonid.me/v1/agent\",\"credentials\":[{\"id\":\"2bcb98bc-e8db-11ed-938b-0242ac180006\",\"description\":\"KYCAgeCredential\"}]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\",\"to\":\"did:polygonid:polygon:mumbai:2qLmyLKBkCXDSHku8mgjU9XM7n6aH8Lwvp4XESPyJt\"}"
+    "{\"id\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/credentials/1.0/offer\",\"thid\":\"bae3a15c-3570-4e33-9cdd-739b6105fc15\",\"body\":{\"url\":\"https://issuer-testing.polygonid.me/v1/agent\",\"credentials\":[{\"id\":\"2bcb98bc-e8db-11ed-938b-0242ac180006\",\"description\":\"KYCAgeCredential\"}]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\",\"to\":\"did:polygonid:polygon:mumbai:2qJGQxEf8n3XiT7fYbqaBdYCUCPQVgkK8rYKbRLTMe\"}"
 const val credentialRequestMessage =
     "{\"id\":\"b11bdbb1-5a6c-49ca-a180-6e5040a50f41\",\"typ\":\"application/iden3comm-plain-json\",\"type\":\"https://iden3-communication.io/authorization/1.0/request\",\"thid\":\"b11bdbb1-5a6c-49ca-a180-6e5040a50f41\",\"body\":{\"callbackUrl\":\"https://self-hosted-testing-backend-platform.polygonid.me/api/callback?sessionId=174262\",\"reason\":\"test flow\",\"scope\":[{\"id\":1,\"circuitId\":\"credentialAtomicQuerySigV2\",\"query\":{\"allowedIssuers\":[\"*\"],\"context\":\"https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld\",\"credentialSubject\":{\"birthday\":{\"\$lt\":20000101}},\"skipClaimRevocationCheck\":true,\"type\":\"KYCAgeCredential\"}}]},\"from\":\"did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9\"}"
 
 class MainViewModel : ViewModel() {
     fun init(context: Context) {
+        val mumbai = EnvEntity(
+            blockchain = "polygon",
+            network = "mumbai",
+            web3Url = "https://polygon-mumbai.infura.io/v3/",
+            web3RdpUrl = "wss://polygon-mumbai.infura.io/v3/",
+            web3ApiKey = apiKey,
+            idStateContract = "0x134B1BE34911E39A8397ec6289782989729807a4",
+            pushUrl = "https://push-staging.polygonid.com/api/v1"
+        )
         viewModelScope.launch {
             PolygonIdSdk.init(
                 context = context,
-                env = EnvEntity.newBuilder().setBlockchain("polygon").setNetwork("mumbai")
-                    .setWeb3Url("https://polygon-mumbai.infura.io/v3/")
-                    .setWeb3RdpUrl("wss://polygon-mumbai.infura.io/v3/").setWeb3ApiKey(apiKey)
-                    .setIdStateContract("0x134B1BE34911E39A8397ec6289782989729807a4")
-                    .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
+                env = mumbai,
             )
+        }
+    }
 
-            PolygonIdSdk.getInstance().switchLog(context = context, enabled = true).thenAccept {
-                println("Log enabled")
-            }.exceptionally {
-                println("Log error")
-                null
+    fun switchOnLog(context: Context) {
+        viewModelScope.launch {
+            PolygonIdSdk.getInstance().switchLog(context = context, true).thenAccept {
+                println("SwitchOnLog Done")
             }
         }
     }
@@ -50,26 +51,25 @@ class MainViewModel : ViewModel() {
     fun getEnv(context: Context) {
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getEnv(context = context).thenApply { env ->
-                println("Blockchain: $env")
+                println("Blockchain: ${env.blockchain}")
             }
         }
     }
 
     fun setEnv(context: Context) {
         viewModelScope.launch {
-            PolygonIdSdk.getInstance().callRaw(context = context, method = "setEnv").thenAccept {
+            val mumbai = EnvEntity(
+                blockchain = "polygon",
+                network = "mumbai",
+                web3Url = "https://polygon-mumbai.infura.io/v3/",
+                web3RdpUrl = "wss://polygon-mumbai.infura.io/v3/",
+                web3ApiKey = apiKey,
+                idStateContract = "0x134B1BE34911E39A8397ec6289782989729807a4",
+                pushUrl = "https://push-staging.polygonid.com/api/v1"
+            )
+            PolygonIdSdk.getInstance().setEnv(context = context, env = mumbai).thenAccept {
                 println("SetEnv Done")
             }
-//            PolygonIdSdk.getInstance()
-//                .setEnv(
-//                    context = context, env = EnvEntity.newBuilder().setBlockchain("polygon")
-//                        .setNetwork("mumbai")
-//                        .setWeb3Url("www").setWeb3ApiKey("3RB23F").setWeb3RdpUrl("rdp")
-//                        .setIdStateContract("98YIFJB").setPushUrl("www").build()
-//                )
-//                .thenAccept {
-//                    println("SetEnv Done")
-//                }
         }
     }
 
@@ -85,7 +85,7 @@ class MainViewModel : ViewModel() {
                     context = context,
                     genesisDid = identity.did,
                     privateKey = identity.privateKey,
-                    profileNonce = BigInteger("1000")
+                    profileNonce = BigInteger("3000")
                 ).thenApply {
                     println("Profile added")
                 }
@@ -194,8 +194,10 @@ class MainViewModel : ViewModel() {
                         ).thenApply { didIdentifier ->
                             PolygonIdSdk.getInstance()
                                 .getDidEntity(context = context, did = didIdentifier)
-                                .thenApply { backup ->
-                                    println("Backup: $backup")
+                                .thenApply {
+                                    println("DidEntity: ${it.did}")
+                                }.exceptionally {
+                                    println("Error: $it")
                                 }
                         }
                     }
@@ -254,7 +256,7 @@ class MainViewModel : ViewModel() {
                                 privateKey = privateKey,
                                 genesisDid = didIdentifier
                             ).thenApply { identity ->
-                                println("Identity: $identity")
+                                println("Identity: ${identity.did}")
                             }
                         }
                     }
@@ -358,7 +360,7 @@ class MainViewModel : ViewModel() {
                     ).thenApply { did ->
                         PolygonIdSdk.getInstance().authenticate(
                             context = context,
-                            message = message as Iden3MessageEntityOuterClass.AuthIden3MessageEntity,
+                            message = message as Iden3MessageEntity.AuthIden3MessageEntity,
                             genesisDid = did,
                             privateKey = privateKey
                         ).thenAccept {
@@ -390,7 +392,7 @@ class MainViewModel : ViewModel() {
                     ).thenApply { did ->
                         PolygonIdSdk.getInstance().fetchAndSaveClaims(
                             context = context,
-                            message = message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity,
+                            message = message as Iden3MessageEntity.OfferIden3MessageEntity,
                             genesisDid = did,
                             privateKey = privateKey
                         ).thenAccept { claims ->
@@ -416,7 +418,7 @@ class MainViewModel : ViewModel() {
                     blockchain = "polygon",
                     network = "mumbai",
                 ).thenApply { did ->
-                    val id =
+                    /*val id =
                         "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
                     val listValueBuilder = ListValue.newBuilder()
                     listValueBuilder.addValues(
@@ -425,12 +427,12 @@ class MainViewModel : ViewModel() {
                     val value = Value.newBuilder().setListValue(listValueBuilder).build()
                     val filter =
                         FilterEntity.newBuilder().setOperator("nonEqual").setName("id")
-                            .setValue(value).build()
+                            .setValue(value).build()*/
                     PolygonIdSdk.getInstance().getClaims(
                         context = context,
                         genesisDid = did,
                         privateKey = privateKey,
-                        filters = listOf(filter)
+                        //filters = listOf(filter)
                     ).thenApply { claims ->
                         println("ClaimsFiltered: $claims")
                     }
@@ -452,7 +454,7 @@ class MainViewModel : ViewModel() {
                     network = "mumbai",
                 ).thenApply { did ->
                     val id =
-                        "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
+                        "https://issuer-testing-testnet.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/d9dc64a8-fae4-11ed-b446-0242ac180006"
                     PolygonIdSdk.getInstance().getClaimsByIds(
                         context = context,
                         genesisDid = did,
@@ -470,7 +472,7 @@ class MainViewModel : ViewModel() {
 
     fun removeClaim(context: Context) {
         val id =
-            "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
+            "https://issuer-testing-testnet.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/d9dc64a8-fae4-11ed-b446-0242ac180006"
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getPrivateKey(
                 context = context, secret = secret
@@ -493,7 +495,7 @@ class MainViewModel : ViewModel() {
 
     fun removeClaims(context: Context) {
         val id =
-            "https://issuer-testing.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/2bcb98bc-e8db-11ed-938b-0242ac180006"
+            "https://issuer-testing-testnet.polygonid.me/v1/did:polygonid:polygon:mumbai:2qFXmNqGWPrLqDowKz37Gq2FETk4yQwVUVUqeBLmf9/claims/d9dc64a8-fae4-11ed-b446-0242ac180006"
         val ids = listOf(id)
         viewModelScope.launch {
             PolygonIdSdk.getInstance().getPrivateKey(
@@ -531,21 +533,8 @@ class MainViewModel : ViewModel() {
                         genesisDid = did,
                         privateKey = privateKey,
                     ).thenApply { claims ->
-                        val expirationValue =
-                            StringValue.newBuilder().setValue("2030-01-01T00:00:00Z").build()
                         println("ClaimsFiltered: $claims")
-                        var claimEntity = claims.first()
-                        //we set customId with timestamp
-                        //val customId = "customId" + System.currentTimeMillis().toString()
-                        //val claimBuilder = claimEntity.newBuilderForType().setId(customId).build()
-                        /*ClaimEntity.newBuilder()
-                            .setId(customId)
-                            .setIssuer(claimEntity.issuer)
-                            .setDid(claimEntity.did)
-                            .setState(claimEntity.state)
-                            .setType(claimEntity.type)
-                            .setExpiration(expirationValue)
-                            .build()*/
+                        val claimEntity = claims.first()
                         PolygonIdSdk.getInstance().saveClaims(
                             context = context,
                             genesisDid = did,
@@ -592,18 +581,18 @@ class MainViewModel : ViewModel() {
                         network = "mumbai",
                     ).thenApply { did ->
                         val iden3message =
-                            message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity
-                        val interaction = InteractionEntity.newBuilder()
-                            .setId(iden3message.id)
-                            .setGenesisDid(did)
-                            .setMessage(fetchMessage)
-                            .setFrom(iden3message.from)
-                            .setState("InteractionState.${InteractionState.received.name}")
-                            .setType("InteractionType.${InteractionType.offer.name}")
-                            .setTimestamp(1683286535)
-                            .setProfileNonce(Int64Value.of(0L))
-                            .build()
+                            message as Iden3MessageEntity.OfferIden3MessageEntity
 
+                        val interaction = InteractionEntity(
+                            id = iden3message.id,
+                            genesisDid = did,
+                            message = fetchMessage,
+                            from = iden3message.from,
+                            interactionState = InteractionState.received,
+                            interactionType = InteractionType.offer,
+                            timestamp = 1684933985692,
+                            profileNonce = SerializableBigInteger(BigInteger("0")),
+                        )
 
                         PolygonIdSdk.getInstance().addInteraction(
                             context = context,
@@ -637,7 +626,7 @@ class MainViewModel : ViewModel() {
                         genesisDid = did,
                         privateKey = privateKey,
                     ).thenApply { interactions ->
-                        println("GetInteractions: $interactions")
+                        println("GetInteractions: ${interactions[0].id}")
                     }
                 }
             }
@@ -659,7 +648,7 @@ class MainViewModel : ViewModel() {
                         context = context,
                         genesisDid = did,
                         privateKey = privateKey,
-                        ids = listOf("0x1")
+                        ids = listOf("bae3a15c-3570-4e33-9cdd-739b6105fc15")
                     ).thenApply { interactions ->
                         println("RemoveInteractions: $interactions")
                     }
@@ -681,7 +670,7 @@ class MainViewModel : ViewModel() {
                         network = "mumbai",
                     ).thenApply { did ->
                         val iden3message =
-                            message as Iden3MessageEntityOuterClass.OfferIden3MessageEntity
+                            message as Iden3MessageEntity.OfferIden3MessageEntity
 
                         PolygonIdSdk.getInstance().updateInteraction(
                             context = context,
@@ -700,9 +689,9 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getClaimsFromIden3Message(context: Context) {
+    fun getClaimsFromIden3Message(context: Context, fetchMessage: String) {
         viewModelScope.launch {
-            PolygonIdSdk.getInstance().getIden3Message(context, credentialRequestMessage)
+            PolygonIdSdk.getInstance().getIden3Message(context, fetchMessage)
                 .thenApply { message ->
                     println("getClaimsFromIden3Message - MESSAGE: $message")
                     PolygonIdSdk.getInstance().getPrivateKey(
@@ -720,7 +709,7 @@ class MainViewModel : ViewModel() {
                                 privateKey = privateKey,
                                 genesisDid = did,
                                 profileNonce = BigInteger("0"),
-                                message = message,
+                                message = message as Iden3MessageEntity,
                             ).thenApply { claims ->
                                 println("getClaimsFromIden3Message - CLAIMS: ${claims.size}")
                             }.exceptionally {
@@ -740,9 +729,9 @@ class MainViewModel : ViewModel() {
 
                     PolygonIdSdk.getInstance().getFilters(
                         context = context,
-                        message = message,
+                        message = message as Iden3MessageEntity,
                     ).thenApply { filters ->
-                        println("getFiltersFromIden3Message - FILTERS: ${filters.size}")
+                        println("getFiltersFromIden3Message - FILTERS: $filters")
                     }.exceptionally {
                         println("getFiltersFromIden3MessageError: $it")
                     }
@@ -757,28 +746,11 @@ class MainViewModel : ViewModel() {
                     println("getSchemasFromIden3Message - MESSAGE: $message")
                     PolygonIdSdk.getInstance().getSchemas(
                         context = context,
-                        message = message,
+                        message = message as Iden3MessageEntity,
                     ).thenApply { schemas ->
                         println("getSchemasFromIden3Message - SCHEMAS: $schemas")
                     }.exceptionally {
                         println("getSchemasFromIden3MessageError: $it")
-                    }
-                }
-        }
-    }
-
-    fun getVocabsFromIden3Message(context: Context) {
-        viewModelScope.launch {
-            PolygonIdSdk.getInstance().getIden3Message(context, credentialRequestMessage)
-                .thenApply { message ->
-                    println("getVocabsFromIden3Message - MESSAGE: $message")
-                    PolygonIdSdk.getInstance().getVocabs(
-                        context = context,
-                        message = message,
-                    ).thenApply { vocabs ->
-                        println("getVocabsFromIden3Message - VOCABS: $vocabs")
-                    }.exceptionally {
-                        println("getVocabsFromIden3MessageError: $it")
                     }
                 }
         }
