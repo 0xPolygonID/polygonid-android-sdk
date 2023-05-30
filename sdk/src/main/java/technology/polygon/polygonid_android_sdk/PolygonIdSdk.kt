@@ -100,7 +100,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     /** Get the list of all the keys of the [MutableSharedFlow] stored in [flows].
      *
      */
-    private fun getFlowKeys(): List<String> {
+    fun getFlowKeys(): List<String> {
         return flows.keys.toList()
     }
 
@@ -129,26 +129,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
     }
 
     private fun processDownloadInfo(data: String): Any {
-        val jsonFormat = Json {
-            serializersModule = SerializersModule {
-                polymorphic(DownloadInfoEntity::class) {
-                    subclass(
-                        DownloadInfoEntity.DownloadInfoOnDone::class,
-                        DownloadInfoEntity.DownloadInfoOnDone.serializer()
-                    )
-                    subclass(
-                        DownloadInfoEntity.DownloadInfoOnProgress::class,
-                        DownloadInfoEntity.DownloadInfoOnProgress.serializer()
-                    )
-                    subclass(
-                        DownloadInfoEntity.DownloadInfoOnError::class,
-                        DownloadInfoEntity.DownloadInfoOnError.serializer()
-                    )
-                }
-            }
-            encodeDefaults = true
-        }
-
+        val jsonFormat = Json { encodeDefaults = true }
         return jsonFormat.decodeFromString<DownloadInfoEntity>(data)
     }
 
@@ -441,7 +422,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      **/
     fun getClaimsFromIden3Message(
         context: Context,
-        message: Any,
+        message: Iden3MessageEntity,
         genesisDid: String,
         profileNonce: BigInteger? = null,
         privateKey: String
@@ -466,7 +447,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      * @return A [CompletableFuture] that completes with the list of [FilterEntity].
      **/
     fun getFilters(
-        context: Context, message: Any
+        context: Context, message: Iden3MessageEntity
     ): CompletableFuture<List<FilterEntity>> {
         val encodedIden3Message = encodeIden3MessageToJson(message)
 
@@ -499,30 +480,9 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
             try {
                 val jsonFormat = Json {
                     classDiscriminator = "customTypeDiscriminator"
-                    serializersModule = SerializersModule {
-                        polymorphic(Iden3MessageEntity::class) {
-                            subclass(
-                                Iden3MessageEntity.AuthIden3MessageEntity::class,
-                                Iden3MessageEntity.AuthIden3MessageEntity.serializer(),
-                            )
-                            subclass(
-                                Iden3MessageEntity.FetchIden3MessageEntity::class,
-                                Iden3MessageEntity.FetchIden3MessageEntity.serializer(),
-                            )
-                            subclass(
-                                Iden3MessageEntity.OfferIden3MessageEntity::class,
-                                Iden3MessageEntity.OfferIden3MessageEntity.serializer(),
-                            )
-                            subclass(
-                                Iden3MessageEntity.ContractFunctionCallIden3MessageEntity::class,
-                                Iden3MessageEntity.ContractFunctionCallIden3MessageEntity.serializer(),
-                            )
-                        }
-                    }
                     encodeDefaults = true
                 }
-                val respo = jsonFormat.decodeFromString<Iden3MessageEntity>(result)
-                respo
+                jsonFormat.decodeFromString<Iden3MessageEntity>(result)
             } catch (e: Exception) {
                 println(e.message)
             }
@@ -536,14 +496,8 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      * @return A [CompletableFuture] that completes with the schemas.
      */
     fun getSchemas(
-        context: Context, message: Any
+        context: Context, message: Iden3MessageEntity
     ): CompletableFuture<List<Map<String, Any?>>> {
-        if (message !is Iden3MessageEntity.AuthIden3MessageEntity
-            && message !is Iden3MessageEntity.ContractFunctionCallIden3MessageEntity
-        ) {
-            throw IllegalArgumentException("Message must be of type AuthIden3MessageEntity or ContractFunctionCallIden3MessageEntity")
-        }
-
         val encodedMessage = encodeIden3MessageToJson(message)
 
         return call<String>(
@@ -685,6 +639,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                 "id" to id,
             )
         ).thenApply {
+
             try {
                 Json.decodeFromString<InteractionEntity>(it)
             } catch (e: Exception) {
@@ -1167,7 +1122,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
      */
     fun startDownloadCircuits(
         context: Context
-    ): CompletableFuture<String> {
+    ): CompletableFuture<String?> {
         return call(
             context = context, method = "startDownloadCircuits"
         )
@@ -1269,7 +1224,7 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
 //        }
     }
 
-    private fun encodeIden3MessageToJson(iden3message: Any): String {
+    private fun encodeIden3MessageToJson(iden3message: Iden3MessageEntity): String {
         return when (iden3message) {
             is Iden3MessageEntity.AuthIden3MessageEntity ->
                 Json.encodeToString(

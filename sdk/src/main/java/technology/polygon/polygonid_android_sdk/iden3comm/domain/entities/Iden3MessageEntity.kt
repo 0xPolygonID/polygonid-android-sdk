@@ -1,6 +1,8 @@
 package technology.polygon.polygonid_android_sdk.iden3comm.domain.entities
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -20,11 +22,14 @@ import technology.polygon.polygonid_android_sdk.iden3comm.domain.entities.reques
 enum class Iden3MessageType { unknown, auth, offer, issuance, contractFunctionCall }
 
 @Serializable(with = Iden3MessageEntitySerializer::class)
+@SerialName("Iden3MessageEntity")
+@Polymorphic
 sealed class Iden3MessageEntity {
     abstract val messageType: Iden3MessageType
     abstract val body: Any
 
     @Serializable
+    @SerialName("AuthIden3MessageEntity")
     data class AuthIden3MessageEntity(
         val id: String,
         val typ: String,
@@ -37,6 +42,7 @@ sealed class Iden3MessageEntity {
     ) : Iden3MessageEntity()
 
     @Serializable
+    @SerialName("FetchIden3MessageEntity")
     data class FetchIden3MessageEntity(
         val id: String,
         val typ: String,
@@ -49,6 +55,7 @@ sealed class Iden3MessageEntity {
     ) : Iden3MessageEntity()
 
     @Serializable
+    @SerialName("OfferIden3MessageEntity")
     data class OfferIden3MessageEntity(
         val id: String,
         val typ: String,
@@ -61,6 +68,7 @@ sealed class Iden3MessageEntity {
     ) : Iden3MessageEntity()
 
     @Serializable
+    @SerialName("ContractFunctionCallIden3MessageEntity")
     data class ContractFunctionCallIden3MessageEntity(
         val id: String,
         val typ: String,

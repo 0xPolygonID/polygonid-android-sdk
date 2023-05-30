@@ -1,6 +1,8 @@
 package technology.polygon.polygonid_android_sdk.proof.domain.entities
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -16,10 +18,13 @@ import kotlinx.serialization.json.jsonPrimitive
 enum class DownloadInfoType { onDone, onError, onProgress }
 
 @Serializable(with = DownloadInfoEntitySerializer::class)
+@SerialName("DownloadInfoEntity")
+@Polymorphic
 sealed class DownloadInfoEntity {
     abstract val downloadInfoType: DownloadInfoType
 
     @Serializable
+    @SerialName("DownloadInfoOnDone")
     data class DownloadInfoOnDone(
         val contentLength: Int,
         val downloaded: Int,
@@ -27,6 +32,7 @@ sealed class DownloadInfoEntity {
     ) : DownloadInfoEntity()
 
     @Serializable
+    @SerialName("DownloadInfoOnProgress")
     data class DownloadInfoOnProgress(
         val contentLength: Int,
         val downloaded: Int,
@@ -34,6 +40,7 @@ sealed class DownloadInfoEntity {
     ) : DownloadInfoEntity()
 
     @Serializable
+    @SerialName("DownloadInfoOnError")
     data class DownloadInfoOnError(
         val errorMessage: String,
         override val downloadInfoType: DownloadInfoType = DownloadInfoType.onError,

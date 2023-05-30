@@ -709,7 +709,7 @@ class MainViewModel : ViewModel() {
                                 privateKey = privateKey,
                                 genesisDid = did,
                                 profileNonce = BigInteger("0"),
-                                message = message,
+                                message = message as Iden3MessageEntity,
                             ).thenApply { claims ->
                                 println("getClaimsFromIden3Message - CLAIMS: ${claims.size}")
                             }.exceptionally {
@@ -729,7 +729,7 @@ class MainViewModel : ViewModel() {
 
                     PolygonIdSdk.getInstance().getFilters(
                         context = context,
-                        message = message,
+                        message = message as Iden3MessageEntity,
                     ).thenApply { filters ->
                         println("getFiltersFromIden3Message - FILTERS: $filters")
                     }.exceptionally {
@@ -746,7 +746,7 @@ class MainViewModel : ViewModel() {
                     println("getSchemasFromIden3Message - MESSAGE: $message")
                     PolygonIdSdk.getInstance().getSchemas(
                         context = context,
-                        message = message,
+                        message = message as Iden3MessageEntity,
                     ).thenApply { schemas ->
                         println("getSchemasFromIden3Message - SCHEMAS: $schemas")
                     }.exceptionally {
