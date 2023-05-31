@@ -26,7 +26,7 @@ This native SDK enables developer to use the [PolygonID solution](https://polygo
 
 3. Add the SDK dependency:
 ```
-implementation 'io.github.0xpolygonid.polygonid_android_sdk:release:1.0.1'
+implementation 'io.github.0xpolygonid.polygonid_android_sdk:release:1.1.0'
 ```
 
 ## Init
