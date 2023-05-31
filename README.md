@@ -32,14 +32,18 @@ implementation 'io.github.0xpolygonid.polygonid_android_sdk:release:1.1.0'
 ## Init
 The SDK needs to be initialized before being used:
 ```
-            PolygonIdSdk.init(
-                context = context,
-                env = EnvEntity.newBuilder().setBlockchain("polygon").setNetwork("mumbai")
-                    .setWeb3Url("https://polygon-mumbai.infura.io/v3/")
-                    .setWeb3RdpUrl("wss://polygon-mumbai.infura.io/v3/").setWeb3ApiKey("theApiKey")
-                    .setIdStateContract("0x134B1BE34911E39A8397ec6289782989729807a4")
-                    .setPushUrl("https://push-staging.polygonid.com/api/v1").build().check()
-            )
+    PolygonIdSdk.init(
+        context = context,
+        env = EnvEntity(
+            blockchain = "polygon",
+            network = "mumbai",
+            web3Url = "https://polygon-mumbai.infura.io/v3/",
+            web3RdpUrl = "wss://polygon-mumbai.infura.io/v3/",
+            web3ApiKey = "theApiKey",
+            idStateContract = "0x134B1BE34911E39A8397ec6289782989729807a4",
+            pushUrl = "https://push-staging.polygonid.com/api/v1"
+        )
+    )
 ```
 The `env` param is optional but you need to set it up at some point via setEnv.
 
