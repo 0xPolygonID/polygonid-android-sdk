@@ -4,8 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
 import com.google.gson.reflect.TypeToken
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -17,10 +15,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import org.json.JSONArray
-import org.json.JSONObject
 import technology.polygon.polygonid_android_sdk.common.domain.entities.EnvEntity
 import technology.polygon.polygonid_android_sdk.common.domain.entities.FilterEntity
 import technology.polygon.polygonid_android_sdk.credential.domain.entities.ClaimEntity
@@ -1251,8 +1245,6 @@ class PolygonIdSdk(private val flows: MutableMap<String, MutableSharedFlow<Any?>
                     Iden3MessageEntity.FetchIden3MessageEntity.serializer(),
                     iden3message
                 )
-
-            else -> ""
         }
     }
 }

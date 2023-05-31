@@ -50,7 +50,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'io.github.0xpolygonid.polygonid_android_sdk'
             artifactId = 'release'
-            version = '1.0.1'
+            version = '1.1.0'
 
             pom {
                 name = 'PolygonID Android SDK'

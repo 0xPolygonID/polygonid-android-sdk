@@ -6,7 +6,7 @@ This native SDK enables developer to use the [PolygonID solution](https://polygo
 
 # How to use the SDK
 ## Prerequisite
-1. Download and unpack [those Maven local repository](https://repo1.maven.org/maven2/io/github/0xpolygonid/polygonid_flutter_wrapper/debug/2.2.5/debug-2.2.5.zip)
+1. Download and unpack [those Maven local repository](https://repo1.maven.org/maven2/io/github/0xpolygonid/polygonid_flutter_wrapper/debug/2.2.6/debug-2.2.6.zip)
 2. Add this to your build.gradle or settings.gradle:
 ```
     String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
